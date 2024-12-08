@@ -22,8 +22,8 @@ export default {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "#1A1F2C",
-        foreground: "#FFFFFF",
+        background: "#FFFFFF",
+        foreground: "#1A1F2C",
         primary: {
           DEFAULT: "#61DAFB",
           foreground: "#1A1F2C",
@@ -33,8 +33,8 @@ export default {
           foreground: "#FFFFFF",
         },
         card: {
-          DEFAULT: "rgba(255, 255, 255, 0.1)",
-          foreground: "#FFFFFF",
+          DEFAULT: "rgba(26, 31, 44, 0.1)",
+          foreground: "#1A1F2C",
         },
       },
       keyframes: {
