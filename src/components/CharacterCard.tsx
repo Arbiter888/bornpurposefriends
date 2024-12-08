@@ -11,7 +11,6 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
   useEffect(() => {
-    // Check if script is already loaded
     if (document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]')) {
       setScriptLoaded(true);
       return;
@@ -25,7 +24,6 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
     document.body.appendChild(script);
 
     return () => {
-      // Cleanup only if script was added by this component
       const existingScript = document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]');
       if (existingScript && !scriptLoaded) {
         document.body.removeChild(existingScript);
@@ -68,6 +66,36 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
             </span>
           </div>
           <p className="text-gray-300 text-sm mb-4">{character.description}</p>
+          
+          <div className="space-y-3 mb-4">
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-400">Trust Level</span>
+              <span className="text-primary">{character.relationshipStats.trustLevel}%</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-400">Years Known</span>
+              <span className="text-primary">{character.relationshipStats.yearsKnown}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-gray-400">Meetings/Month</span>
+              <span className="text-primary">{character.relationshipStats.meetingsPerMonth}</span>
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <h4 className="text-sm text-gray-400 mb-2">Common Topics:</h4>
+            <div className="flex flex-wrap gap-2">
+              {character.conversationTopics.map((topic, index) => (
+                <span 
+                  key={index}
+                  className="text-xs px-2 py-1 rounded-full bg-secondary/50 text-gray-300"
+                >
+                  {topic}
+                </span>
+              ))}
+            </div>
+          </div>
+
           <p className="text-xs text-gray-400">© George Jacklin 2024</p>
         </div>
       </div>
