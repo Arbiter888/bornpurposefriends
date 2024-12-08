@@ -29,7 +29,7 @@ export const characters: Character[] = [
     name: "Nova",
     role: "Translator",
     description: "Nova and you first connected at the International Space Station's Cultural Exchange Hub. You've known each other for 2 years, helping bridge communication gaps across the solar system's colonies.",
-    image: "/lovable-uploads/c5dfc262-4e33-44a9-9ded-4ede0b241e17.png",
+    image: "/lovable-uploads/13d26c54-f985-4e90-92f2-dca91eca7a1b.png",
     widgetId: "cJZziDTpqaTCZzKseAKK"
   },
   {
