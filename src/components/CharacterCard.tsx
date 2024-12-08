@@ -29,18 +29,18 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
       <div 
         ref={containerRef}
         onClick={handleCardClick}
-        className="relative group bg-black rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer"
+        className="relative group bg-black rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer h-full"
         style={{
           backdropFilter: "blur(10px)",
           WebkitBackdropFilter: "blur(10px)",
           fontFamily: 'Tomorrow'
         }}
       >
-        <div className="aspect-[3/4] relative">
+        <div className="relative">
           <img
             src={character.image}
             alt={character.name}
-            className="w-full h-full object-cover"
+            className="w-full object-cover"
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-100" />
