@@ -80,12 +80,18 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
 
       {/* Voice Chat Widget */}
       {showWidget && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50" onClick={handleWidgetToggle}>
-          <div className="bg-background p-4 rounded-lg w-full max-w-xl" onClick={e => e.stopPropagation()}>
+        <div className="fixed bottom-4 right-4 z-50 w-full max-w-xl">
+          <div className="bg-background p-4 rounded-lg shadow-xl">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold">Voice Chat with {character.name}</h3>
-              <button onClick={handleWidgetToggle} className="text-gray-400 hover:text-white">
-                ×
+              <button 
+                onClick={handleWidgetToggle}
+                className="text-gray-400 hover:text-white transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
               </button>
             </div>
             <ElevenLabsWidget widgetId={character.widgetId} />
