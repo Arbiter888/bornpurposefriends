@@ -67,7 +67,8 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
               {character.role}
             </span>
           </div>
-          <p className="text-gray-300 text-sm">{character.description}</p>
+          <p className="text-gray-300 text-sm mb-4">{character.description}</p>
+          <p className="text-xs text-gray-400">© George Jacklin 2024</p>
         </div>
       </div>
 
