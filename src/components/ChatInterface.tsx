@@ -55,8 +55,8 @@ const ChatInterface = ({ character, onClose }: ChatInterfaceProps) => {
   };
 
   return (
-    <div className="fixed bottom-4 right-4 w-96 h-[600px] bg-background border rounded-lg shadow-xl flex flex-col animate-fade-in">
-      <div className="p-4 border-b flex justify-between items-center bg-secondary rounded-t-lg">
+    <div className="flex flex-col h-full">
+      <div className="p-4 border-b flex justify-between items-center bg-secondary">
         <div className="flex items-center gap-3">
           <img
             src={character.image}
@@ -71,7 +71,7 @@ const ChatInterface = ({ character, onClose }: ChatInterfaceProps) => {
         <Button
           variant="ghost"
           size="icon"
-          className="text-foreground"
+          className="text-foreground hover:text-primary"
           onClick={onClose}
         >
           ×
@@ -104,7 +104,7 @@ const ChatInterface = ({ character, onClose }: ChatInterfaceProps) => {
         </div>
       </ScrollArea>
 
-      <form onSubmit={handleSendMessage} className="p-4 border-t">
+      <form onSubmit={handleSendMessage} className="p-4 border-t bg-background">
         <div className="flex gap-2">
           <Input
             value={newMessage}
