@@ -13,42 +13,36 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
   useEffect(() => {
-    // Check if script already exists
-    const existingScript = document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]');
-    
-    if (existingScript) {
-      setScriptLoaded(true);
-      return;
-    }
+    const loadScript = () => {
+      const existingScript = document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]');
+      
+      if (existingScript) {
+        setScriptLoaded(true);
+        return;
+      }
 
-    const script = document.createElement("script");
-    script.src = "https://elevenlabs.io/convai-widget/index.js";
-    script.async = true;
-    script.crossOrigin = "anonymous"; // Add crossOrigin attribute
-    
-    const handleLoad = () => {
-      console.log("Script loaded successfully");
-      setScriptLoaded(true);
+      const script = document.createElement("script");
+      script.src = "https://elevenlabs.io/convai-widget/index.js";
+      script.async = true;
+      script.defer = true;
+      
+      script.onload = () => {
+        console.log("Script loaded successfully");
+        setScriptLoaded(true);
+      };
+
+      script.onerror = (error) => {
+        console.error("Script loading error:", error);
+        setScriptLoaded(false);
+      };
+      
+      document.head.appendChild(script);
     };
 
-    const handleError = (error: Event | string) => {
-      console.error("Script loading error:", error);
-      setScriptLoaded(false);
-    };
-
-    script.addEventListener('load', handleLoad);
-    script.addEventListener('error', handleError);
-    
-    document.body.appendChild(script);
+    loadScript();
 
     return () => {
-      script.removeEventListener('load', handleLoad);
-      script.removeEventListener('error', handleError);
-      
-      // Only remove the script if it's the one we added
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
+      // Cleanup not needed as we want to keep the script loaded
     };
   }, []);
 
