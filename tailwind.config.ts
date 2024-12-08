@@ -64,9 +64,6 @@ export default {
       backdropBlur: {
         xs: "2px",
       },
-      rotate: {
-        'y-180': '180deg',
-      },
     },
   },
   plugins: [require("tailwindcss-animate")],
