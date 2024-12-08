@@ -1,48 +1,21 @@
 import { Character } from "@/lib/characters";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
+import ChatInterface from "./ChatInterface";
 
 interface CharacterCardProps {
   character: Character;
 }
 
 const CharacterCard = ({ character }: CharacterCardProps) => {
-  const [showWidget, setShowWidget] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [scriptLoaded, setScriptLoaded] = useState(false);
-
-  useEffect(() => {
-    // Check if script is already loaded
-    if (document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]')) {
-      setScriptLoaded(true);
-      return;
-    }
-
-    const script = document.createElement("script");
-    script.src = "https://elevenlabs.io/convai-widget/index.js";
-    script.async = true;
-    script.onload = () => setScriptLoaded(true);
-    script.onerror = (error) => console.error("Script loading error:", error);
-    document.body.appendChild(script);
-
-    return () => {
-      // Cleanup only if script was added by this component
-      const existingScript = document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]');
-      if (existingScript && !scriptLoaded) {
-        document.body.removeChild(existingScript);
-      }
-    };
-  }, []);
+  const [showChat, setShowChat] = useState(false);
 
   const handleCardClick = () => {
-    if (scriptLoaded) {
-      setShowWidget(true);
-    }
+    setShowChat(true);
   };
 
   return (
     <>
       <div 
-        ref={containerRef}
         onClick={handleCardClick}
         className="relative group bg-black rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer h-full"
         style={{
@@ -71,25 +44,11 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
         </div>
       </div>
 
-      {showWidget && scriptLoaded && (
-        <div className="fixed bottom-4 right-4 z-50 animate-fade-in">
-          <div 
-            className="relative bg-black rounded-lg p-4 shadow-2xl"
-            style={{ width: '300px' }}
-          >
-            <button 
-              onClick={() => setShowWidget(false)}
-              className="absolute top-2 right-2 text-white hover:text-gray-300"
-            >
-              ×
-            </button>
-            <div 
-              dangerouslySetInnerHTML={{
-                __html: `<elevenlabs-convai agent-id="${character.widgetId}"></elevenlabs-convai>`
-              }}
-            />
-          </div>
-        </div>
+      {showChat && (
+        <ChatInterface 
+          character={character} 
+          onClose={() => setShowChat(false)} 
+        />
       )}
     </>
   );
