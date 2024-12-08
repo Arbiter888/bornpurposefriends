@@ -8,20 +8,35 @@ interface CharacterCardProps {
 const CharacterCard = ({ character }: CharacterCardProps) => {
   const [showWidget, setShowWidget] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
 
   useEffect(() => {
+    // Check if script is already loaded
+    if (document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]')) {
+      setScriptLoaded(true);
+      return;
+    }
+
     const script = document.createElement("script");
     script.src = "https://elevenlabs.io/convai-widget/index.js";
     script.async = true;
+    script.onload = () => setScriptLoaded(true);
+    script.onerror = (error) => console.error("Script loading error:", error);
     document.body.appendChild(script);
 
     return () => {
-      document.body.removeChild(script);
+      // Cleanup only if script was added by this component
+      const existingScript = document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]');
+      if (existingScript && !scriptLoaded) {
+        document.body.removeChild(existingScript);
+      }
     };
   }, []);
 
   const handleCardClick = () => {
-    setShowWidget(true);
+    if (scriptLoaded) {
+      setShowWidget(true);
+    }
   };
 
   return (
@@ -56,7 +71,7 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
         </div>
       </div>
 
-      {showWidget && (
+      {showWidget && scriptLoaded && (
         <div className="fixed bottom-4 right-4 z-50 animate-fade-in">
           <div 
             className="relative bg-black rounded-lg p-4 shadow-2xl"
