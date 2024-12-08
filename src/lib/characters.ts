@@ -29,15 +29,15 @@ export const characters: Character[] = [
     name: "Nova",
     role: "Translator",
     description: "Nova and you first connected at the International Space Station's Cultural Exchange Hub. You've known each other for 2 years, helping bridge communication gaps across the solar system's colonies.",
-    image: "/lovable-uploads/3ed1979a-c47e-4d48-b773-ead55dd2ed84.png",
-    widgetId: "6uUzWns28me6nq7WB2Ch"
+    image: "/lovable-uploads/47e5d92c-8e2a-454d-aace-871817a67ea3.png",
+    widgetId: "cJZziDTpqaTCZzKseAKK"
   },
   {
-    id: "echo",
-    name: "Echo",
-    role: "Health Coach",
-    description: "You met Echo at the Mars Colony Wellness Symposium while researching personalized nutrition algorithms. You've been friends for 4 years, regularly consulting on holistic health optimization.",
-    image: "/lovable-uploads/761f3623-3775-4357-be2c-383985df2544.png",
-    widgetId: "2TrHp4U7CtvKYhNlPx6U"
+    id: "aria",
+    name: "Aria",
+    role: "Research Assistant",
+    description: "Aria and you crossed paths at the Quantum Library of Alexandria while researching ancient civilizations through time-projection technology. You've been knowledge-sharing partners for 1.5 years.",
+    image: "/lovable-uploads/3e7191d5-0809-4805-b675-a787ddb38e7c.png",
+    widgetId: "RFVLgNGutYmjTtsIGNX1"
   }
 ];
