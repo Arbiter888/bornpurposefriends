@@ -20,7 +20,7 @@ export const characters: Character[] = [
     id: "cipher",
     name: "Cipher",
     role: "Security Specialist",
-    description: "Cipher became your trusted ally during a cybersecurity crisis in the Digital Defense Grid. For the past 2 years, they've been your go-to expert for digital security and encryption protocols.",
+    description: "You met Cipher at the Mars Colony Wellness Symposium while researching personalized nutrition algorithms. You've been friends for 4 years, regularly consulting on holistic health optimization.",
     image: "/lovable-uploads/3ed1979a-c47e-4d48-b773-ead55dd2ed84.png",
     widgetId: "6uUzWns28me6nq7WB2Ch"
   },
@@ -44,7 +44,7 @@ export const characters: Character[] = [
     id: "echo",
     name: "Echo",
     role: "Health Coach",
-    description: "You met Echo at the Mars Colony Wellness Symposium while researching personalized nutrition algorithms. You've been friends for 4 years, regularly consulting on holistic health optimization.",
+    description: "Cipher became your trusted ally during a cybersecurity crisis in the Digital Defense Grid. For the past 2 years, they've been your go-to expert for digital security and encryption protocols.",
     image: "/lovable-uploads/761f3623-3775-4357-be2c-383985df2544.png",
     widgetId: "2TrHp4U7CtvKYhNlPx6U"
   },
