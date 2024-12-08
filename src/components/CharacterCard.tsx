@@ -3,9 +3,11 @@ import { useEffect, useRef, useState } from "react";
 
 interface CharacterCardProps {
   character: Character;
+  onWidgetOpen: () => void;
+  isWidgetActive: boolean;
 }
 
-const CharacterCard = ({ character }: CharacterCardProps) => {
+const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCardProps) => {
   const [showWidget, setShowWidget] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scriptLoaded, setScriptLoaded] = useState(false);
@@ -31,8 +33,16 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
     };
   }, []);
 
+  // Reset showWidget when another widget becomes active
+  useEffect(() => {
+    if (!isWidgetActive) {
+      setShowWidget(false);
+    }
+  }, [isWidgetActive]);
+
   const handleCardClick = () => {
     if (scriptLoaded) {
+      onWidgetOpen();
       setShowWidget(true);
     }
   };
