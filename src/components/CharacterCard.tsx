@@ -13,7 +13,10 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
   const [scriptLoaded, setScriptLoaded] = useState(false);
 
   useEffect(() => {
-    if (document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]')) {
+    // Check if script already exists
+    const existingScript = document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]');
+    
+    if (existingScript) {
       setScriptLoaded(true);
       return;
     }
@@ -21,14 +24,30 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     const script = document.createElement("script");
     script.src = "https://elevenlabs.io/convai-widget/index.js";
     script.async = true;
-    script.onload = () => setScriptLoaded(true);
-    script.onerror = (error) => console.error("Script loading error:", error);
+    script.crossOrigin = "anonymous"; // Add crossOrigin attribute
+    
+    const handleLoad = () => {
+      console.log("Script loaded successfully");
+      setScriptLoaded(true);
+    };
+
+    const handleError = (error: Event | string) => {
+      console.error("Script loading error:", error);
+      setScriptLoaded(false);
+    };
+
+    script.addEventListener('load', handleLoad);
+    script.addEventListener('error', handleError);
+    
     document.body.appendChild(script);
 
     return () => {
-      const existingScript = document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]');
-      if (existingScript && !scriptLoaded) {
-        document.body.removeChild(existingScript);
+      script.removeEventListener('load', handleLoad);
+      script.removeEventListener('error', handleError);
+      
+      // Only remove the script if it's the one we added
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
       }
     };
   }, []);
@@ -42,8 +61,11 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
 
   const handleCardClick = () => {
     if (scriptLoaded) {
+      console.log("Opening widget for character:", character.name);
       onWidgetOpen();
       setShowWidget(true);
+    } else {
+      console.warn("Widget script not loaded yet");
     }
   };
 
