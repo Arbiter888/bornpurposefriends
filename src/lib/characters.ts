@@ -25,18 +25,18 @@ export const characters: Character[] = [
     widgetId: "8gJ0dMHzPVXRpxVpWpnj"
   },
   {
-    id: "echo",
-    role: "Health Coach",
-    name: "Echo",
-    description: "You met Echo at the Mars Colony Wellness Symposium while researching personalized nutrition algorithms. You've been friends for 4 years, regularly consulting on holistic health optimization.",
+    id: "nova",
+    name: "Nova",
+    role: "Translator",
+    description: "Nova and you first connected at the International Space Station's Cultural Exchange Hub. You've known each other for 2 years, helping bridge communication gaps across the solar system's colonies.",
     image: "/lovable-uploads/3ed1979a-c47e-4d48-b773-ead55dd2ed84.png",
     widgetId: "6uUzWns28me6nq7WB2Ch"
   },
   {
-    id: "cipher",
-    name: "Cipher",
-    role: "Fashion Designer",
-    description: "You met Cipher at the floating Fashion Week above Neo-Singapore, where they were showcasing their latest collection of smart-fabric designs. You've been style confidants for 2.5 years.",
+    id: "echo",
+    name: "Echo",
+    role: "Health Coach",
+    description: "You met Echo at the Mars Colony Wellness Symposium while researching personalized nutrition algorithms. You've been friends for 4 years, regularly consulting on holistic health optimization.",
     image: "/lovable-uploads/761f3623-3775-4357-be2c-383985df2544.png",
     widgetId: "2TrHp4U7CtvKYhNlPx6U"
   }

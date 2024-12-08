@@ -1,11 +1,12 @@
 import { Character } from "@/lib/characters";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface CharacterCardProps {
   character: Character;
 }
 
 const CharacterCard = ({ character }: CharacterCardProps) => {
+  const [showWidget, setShowWidget] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -19,39 +20,63 @@ const CharacterCard = ({ character }: CharacterCardProps) => {
     };
   }, []);
 
+  const handleCardClick = () => {
+    setShowWidget(true);
+  };
+
   return (
-    <div 
-      ref={containerRef}
-      className="relative group bg-card rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
-      style={{
-        backdropFilter: "blur(10px)",
-        WebkitBackdropFilter: "blur(10px)",
-      }}
-    >
-      <div className="aspect-[3/4] relative">
-        <img
-          src={character.image}
-          alt={character.name}
-          className="w-full h-full object-cover"
-          loading="lazy"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-background to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      </div>
-      <div className="p-6">
-        <div className="mb-4">
-          <h3 className="text-2xl font-bold mb-1">{character.name}</h3>
-          <span className="inline-block px-3 py-1 rounded-full text-sm bg-primary/10 text-primary">
-            {character.role}
-          </span>
+    <>
+      <div 
+        ref={containerRef}
+        onClick={handleCardClick}
+        className="relative group bg-black rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer"
+        style={{
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          fontFamily: 'Tomorrow'
+        }}
+      >
+        <div className="aspect-[3/4] relative">
+          <img
+            src={character.image}
+            alt={character.name}
+            className="w-full h-full object-cover"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-100" />
         </div>
-        <p className="text-gray-300 mb-6">{character.description}</p>
-        <div 
-          dangerouslySetInnerHTML={{
-            __html: `<elevenlabs-convai agent-id="${character.widgetId}"></elevenlabs-convai>`
-          }}
-        />
+        <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+          <div className="mb-2">
+            <h3 className="text-2xl font-bold mb-1">{character.name}</h3>
+            <span className="inline-block px-3 py-1 rounded-full text-sm bg-primary/10 text-primary">
+              {character.role}
+            </span>
+          </div>
+          <p className="text-gray-300 text-sm">{character.description}</p>
+        </div>
       </div>
-    </div>
+
+      {showWidget && (
+        <div className="fixed bottom-4 right-4 z-50 animate-fade-in">
+          <div 
+            className="relative bg-black rounded-lg p-4 shadow-2xl"
+            style={{ width: '300px' }}
+          >
+            <button 
+              onClick={() => setShowWidget(false)}
+              className="absolute top-2 right-2 text-white hover:text-gray-300"
+            >
+              ×
+            </button>
+            <div 
+              dangerouslySetInnerHTML={{
+                __html: `<elevenlabs-convai agent-id="${character.widgetId}"></elevenlabs-convai>`
+              }}
+            />
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
