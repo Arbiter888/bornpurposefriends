@@ -83,10 +83,10 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
           <div className="mb-2">
             <h3 className="text-2xl font-bold mb-1">{character.name}</h3>
             <div className="flex flex-wrap gap-2 mb-2">
-              <span className="inline-block px-3 py-1 rounded-full text-sm bg-primary/10 text-primary">
+              <span className="inline-block px-3 py-1 rounded-full text-sm bg-[#8B0000]/10 text-[#FF0000]">
                 {character.role}
               </span>
-              <span className="inline-block px-3 py-1 rounded-full text-sm bg-secondary/10 text-secondary">
+              <span className="inline-block px-3 py-1 rounded-full text-sm bg-[#8B0000]/10 text-[#FF0000]">
                 {character.nationality}
               </span>
             </div>
