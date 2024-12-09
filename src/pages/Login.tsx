@@ -99,7 +99,7 @@ const Login = () => {
               />
             </div>
 
-            <div className="bg-card p-8 rounded-xl shadow-lg space-y-6">
+            <div className="bg-card p-8 rounded-xl shadow-lg space-y-6 mt-8">
               <div className="text-center">
                 <h3 className="text-xl font-semibold mb-3">Premium Access</h3>
                 <p className="text-muted-foreground text-sm mb-6">
