@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import SubscriptionButton from "@/components/SubscriptionButton";
 import { characters } from "@/lib/characters";
 import { motion } from "framer-motion";
+import { Lock } from "lucide-react";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -50,6 +51,12 @@ const Login = () => {
                       className="w-full h-full object-cover object-top"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90" />
+                    {character.id !== 'atlas' && (
+                      <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white">
+                        <Lock className="w-8 h-8 mb-2 text-[#FF0000]" />
+                        <span className="text-sm font-semibold">Premium Only</span>
+                      </div>
+                    )}
                     <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                       <h3 className="text-xl font-bold mb-1">{character.name}</h3>
                       <p className="text-sm text-gray-300">{character.role}</p>
