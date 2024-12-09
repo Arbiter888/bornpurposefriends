@@ -22,7 +22,7 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid lg:grid-cols-2 gap-12 items-start">
+        <div className="grid lg:grid-cols-2 gap-12 items-stretch">
           {/* Character Preview Section */}
           <div className="space-y-8">
             <div className="text-center lg:text-left">
@@ -52,7 +52,7 @@ const Login = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90" />
                     {character.id !== 'atlas' && (
-                      <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white">
+                      <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white">
                         <Lock className="w-8 h-8 mb-2 text-[#FF0000]" />
                         <span className="text-sm font-semibold">Premium Only</span>
                       </div>
