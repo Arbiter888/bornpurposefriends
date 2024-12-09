@@ -68,7 +68,7 @@ const Login = () => {
           </div>
 
           {/* Auth & Subscription Section */}
-          <div className="space-y-8 font-['Tomorrow']">
+          <div className="h-full flex flex-col justify-between space-y-8 font-['Tomorrow']">
             <div className="bg-card p-8 rounded-xl shadow-lg space-y-6">
               <div className="text-center mb-6">
                 <h2 className="text-3xl font-bold">Welcome to BornPurpose</h2>
@@ -99,7 +99,7 @@ const Login = () => {
               />
             </div>
 
-            <div className="bg-card p-8 rounded-xl shadow-lg space-y-4">
+            <div className="bg-card p-8 rounded-xl shadow-lg space-y-4 mt-auto">
               <div className="text-center">
                 <h3 className="text-xl font-semibold mb-2">Premium Access</h3>
                 <p className="text-muted-foreground text-sm mb-4">
