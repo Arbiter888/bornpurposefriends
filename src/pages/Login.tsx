@@ -30,20 +30,9 @@ const Login = () => {
               </h1>
             </div>
 
-            <div className="space-y-4 text-left mb-8">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-[#FF0000]"></div>
-                <p className="text-lg">Advanced neural-linked conversations</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-[#FF0000]"></div>
-                <p className="text-lg">Personalized growth & learning</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-[#FF0000]"></div>
-                <p className="text-lg">Multi-language support</p>
-              </div>
-            </div>
+            <p className="text-lg text-left mb-8 leading-relaxed">
+              Experience personalized growth through advanced neural-linked conversations with our AI companions. Connect across multiple languages and cultures for meaningful interactions.
+            </p>
             
             <div className="grid grid-cols-2 gap-4 max-w-2xl">
               {characters.slice(0, 4).map((character, index) => (
