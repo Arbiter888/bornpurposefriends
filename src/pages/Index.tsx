@@ -18,10 +18,11 @@ const Index = () => {
 
   const handleLogout = async () => {
     try {
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        throw error;
-      }
+      // First clear any existing session
+      await supabase.auth.signOut({ scope: 'local' });
+      
+      // Then navigate to login page
+      navigate("/login");
     } catch (error) {
       console.error("Logout error:", error);
       toast({
