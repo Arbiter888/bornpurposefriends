@@ -40,13 +40,8 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     };
 
     loadScript();
-
-    return () => {
-      // Cleanup not needed as we want to keep the script loaded
-    };
   }, []);
 
-  // Reset showWidget when another widget becomes active
   useEffect(() => {
     if (!isWidgetActive) {
       setShowWidget(false);
@@ -87,9 +82,14 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
         <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
           <div className="mb-2">
             <h3 className="text-2xl font-bold mb-1">{character.name}</h3>
-            <span className="inline-block px-3 py-1 rounded-full text-sm bg-primary/10 text-primary">
-              {character.role}
-            </span>
+            <div className="flex flex-wrap gap-2 mb-2">
+              <span className="inline-block px-3 py-1 rounded-full text-sm bg-primary/10 text-primary">
+                {character.role}
+              </span>
+              <span className="inline-block px-3 py-1 rounded-full text-sm bg-secondary/10 text-secondary">
+                {character.nationality}
+              </span>
+            </div>
           </div>
           <p className="text-gray-300 text-sm mb-4">{character.description}</p>
           
@@ -109,6 +109,18 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
           </div>
 
           <div className="mb-4">
+            <h4 className="text-sm text-gray-400 mb-2">Languages:</h4>
+            <div className="flex flex-wrap gap-2 mb-3">
+              {character.languages.map((language, index) => (
+                <span 
+                  key={index}
+                  className="text-xs px-2 py-1 rounded-full bg-primary/20 text-primary"
+                >
+                  {language}
+                </span>
+              ))}
+            </div>
+            
             <h4 className="text-sm text-gray-400 mb-2">Common Topics:</h4>
             <div className="flex flex-wrap gap-2">
               {character.conversationTopics.map((topic, index) => (
