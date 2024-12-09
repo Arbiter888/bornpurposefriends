@@ -2,40 +2,14 @@ import Hero from "@/components/Hero";
 import CharacterGrid from "@/components/CharacterGrid";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-import { toast } from "@/hooks/use-toast";
-import { useSession } from "@supabase/auth-helpers-react";
-import { useEffect } from "react";
 
 const Index = () => {
   const navigate = useNavigate();
-  const session = useSession();
-
-  useEffect(() => {
-    if (!session) {
-      navigate("/login");
-    }
-  }, [session, navigate]);
 
   const handleLogout = async () => {
-    try {
-      // First clear any existing session
-      await supabase.auth.signOut({ scope: 'local' });
-      
-      // Then navigate to login page
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout error:", error);
-      toast({
-        title: "Error",
-        description: "Failed to sign out. Please try again.",
-        variant: "destructive",
-      });
-    }
+    await supabase.auth.signOut();
+    navigate("/login");
   };
-
-  if (!session) {
-    return null;
-  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
