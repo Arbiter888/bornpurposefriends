@@ -72,7 +72,7 @@ const Login = () => {
           </div>
 
           {/* Auth & Subscription Section */}
-          <div className="space-y-8">
+          <div className="space-y-8 font-['Tomorrow']">
             <div className="bg-card p-8 rounded-xl shadow-lg space-y-6">
               <div className="text-center mb-6">
                 <h2 className="text-3xl font-bold">Welcome to BornPurpose</h2>
@@ -88,6 +88,12 @@ const Login = () => {
                       colors: {
                         brand: '#8B0000',
                         brandAccent: '#FF0000',
+                      },
+                      fonts: {
+                        bodyFontFamily: 'Tomorrow, sans-serif',
+                        buttonFontFamily: 'Tomorrow, sans-serif',
+                        inputFontFamily: 'Tomorrow, sans-serif',
+                        labelFontFamily: 'Tomorrow, sans-serif',
                       },
                     },
                   },
