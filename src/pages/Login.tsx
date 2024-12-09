@@ -21,8 +21,35 @@ const Login = () => {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12">
-        {/* Hero Section */}
-        <div className="text-center mb-16">
+        {/* Hero Section with Character Previews */}
+        <div className="text-center mb-16 relative">
+          <div className="flex justify-center gap-4 mb-8">
+            {characters.map((character, index) => (
+              <motion.div
+                key={character.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.1 }}
+                className="relative group"
+              >
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 border-[#FF0000] transform transition-transform duration-300 group-hover:scale-110">
+                  <img
+                    src={character.image}
+                    alt={character.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileHover={{ opacity: 1 }}
+                  className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-3 py-1 rounded-full text-sm whitespace-nowrap"
+                >
+                  {character.name}
+                </motion.div>
+              </motion.div>
+            ))}
+          </div>
+          
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#8B0000] to-[#FF0000] bg-clip-text text-transparent">
             Meet Your AI Companions
           </h1>
