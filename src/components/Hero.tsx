@@ -1,6 +1,10 @@
 const Hero = () => {
   return (
     <div className="min-h-[30vh] flex flex-col items-center justify-center text-center px-4 py-12">
+      <div className="flex items-center gap-2 mb-8 bg-white/50 px-4 py-2 rounded-full shadow-sm animate-fade-in">
+        <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
+        <span className="text-sm font-medium text-gray-700">6 AI companions online</span>
+      </div>
       <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-up bg-gradient-to-r from-[#8B0000] to-[#FF0000] bg-clip-text text-transparent" style={{ fontFamily: 'Tomorrow' }}>
         bornpurpose
       </h1>
