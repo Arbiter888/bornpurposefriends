@@ -99,23 +99,37 @@ const Login = () => {
               />
             </div>
 
-            <div className="bg-card p-8 rounded-xl shadow-lg space-y-4 mt-8">
+            <div className="bg-card p-8 rounded-xl shadow-lg space-y-6">
               <div className="text-center">
-                <h3 className="text-xl font-semibold mb-2">Premium Access</h3>
-                <p className="text-muted-foreground text-sm mb-4">
-                  Unlock unlimited conversations with all AI companions
+                <h3 className="text-xl font-semibold mb-3">Premium Access</h3>
+                <p className="text-muted-foreground text-sm mb-6">
+                  Unlock unlimited conversations with all AI companions and experience personalized growth through advanced neural-linked interactions
                 </p>
-                <ul className="text-sm space-y-2 mb-6">
-                  <li className="flex items-center justify-center gap-2">
-                    <span className="text-[#FF0000]">✓</span> Unlimited character interactions
-                  </li>
-                  <li className="flex items-center justify-center gap-2">
-                    <span className="text-[#FF0000]">✓</span> Premium character access
-                  </li>
-                  <li className="flex items-center justify-center gap-2">
-                    <span className="text-[#FF0000]">✓</span> Priority support
-                  </li>
-                </ul>
+                <div className="space-y-4 mb-6">
+                  <div className="text-sm">
+                    <h4 className="font-semibold mb-2">What's included:</h4>
+                    <ul className="space-y-3">
+                      <li className="flex items-center justify-center gap-2">
+                        <span className="text-[#FF0000]">✓</span> Unlimited character interactions
+                      </li>
+                      <li className="flex items-center justify-center gap-2">
+                        <span className="text-[#FF0000]">✓</span> Premium character access
+                      </li>
+                      <li className="flex items-center justify-center gap-2">
+                        <span className="text-[#FF0000]">✓</span> Priority support
+                      </li>
+                      <li className="flex items-center justify-center gap-2">
+                        <span className="text-[#FF0000]">✓</span> Advanced conversation features
+                      </li>
+                      <li className="flex items-center justify-center gap-2">
+                        <span className="text-[#FF0000]">✓</span> Customizable AI responses
+                      </li>
+                    </ul>
+                  </div>
+                  <p className="text-sm text-muted-foreground italic">
+                    Join our premium members and unlock the full potential of AI companionship
+                  </p>
+                </div>
                 <SubscriptionButton />
               </div>
             </div>
