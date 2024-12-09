@@ -114,7 +114,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
               {character.languages.map((language, index) => (
                 <span 
                   key={index}
-                  className="text-xs px-2 py-1 rounded-full bg-primary/20 text-primary"
+                  className="text-xs px-2 py-1 rounded-full bg-[#8B0000]/10 text-[#FF0000]"
                 >
                   {language}
                 </span>
