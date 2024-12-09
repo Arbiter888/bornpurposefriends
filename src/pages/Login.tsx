@@ -23,8 +23,12 @@ const Login = () => {
       <div className="container mx-auto px-4 py-12">
         {/* Hero Section with Character Previews */}
         <div className="text-center mb-16 relative">
-          <div className="flex justify-center gap-4 mb-8">
-            {characters.map((character, index) => (
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#8B0000] to-[#FF0000] bg-clip-text text-transparent">
+            Featured Companions
+          </h1>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-12">
+            {characters.slice(0, 4).map((character, index) => (
               <motion.div
                 key={character.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -32,79 +36,39 @@ const Login = () => {
                 transition={{ delay: index * 0.1 }}
                 className="relative group"
               >
-                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 border-[#FF0000] transform transition-transform duration-300 group-hover:scale-110">
+                <div className="aspect-square relative overflow-hidden rounded-lg bg-black">
                   <img
                     src={character.image}
                     alt={character.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-top"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90" />
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                    <h3 className="text-xl font-bold mb-1">{character.name}</h3>
+                    <p className="text-sm text-gray-300">{character.role}</p>
+                  </div>
                 </div>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  whileHover={{ opacity: 1 }}
-                  className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-black/80 text-white px-3 py-1 rounded-full text-sm whitespace-nowrap"
-                >
-                  {character.name}
-                </motion.div>
               </motion.div>
             ))}
           </div>
-          
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-[#8B0000] to-[#FF0000] bg-clip-text text-transparent">
-            Meet Your AI Companions
-          </h1>
-          <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
-            Step into 2040 where AI companions enhance every aspect of your life. Connect with unique personalities designed to inspire, support, and grow with you.
-          </p>
+
+          <div className="space-y-4 text-left max-w-2xl mx-auto mb-12">
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-[#FF0000]"></div>
+              <p className="text-lg">Advanced neural-linked conversations</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-[#FF0000]"></div>
+              <p className="text-lg">Personalized growth & learning</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <div className="w-2 h-2 rounded-full bg-[#FF0000]"></div>
+              <p className="text-lg">Multi-language support</p>
+            </div>
+          </div>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-start">
-          {/* Character Preview */}
-          <div className="space-y-8">
-            <div className="relative">
-              <div className="absolute -inset-1 bg-gradient-to-r from-[#8B0000] to-[#FF0000] rounded-lg blur opacity-25"></div>
-              <div className="relative bg-black p-6 rounded-lg space-y-6">
-                <h2 className="text-2xl font-bold text-white mb-4">Featured Companions</h2>
-                <div className="grid grid-cols-2 gap-4">
-                  {characters.slice(0, 4).map((character) => (
-                    <motion.div
-                      key={character.id}
-                      className="relative group cursor-pointer"
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <img
-                        src={character.image}
-                        alt={character.name}
-                        className="w-full h-40 object-cover rounded-lg"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-75 rounded-lg"></div>
-                      <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
-                        <p className="font-semibold">{character.name}</p>
-                        <p className="text-sm text-gray-300">{character.role}</p>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-
-                <div className="space-y-4 text-gray-300">
-                  <div className="flex items-center gap-2">
-                    <div className="w-1 h-1 rounded-full bg-[#FF0000]"></div>
-                    <p>Advanced neural-linked conversations</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-1 h-1 rounded-full bg-[#FF0000]"></div>
-                    <p>Personalized growth & learning</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-1 h-1 rounded-full bg-[#FF0000]"></div>
-                    <p>Multi-language support</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
           {/* Auth & Subscription Section */}
           <div className="space-y-8">
             <div className="bg-card p-8 rounded-xl shadow-lg space-y-6">
