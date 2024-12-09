@@ -2,12 +2,19 @@ import Hero from "@/components/Hero";
 import CharacterGrid from "@/components/CharacterGrid";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
 import { useSession } from "@supabase/auth-helpers-react";
+import { useEffect } from "react";
 
 const Index = () => {
   const navigate = useNavigate();
   const session = useSession();
+
+  useEffect(() => {
+    if (!session) {
+      navigate("/login");
+    }
+  }, [session, navigate]);
 
   const handleLogout = async () => {
     try {
@@ -15,15 +22,17 @@ const Index = () => {
       if (error) {
         throw error;
       }
-      navigate("/login");
     } catch (error) {
       console.error("Logout error:", error);
-      toast.error("Failed to sign out. Please try again.");
+      toast({
+        title: "Error",
+        description: "Failed to sign out. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
   if (!session) {
-    navigate("/login");
     return null;
   }
 
