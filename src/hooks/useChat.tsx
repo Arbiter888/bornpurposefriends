@@ -1,155 +1,116 @@
 import { useState, useEffect } from "react";
 import { Message } from "@/types/chat";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
 import { User } from "@supabase/auth-helpers-react";
 import { Character } from "@/lib/characters";
+import { useToast } from "@/components/ui/use-toast";
+import { messageService } from "@/services/messageService";
+import { UseChatResult } from "@/types/chat-types";
 
-export const useChat = (user: User | null, characterId: string | undefined, isGroupChat: boolean = false) => {
+export const useChat = (
+  user: User | null, 
+  characterId: string | undefined, 
+  isGroupChat: boolean = false
+): UseChatResult => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const conversationUUID = crypto.randomUUID();
 
   useEffect(() => {
     if (!user?.id || !characterId) return;
     
-    const fetchMessages = async () => {
-      const conversationUUID = crypto.randomUUID();
-      
-      const { data, error } = await supabase
-        .from('messages')
-        .select('*')
-        .eq('conversation_id', conversationUUID)
-        .order('created_at', { ascending: true });
-
-      if (error) {
+    const loadMessages = async () => {
+      try {
+        const messages = await messageService.fetchMessages(conversationUUID);
+        setMessages(messages);
+      } catch (error) {
         toast({
           title: "Error fetching messages",
           description: error.message,
           variant: "destructive",
         });
-        return;
-      }
-
-      if (data) {
-        setMessages(data.map(msg => ({
-          id: msg.id,
-          role: msg.role as 'user' | 'assistant',
-          content: msg.content,
-          timestamp: new Date(msg.created_at),
-          characterName: msg.character_name,
-          characterImage: msg.character_image,
-        })));
       }
     };
 
-    fetchMessages();
-  }, [user?.id, characterId, toast]);
+    loadMessages();
+  }, [user?.id, characterId, toast, conversationUUID]);
 
   const handleSendMessage = async (character: Character | Character[]) => {
     if (!newMessage.trim() || !user?.id) return;
 
     setIsLoading(true);
     const messageId = crypto.randomUUID();
-    const conversationUUID = crypto.randomUUID();
-    
-    const userMessage: Message = {
-      id: messageId,
-      role: 'user',
-      content: newMessage,
-      timestamp: new Date(),
-    };
 
     try {
-      const { error: insertError } = await supabase
-        .from('messages')
-        .insert({
-          id: messageId,
-          conversation_id: conversationUUID,
-          content: newMessage,
-          role: 'user',
-          user_id: user.id,
-        });
+      // Add user message
+      const userMessage: Message = {
+        id: messageId,
+        role: 'user',
+        content: newMessage,
+        timestamp: new Date(),
+      };
 
-      if (insertError) throw insertError;
+      await messageService.insertMessage({
+        id: messageId,
+        conversationId: conversationUUID,
+        content: newMessage,
+        role: 'user',
+        userId: user.id,
+      });
 
       setMessages(prev => [...prev, userMessage]);
       setNewMessage("");
 
+      // Handle AI responses
       if (isGroupChat && Array.isArray(character)) {
-        // Handle group chat responses
         for (const char of character) {
-          const { data, error } = await supabase.functions.invoke('chat', {
-            body: {
-              message: newMessage,
-              character: char,
-              isGroupChat: true,
-            },
-          });
-
-          if (error) throw error;
-
+          const response = await messageService.getAIResponse(newMessage, char, true);
+          
           const aiMessageId = crypto.randomUUID();
           const aiMessage: Message = {
             id: aiMessageId,
             role: 'assistant',
-            content: data.response,
+            content: response,
             timestamp: new Date(),
             characterName: char.name,
             characterImage: char.image,
           };
 
-          const { error: aiInsertError } = await supabase
-            .from('messages')
-            .insert({
-              id: aiMessageId,
-              conversation_id: conversationUUID,
-              content: data.response,
-              role: 'assistant',
-              user_id: user.id,
-              character_name: char.name,
-              character_image: char.image,
-            });
-
-          if (aiInsertError) throw aiInsertError;
+          await messageService.insertMessage({
+            id: aiMessageId,
+            conversationId: conversationUUID,
+            content: response,
+            role: 'assistant',
+            userId: user.id,
+            characterName: char.name,
+            characterImage: char.image,
+          });
 
           setMessages(prev => [...prev, aiMessage]);
         }
       } else if (!Array.isArray(character)) {
-        // Handle single character chat
-        const { data, error } = await supabase.functions.invoke('chat', {
-          body: {
-            message: newMessage,
-            character,
-          },
-        });
-
-        if (error) throw error;
-
+        const response = await messageService.getAIResponse(newMessage, character);
+        
         const aiMessageId = crypto.randomUUID();
         const aiMessage: Message = {
           id: aiMessageId,
           role: 'assistant',
-          content: data.response,
+          content: response,
           timestamp: new Date(),
           characterName: character.name,
           characterImage: character.image,
         };
 
-        const { error: aiInsertError } = await supabase
-          .from('messages')
-          .insert({
-            id: aiMessageId,
-            conversation_id: conversationUUID,
-            content: data.response,
-            role: 'assistant',
-            user_id: user.id,
-            character_name: character.name,
-            character_image: character.image,
-          });
-
-        if (aiInsertError) throw aiInsertError;
+        await messageService.insertMessage({
+          id: aiMessageId,
+          conversationId: conversationUUID,
+          content: response,
+          role: 'assistant',
+          userId: user.id,
+          characterName: character.name,
+          characterImage: character.image,
+        });
 
         setMessages(prev => [...prev, aiMessage]);
       }
