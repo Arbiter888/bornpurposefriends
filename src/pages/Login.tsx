@@ -42,7 +42,7 @@ const Login = () => {
           {/* Left Section - Featured Companions */}
           <div className="space-y-8">
             <div>
-              <h1 className="text-6xl font-bold text-[#990000] mb-4">
+              <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-[#990000] to-[#ff4d4d] bg-clip-text text-transparent backdrop-blur-sm">
                 Featured Companions
               </h1>
               <p className="text-lg text-gray-700">
@@ -68,7 +68,7 @@ const Login = () => {
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90" />
                     {character.id !== 'atlas' && (
                       <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center">
-                        <Lock className="w-8 h-8 mb-2 text-white" />
+                        <Lock className="w-8 h-8 mb-2 text-red-500" />
                         <span className="text-sm font-semibold text-white">Premium Only</span>
                       </div>
                     )}
