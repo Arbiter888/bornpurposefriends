@@ -23,10 +23,13 @@ const Workspace = () => {
     if (!user?.id || !characterId) return;
     
     const fetchMessages = async () => {
+      // Create a deterministic UUID based on the character ID
+      const conversationUUID = crypto.randomUUID();
+      
       const { data, error } = await supabase
         .from('messages')
         .select('*')
-        .eq('conversation_id', characterId)
+        .eq('conversation_id', conversationUUID)
         .order('created_at', { ascending: true });
 
       if (error) {
@@ -57,6 +60,8 @@ const Workspace = () => {
 
     setIsLoading(true);
     const messageId = crypto.randomUUID();
+    const conversationUUID = crypto.randomUUID();
+    
     const userMessage: Message = {
       id: messageId,
       role: 'user',
@@ -70,7 +75,7 @@ const Workspace = () => {
         .from('messages')
         .insert({
           id: messageId,
-          conversation_id: characterId,
+          conversation_id: conversationUUID,
           content: newMessage,
           role: 'user',
           user_id: user.id,
@@ -110,7 +115,7 @@ const Workspace = () => {
         .from('messages')
         .insert({
           id: aiMessageId,
-          conversation_id: characterId,
+          conversation_id: conversationUUID,
           content: data.response,
           role: 'assistant',
           user_id: user.id,
