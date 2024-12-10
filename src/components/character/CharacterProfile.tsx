@@ -1,6 +1,5 @@
 import { Character } from "@/lib/characters";
 import { Card } from "../ui/card";
-import { Avatar, AvatarImage } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { Globe, MessageCircle, Clock, Phone } from "lucide-react";
 import { Button } from "../ui/button";
@@ -25,10 +24,7 @@ export const CharacterProfile = ({ character, onQuickCall }: CharacterProfilePro
 
       {/* Profile Info */}
       <div className="flex flex-col items-center text-center">
-        <Avatar className="w-24 h-24">
-          <AvatarImage src={character.image} alt={character.name} />
-        </Avatar>
-        <h2 className="mt-4 text-2xl font-bold">{character.name}</h2>
+        <h2 className="text-2xl font-bold">{character.name}</h2>
         <p className="text-muted-foreground">{character.role}</p>
       </div>
 
