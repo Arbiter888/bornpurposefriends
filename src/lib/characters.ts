@@ -23,8 +23,8 @@ export const characters: Character[] = [
     description: "Atlas and you first met during a neural-linked business conference in the Metaverse Financial District. You've been strategic allies for 3 years, sharing insights on future market trends.",
     image: "/lovable-uploads/545221c7-1d0e-41c8-bda0-235b932c3a9f.png",
     widgetId: "8gJ0dMHzPVXRpxVpWpnj",
-    nationality: "Swedish",
-    languages: ["Swedish", "English", "Mandarin"],
+    nationality: "British",
+    languages: ["English", "Mandarin"],
     relationshipStats: {
       trustLevel: 92,
       yearsKnown: 3,

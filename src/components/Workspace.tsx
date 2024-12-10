@@ -1,16 +1,12 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { characters } from "@/lib/characters";
-import { ChatWindow } from "./chat/ChatWindow";
 import { useToast } from "./ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useUser } from "@supabase/auth-helpers-react";
 import { Message } from "@/types/chat";
-import { KanbanBoard } from "./kanban/KanbanBoard";
-import { Card } from "./ui/card";
-import { Avatar, AvatarImage } from "./ui/avatar";
-import { Badge } from "./ui/badge";
-import { Globe, MessageCircle, Clock } from "lucide-react";
+import { CharacterProfile } from "./character/CharacterProfile";
+import { ChatSection } from "./chat/ChatSection";
 
 const Workspace = () => {
   const { characterId } = useParams();
@@ -127,6 +123,14 @@ const Workspace = () => {
     }
   };
 
+  const handleQuickCall = () => {
+    toast({
+      title: "Starting call...",
+      description: `Initiating a call with ${character?.name}`,
+    });
+    // Additional call logic would go here
+  };
+
   if (!character) {
     return <div>Character not found</div>;
   }
@@ -135,54 +139,12 @@ const Workspace = () => {
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          {/* Profile Section */}
-          <Card className="p-6 space-y-6">
-            <div className="flex flex-col items-center text-center">
-              <Avatar className="w-24 h-24">
-                <AvatarImage src={character.image} alt={character.name} />
-              </Avatar>
-              <h2 className="mt-4 text-2xl font-bold">{character.name}</h2>
-              <p className="text-muted-foreground">{character.role}</p>
-            </div>
-            
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium">About</h3>
-                <p className="text-sm text-muted-foreground">{character.description}</p>
-              </div>
-
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium">Details</h3>
-                <div className="flex items-center gap-2">
-                  <Globe className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">{character.nationality}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <MessageCircle className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">{character.languages.join(", ")}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-muted-foreground" />
-                  <span className="text-sm">{character.relationshipStats.yearsKnown} years</span>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <h3 className="text-sm font-medium">Topics</h3>
-                <div className="flex flex-wrap gap-2">
-                  {character.conversationTopics.map((topic) => (
-                    <Badge key={topic} variant="secondary">
-                      {topic}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </Card>
-
-          {/* Chat and Kanban Section */}
-          <div className="md:col-span-3 space-y-6">
-            <ChatWindow
+          <CharacterProfile 
+            character={character}
+            onQuickCall={handleQuickCall}
+          />
+          <div className="md:col-span-3">
+            <ChatSection
               messages={messages}
               newMessage={newMessage}
               setNewMessage={setNewMessage}
@@ -191,8 +153,6 @@ const Workspace = () => {
               characterName={character.name}
               isLoading={isLoading}
             />
-
-            <KanbanBoard />
           </div>
         </div>
       </div>
