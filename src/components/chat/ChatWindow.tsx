@@ -13,6 +13,7 @@ interface ChatWindowProps {
   characterName?: string;
   isLoading?: boolean;
   isGroupChat?: boolean;
+  background?: string;
 }
 
 export const ChatWindow = ({
@@ -23,7 +24,8 @@ export const ChatWindow = ({
   characterImage,
   characterName,
   isLoading,
-  isGroupChat
+  isGroupChat,
+  background,
 }: ChatWindowProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -32,25 +34,34 @@ export const ChatWindow = ({
   }, [messages]);
 
   return (
-    <Card className="p-6">
-      <div className="h-[500px] overflow-y-auto mb-4 space-y-4">
-        {messages.map((message) => (
-          <ChatMessage
-            key={message.id}
-            role={message.role}
-            content={message.content}
-            characterImage={isGroupChat ? message.characterImage : characterImage}
-            characterName={isGroupChat ? message.characterName : characterName}
-          />
-        ))}
-        <div ref={messagesEndRef} />
+    <Card 
+      className="p-6 relative overflow-hidden"
+      style={background ? {
+        backgroundImage: `url(${background})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      } : undefined}
+    >
+      <div className="relative z-10">
+        <div className="h-[500px] overflow-y-auto mb-4 space-y-4 backdrop-blur-sm bg-white/10 rounded-lg p-4">
+          {messages.map((message) => (
+            <ChatMessage
+              key={message.id}
+              role={message.role}
+              content={message.content}
+              characterImage={isGroupChat ? message.characterImage : characterImage}
+              characterName={isGroupChat ? message.characterName : characterName}
+            />
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+        <ChatInput
+          value={newMessage}
+          onChange={setNewMessage}
+          onSubmit={handleSendMessage}
+          disabled={isLoading}
+        />
       </div>
-      <ChatInput
-        value={newMessage}
-        onChange={setNewMessage}
-        onSubmit={handleSendMessage}
-        disabled={isLoading}
-      />
     </Card>
   );
 };

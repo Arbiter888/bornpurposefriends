@@ -9,6 +9,7 @@ import { useToast } from "./ui/use-toast";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Users } from "lucide-react";
+import { BackgroundSelector } from "./workspace/BackgroundSelector";
 
 const Workspace = () => {
   const { characterId } = useParams();
@@ -16,6 +17,7 @@ const Workspace = () => {
   const user = useUser();
   const { toast } = useToast();
   const [isGroupChat, setIsGroupChat] = useState(false);
+  const [background, setBackground] = useState("");
   
   const {
     messages,
@@ -30,7 +32,6 @@ const Workspace = () => {
       title: "Starting call...",
       description: `Initiating a call with ${character?.name}`,
     });
-    // Additional call logic would go here
   };
 
   const toggleGroupChat = () => {
@@ -43,6 +44,14 @@ const Workspace = () => {
     });
   };
 
+  const handleBackgroundChange = (newBackground: string) => {
+    setBackground(newBackground);
+    toast({
+      title: "Background Updated",
+      description: "Chat background has been changed successfully",
+    });
+  };
+
   if (!character) {
     return <div>Character not found</div>;
   }
@@ -51,7 +60,8 @@ const Workspace = () => {
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto space-y-8">
         <WorkspaceHeader />
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-2">
+          <BackgroundSelector onSelect={handleBackgroundChange} />
           <Button
             onClick={toggleGroupChat}
             variant={isGroupChat ? "default" : "outline"}
@@ -79,6 +89,7 @@ const Workspace = () => {
               characterName={character.name}
               isLoading={isLoading}
               isGroupChat={isGroupChat}
+              background={background}
             />
           </div>
         </div>
