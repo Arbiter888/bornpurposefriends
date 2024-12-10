@@ -4,12 +4,13 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
+import { Folder } from "lucide-react";
 
 interface Task {
   id: string;
   title: string;
   description: string;
-  status: 'todo' | 'in-progress' | 'done';
+  status: 'todo' | 'in-progress' | 'done' | 'saved';
 }
 
 interface NewTask {
@@ -35,9 +36,22 @@ export const KanbanBoard = () => {
       setTasks(prev => [...prev, task]);
     };
 
+    const handleSaveMessage = (event: CustomEvent<NewTask>) => {
+      const task: Task = {
+        id: crypto.randomUUID(),
+        title: event.detail.title,
+        description: event.detail.description,
+        status: 'saved'
+      };
+      setTasks(prev => [...prev, task]);
+    };
+
     window.addEventListener('addToKanban', handleAddToKanban as EventListener);
+    window.addEventListener('saveMessage', handleSaveMessage as EventListener);
+    
     return () => {
       window.removeEventListener('addToKanban', handleAddToKanban as EventListener);
+      window.removeEventListener('saveMessage', handleSaveMessage as EventListener);
     };
   }, []);
 
@@ -88,10 +102,13 @@ export const KanbanBoard = () => {
         <Button type="submit">Add Task</Button>
       </form>
 
-      <div className="grid grid-cols-3 gap-4">
-        {(['todo', 'in-progress', 'done'] as const).map((status) => (
+      <div className="grid grid-cols-4 gap-4">
+        {(['todo', 'in-progress', 'done', 'saved'] as const).map((status) => (
           <div key={status} className="space-y-4">
-            <h3 className="font-semibold capitalize">{status.replace('-', ' ')}</h3>
+            <h3 className="font-semibold capitalize flex items-center gap-2">
+              {status === 'saved' && <Folder className="w-4 h-4" />}
+              {status.replace('-', ' ')}
+            </h3>
             <div className="space-y-2">
               {tasks
                 .filter((task) => task.status === status)
@@ -99,35 +116,37 @@ export const KanbanBoard = () => {
                   <Card key={task.id} className="p-4">
                     <h4 className="font-medium">{task.title}</h4>
                     <p className="text-sm text-gray-500 mt-1">{task.description}</p>
-                    <div className="flex gap-2 mt-4">
-                      {status !== 'todo' && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => updateTaskStatus(task.id, 'todo')}
-                        >
-                          Move to Todo
-                        </Button>
-                      )}
-                      {status !== 'in-progress' && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => updateTaskStatus(task.id, 'in-progress')}
-                        >
-                          Move to In Progress
-                        </Button>
-                      )}
-                      {status !== 'done' && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => updateTaskStatus(task.id, 'done')}
-                        >
-                          Move to Done
-                        </Button>
-                      )}
-                    </div>
+                    {status !== 'saved' && (
+                      <div className="flex gap-2 mt-4">
+                        {status !== 'todo' && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => updateTaskStatus(task.id, 'todo')}
+                          >
+                            Move to Todo
+                          </Button>
+                        )}
+                        {status !== 'in-progress' && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => updateTaskStatus(task.id, 'in-progress')}
+                          >
+                            Move to In Progress
+                          </Button>
+                        )}
+                        {status !== 'done' && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => updateTaskStatus(task.id, 'done')}
+                          >
+                            Move to Done
+                          </Button>
+                        )}
+                      </div>
+                    )}
                   </Card>
                 ))}
             </div>

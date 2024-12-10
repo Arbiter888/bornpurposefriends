@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { PlusCircle } from "lucide-react";
+import { PlusCircle, BookmarkPlus } from "lucide-react";
 import { useToast } from "../ui/use-toast";
 
 interface ChatMessageProps {
@@ -28,6 +28,21 @@ export const ChatMessage = ({ role, content, characterImage, characterName }: Ch
     });
   };
 
+  const handleSaveMessage = () => {
+    const event = new CustomEvent('saveMessage', { 
+      detail: { 
+        title: `Saved message from ${role === 'assistant' ? characterName : 'you'}`,
+        description: content
+      } 
+    });
+    window.dispatchEvent(event);
+    
+    toast({
+      title: "Message Saved",
+      description: "The message has been added to your saved messages",
+    });
+  };
+
   return (
     <div className={`flex gap-3 ${role === 'assistant' ? 'flex-row' : 'flex-row-reverse'}`}>
       <Avatar>
@@ -46,17 +61,28 @@ export const ChatMessage = ({ role, content, characterImage, characterName }: Ch
         >
           {content}
         </div>
-        {role === 'assistant' && (
+        <div className="flex gap-2">
+          {role === 'assistant' && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex items-center gap-2"
+              onClick={handleAddToKanban}
+            >
+              <PlusCircle className="w-4 h-4" />
+              Add to Kanban
+            </Button>
+          )}
           <Button
             variant="outline"
             size="sm"
-            className="ml-auto flex items-center gap-2"
-            onClick={handleAddToKanban}
+            className="flex items-center gap-2"
+            onClick={handleSaveMessage}
           >
-            <PlusCircle className="w-4 h-4" />
-            Add to Kanban
+            <BookmarkPlus className="w-4 h-4" />
+            Save Message
           </Button>
-        )}
+        </div>
       </div>
     </div>
   );
