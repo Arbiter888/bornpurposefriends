@@ -23,11 +23,11 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4',
+        model: 'gpt-4o-mini',
         messages: [
           { 
             role: 'system', 
-            content: `You are ${character.name}, ${character.role}. Respond in character, maintaining their personality and expertise.` 
+            content: `You are ${character.name}, ${character.role}. Respond in character, maintaining their personality and expertise. When appropriate, include actionable suggestions or tasks that the user might want to add to their todo list. Format these suggestions clearly within your response.` 
           },
           { role: 'user', content: message }
         ],
