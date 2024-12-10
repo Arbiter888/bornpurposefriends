@@ -23,7 +23,6 @@ const Workspace = () => {
     if (!user?.id || !characterId) return;
     
     const fetchMessages = async () => {
-      // Create a deterministic UUID based on the character ID
       const conversationUUID = crypto.randomUUID();
       
       const { data, error } = await supabase
@@ -86,22 +85,16 @@ const Workspace = () => {
       setMessages(prev => [...prev, userMessage]);
       setNewMessage("");
 
-      // Get AI response
-      const response = await fetch('/functions/v1/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-        },
-        body: JSON.stringify({
+      // Get AI response using Supabase Edge Function
+      const { data, error } = await supabase.functions.invoke('chat', {
+        body: {
           message: newMessage,
           character,
-        }),
+        },
       });
 
-      if (!response.ok) throw new Error('Failed to get AI response');
+      if (error) throw error;
 
-      const data = await response.json();
       const aiMessageId = crypto.randomUUID();
       const aiMessage: Message = {
         id: aiMessageId,
