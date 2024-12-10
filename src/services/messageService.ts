@@ -2,6 +2,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { Character } from "@/lib/characters";
 import { Message } from "@/types/chat";
 
+interface SupabaseMessage {
+  id: string;
+  conversation_id: string;
+  content: string;
+  role: string;
+  user_id: string;
+  character_name?: string;
+  character_image?: string;
+  created_at: string;
+}
+
 export const messageService = {
   async fetchMessages(conversationId: string): Promise<Message[]> {
     const { data, error } = await supabase
@@ -11,7 +22,16 @@ export const messageService = {
       .order('created_at', { ascending: true });
 
     if (error) throw error;
-    return data as Message[];
+    
+    // Transform the Supabase data into the Message type
+    return (data as SupabaseMessage[]).map(msg => ({
+      id: msg.id,
+      role: msg.role as 'user' | 'assistant',
+      content: msg.content,
+      timestamp: new Date(msg.created_at),
+      characterName: msg.character_name,
+      characterImage: msg.character_image,
+    }));
   },
 
   async insertMessage(message: {
