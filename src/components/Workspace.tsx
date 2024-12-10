@@ -2,27 +2,19 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { characters } from "@/lib/characters";
 import { MessageSquare, Kanban } from "lucide-react";
-import { Card } from "./ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ChatWindow } from "./chat/ChatWindow";
 import { useToast } from "./ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { useUser } from "@supabase/auth-helpers-react";
 import { Message } from "@/types/chat";
-
-interface Task {
-  id: string;
-  title: string;
-  description: string;
-  status: 'todo' | 'in-progress' | 'done';
-}
+import { KanbanBoard } from "./kanban/KanbanBoard";
 
 const Workspace = () => {
   const { characterId } = useParams();
   const character = characters.find((c) => c.id === characterId);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const user = useUser();
@@ -182,76 +174,7 @@ const Workspace = () => {
           </TabsContent>
 
           <TabsContent value="kanban">
-            <Card className="p-6">
-              <form onSubmit={handleAddTask} className="mb-6 space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="title">Task Title</Label>
-                  <Input
-                    id="title"
-                    value={newTask.title}
-                    onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-                    placeholder="Enter task title"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    value={newTask.description}
-                    onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-                    placeholder="Enter task description"
-                  />
-                </div>
-                <Button type="submit">Add Task</Button>
-              </form>
-
-              <div className="grid grid-cols-3 gap-4">
-                {(['todo', 'in-progress', 'done'] as const).map((status) => (
-                  <div key={status} className="space-y-4">
-                    <h3 className="font-semibold capitalize">{status.replace('-', ' ')}</h3>
-                    <div className="space-y-2">
-                      {tasks
-                        .filter((task) => task.status === status)
-                        .map((task) => (
-                          <Card key={task.id} className="p-4">
-                            <h4 className="font-medium">{task.title}</h4>
-                            <p className="text-sm text-gray-500 mt-1">{task.description}</p>
-                            <div className="flex gap-2 mt-4">
-                              {status !== 'todo' && (
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => updateTaskStatus(task.id, 'todo')}
-                                >
-                                  Move to Todo
-                                </Button>
-                              )}
-                              {status !== 'in-progress' && (
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => updateTaskStatus(task.id, 'in-progress')}
-                                >
-                                  Move to In Progress
-                                </Button>
-                              )}
-                              {status !== 'done' && (
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => updateTaskStatus(task.id, 'done')}
-                                >
-                                  Move to Done
-                                </Button>
-                              )}
-                            </div>
-                          </Card>
-                        ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </Card>
+            <KanbanBoard />
           </TabsContent>
         </Tabs>
       </div>
