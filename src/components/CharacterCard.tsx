@@ -1,5 +1,7 @@
 import { Character } from "@/lib/characters";
 import { useEffect, useRef, useState } from "react";
+import { MessageSquare, Kanban, User } from "lucide-react";
+import { Button } from "./ui/button";
 
 interface CharacterCardProps {
   character: Character;
@@ -58,12 +60,16 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     }
   };
 
+  const openWorkspace = () => {
+    const workspaceUrl = `/workspace/${character.id}`;
+    window.open(workspaceUrl, '_blank');
+  };
+
   return (
     <>
       <div 
         ref={containerRef}
-        onClick={handleCardClick}
-        className="relative group bg-black rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer h-full"
+        className="relative group bg-black rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl h-full"
         style={{
           backdropFilter: "blur(10px)",
           WebkitBackdropFilter: "blur(10px)",
@@ -134,7 +140,25 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
             </div>
           </div>
 
-          <p className="text-xs text-gray-400">© George Jacklin 2024</p>
+          <div className="flex flex-col gap-2">
+            <Button 
+              onClick={handleCardClick}
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
+            >
+              <MessageSquare className="w-4 h-4 mr-2" />
+              Quick Chat
+            </Button>
+            <Button 
+              onClick={openWorkspace}
+              variant="secondary"
+              className="w-full"
+            >
+              <User className="w-4 h-4 mr-2" />
+              Open Workspace
+            </Button>
+          </div>
+
+          <p className="text-xs text-gray-400 mt-4">© George Jacklin 2024</p>
         </div>
       </div>
 
