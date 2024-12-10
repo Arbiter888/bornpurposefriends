@@ -18,7 +18,7 @@ export const CharacterProfile = ({ character, onQuickCall }: CharacterProfilePro
         <img
           src={character.image}
           alt={character.name}
-          className="object-cover w-full h-full"
+          className="object-cover w-full h-full object-top"
         />
       </AspectRatio>
 
