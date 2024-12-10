@@ -1,7 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, BookmarkPlus } from "lucide-react";
+import { PlusCircle, BookmarkPlus, ChevronDown, ChevronUp } from "lucide-react";
 import { useToast } from "../ui/use-toast";
+import { useState } from "react";
 
 interface ChatMessageProps {
   role: 'user' | 'assistant';
@@ -12,6 +13,12 @@ interface ChatMessageProps {
 
 export const ChatMessage = ({ role, content, characterImage, characterName }: ChatMessageProps) => {
   const { toast } = useToast();
+  const [isExpanded, setIsExpanded] = useState(false);
+  const messageLength = 300; // Characters to show before "read more"
+  const shouldTruncate = content.length > messageLength;
+  const displayContent = shouldTruncate && !isExpanded 
+    ? content.slice(0, messageLength) + "..."
+    : content;
 
   const handleAddToKanban = () => {
     const event = new CustomEvent('addToKanban', { 
@@ -44,22 +51,47 @@ export const ChatMessage = ({ role, content, characterImage, characterName }: Ch
   };
 
   return (
-    <div className={`flex gap-3 ${role === 'assistant' ? 'flex-row' : 'flex-row-reverse'}`}>
+    <div className={`flex gap-3 ${role === 'assistant' ? 'flex-row' : 'flex-row-reverse'} animate-fade-up`}>
       <Avatar>
         <AvatarImage src={role === 'assistant' ? characterImage : undefined} />
         <AvatarFallback>
           {role === 'assistant' ? characterName?.[0] : 'You'}
         </AvatarFallback>
       </Avatar>
-      <div className="flex-1">
+      <div className="flex-1 space-y-2">
+        {role === 'assistant' && (
+          <p className="text-sm text-foreground/70">{characterName}</p>
+        )}
         <div
-          className={`rounded-lg p-3 mb-2 ${
+          className={`rounded-lg p-4 ${
             role === 'assistant'
               ? 'bg-card text-card-foreground'
               : 'bg-primary text-primary-foreground'
           }`}
         >
-          {content}
+          <div className="prose max-w-none">
+            {displayContent}
+          </div>
+          {shouldTruncate && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="mt-2 flex items-center gap-2"
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
+              {isExpanded ? (
+                <>
+                  <ChevronUp className="w-4 h-4" />
+                  Show less
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="w-4 h-4" />
+                  Read more
+                </>
+              )}
+            </Button>
+          )}
         </div>
         <div className="flex gap-2">
           {role === 'assistant' && (

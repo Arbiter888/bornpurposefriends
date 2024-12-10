@@ -6,12 +6,16 @@ import { ChatSection } from "./chat/ChatSection";
 import { WorkspaceHeader } from "./workspace/WorkspaceHeader";
 import { useChat } from "@/hooks/useChat";
 import { useToast } from "./ui/use-toast";
+import { useState } from "react";
+import { Button } from "./ui/button";
+import { Users } from "lucide-react";
 
 const Workspace = () => {
   const { characterId } = useParams();
   const character = characters.find((c) => c.id === characterId);
   const user = useUser();
   const { toast } = useToast();
+  const [isGroupChat, setIsGroupChat] = useState(false);
   
   const {
     messages,
@@ -19,7 +23,7 @@ const Workspace = () => {
     setNewMessage,
     isLoading,
     handleSendMessage,
-  } = useChat(user, characterId);
+  } = useChat(user, characterId, isGroupChat);
 
   const handleQuickCall = () => {
     toast({
@@ -27,6 +31,16 @@ const Workspace = () => {
       description: `Initiating a call with ${character?.name}`,
     });
     // Additional call logic would go here
+  };
+
+  const toggleGroupChat = () => {
+    setIsGroupChat(!isGroupChat);
+    toast({
+      title: isGroupChat ? "Single Chat Mode" : "Group Chat Mode",
+      description: isGroupChat 
+        ? `Switching to chat with ${character?.name}`
+        : "Switching to group chat with all AI companions",
+    });
   };
 
   if (!character) {
@@ -37,6 +51,16 @@ const Workspace = () => {
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto space-y-8">
         <WorkspaceHeader />
+        <div className="flex justify-end">
+          <Button
+            onClick={toggleGroupChat}
+            variant={isGroupChat ? "default" : "outline"}
+            className="flex items-center gap-2"
+          >
+            <Users className="w-4 h-4" />
+            {isGroupChat ? "Exit Group Chat" : "Start Group Chat"}
+          </Button>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <CharacterProfile 
             character={character}
@@ -49,11 +73,12 @@ const Workspace = () => {
               setNewMessage={setNewMessage}
               handleSendMessage={(e) => {
                 e.preventDefault();
-                handleSendMessage(character);
+                handleSendMessage(isGroupChat ? characters : character);
               }}
               characterImage={character.image}
               characterName={character.name}
               isLoading={isLoading}
+              isGroupChat={isGroupChat}
             />
           </div>
         </div>
