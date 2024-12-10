@@ -1,19 +1,47 @@
 import Hero from "@/components/Hero";
 import CharacterGrid from "@/components/CharacterGrid";
-import CharacterGenerator from "@/components/CharacterGenerator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import { useSession } from "@supabase/auth-helpers-react";
+import { toast } from "@/hooks/use-toast";
 
 const Index = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const session = useSession();
+
+  useEffect(() => {
+    if (!session) {
+      navigate("/login");
+    }
+  }, [session, navigate]);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate("/login");
+    try {
+      const { error } = await supabase.auth.signOut({ scope: 'local' });
+      if (error) {
+        throw error;
+      }
+      toast({
+        title: "Logged out successfully",
+        duration: 2000,
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+      toast({
+        title: "Error logging out",
+        description: "Please try again",
+        variant: "destructive",
+        duration: 2000,
+      });
+    }
   };
+
+  if (!session) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -58,7 +86,7 @@ const Index = () => {
             </svg>
           </CollapsibleTrigger>
           <CollapsibleContent className="mt-4">
-            <CharacterGenerator />
+            {/* Character Generator content removed as per revert */}
           </CollapsibleContent>
         </Collapsible>
       </div>
