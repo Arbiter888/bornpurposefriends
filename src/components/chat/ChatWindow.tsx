@@ -41,10 +41,14 @@ export const ChatWindow = ({
 }: ChatWindowProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [background, setBackground] = useState("none");
+  const [prevMessagesLength, setPrevMessagesLength] = useState(messages.length);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    if (messages.length > prevMessagesLength) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+    setPrevMessagesLength(messages.length);
+  }, [messages, prevMessagesLength]);
 
   const getBackgroundStyle = () => {
     switch (background) {
