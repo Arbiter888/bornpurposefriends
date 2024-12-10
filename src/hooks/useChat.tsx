@@ -18,21 +18,16 @@ export const useChat = (
   const conversationUUID = crypto.randomUUID();
 
   useEffect(() => {
-    if (!user?.id || !characterId) {
-      console.log('Missing user or character ID:', { userId: user?.id, characterId });
-      return;
-    }
+    if (!user?.id || !characterId) return;
     
     const loadMessages = async () => {
       try {
-        console.log('Loading messages for conversation:', conversationUUID);
         const messages = await messageService.fetchMessages(conversationUUID);
         setMessages(messages);
       } catch (error) {
-        console.error('Error fetching messages:', error);
         toast({
           title: "Error fetching messages",
-          description: "Failed to load chat messages. Please try again.",
+          description: error.message,
           variant: "destructive",
         });
       }
@@ -42,14 +37,7 @@ export const useChat = (
   }, [user?.id, characterId, toast, conversationUUID]);
 
   const handleSendMessage = async (character: Character | Character[]) => {
-    if (!newMessage.trim() || !user?.id || isLoading) {
-      console.log('Invalid send message attempt:', { 
-        hasMessage: Boolean(newMessage.trim()), 
-        hasUser: Boolean(user?.id), 
-        isLoading 
-      });
-      return;
-    }
+    if (!newMessage.trim() || !user?.id) return;
 
     setIsLoading(true);
     const messageId = crypto.randomUUID();
@@ -77,51 +65,63 @@ export const useChat = (
       // Handle AI responses
       if (isGroupChat && Array.isArray(character)) {
         for (const char of character) {
-          await handleAIResponse(char, user.id);
+          const response = await messageService.getAIResponse(newMessage, char, true);
+          
+          const aiMessageId = crypto.randomUUID();
+          const aiMessage: Message = {
+            id: aiMessageId,
+            role: 'assistant',
+            content: response,
+            timestamp: new Date(),
+            characterName: char.name,
+            characterImage: char.image,
+          };
+
+          await messageService.insertMessage({
+            id: aiMessageId,
+            conversationId: conversationUUID,
+            content: response,
+            role: 'assistant',
+            userId: user.id,
+            characterName: char.name,
+            characterImage: char.image,
+          });
+
+          setMessages(prev => [...prev, aiMessage]);
         }
       } else if (!Array.isArray(character)) {
-        await handleAIResponse(character, user.id);
+        const response = await messageService.getAIResponse(newMessage, character);
+        
+        const aiMessageId = crypto.randomUUID();
+        const aiMessage: Message = {
+          id: aiMessageId,
+          role: 'assistant',
+          content: response,
+          timestamp: new Date(),
+          characterName: character.name,
+          characterImage: character.image,
+        };
+
+        await messageService.insertMessage({
+          id: aiMessageId,
+          conversationId: conversationUUID,
+          content: response,
+          role: 'assistant',
+          userId: user.id,
+          characterName: character.name,
+          characterImage: character.image,
+        });
+
+        setMessages(prev => [...prev, aiMessage]);
       }
     } catch (error) {
-      console.error('Error sending message:', error);
       toast({
         title: "Error sending message",
-        description: "Failed to send message. Please try again.",
+        description: error.message,
         variant: "destructive",
       });
     } finally {
       setIsLoading(false);
-    }
-  };
-
-  const handleAIResponse = async (character: Character, userId: string) => {
-    try {
-      const response = await messageService.getAIResponse(newMessage, character, isGroupChat);
-      
-      const aiMessageId = crypto.randomUUID();
-      const aiMessage: Message = {
-        id: aiMessageId,
-        role: 'assistant',
-        content: response,
-        timestamp: new Date(),
-        characterName: character.name,
-        characterImage: character.image,
-      };
-
-      await messageService.insertMessage({
-        id: aiMessageId,
-        conversationId: conversationUUID,
-        content: response,
-        role: 'assistant',
-        userId: userId,
-        characterName: character.name,
-        characterImage: character.image,
-      });
-
-      setMessages(prev => [...prev, aiMessage]);
-    } catch (error) {
-      console.error('Error handling AI response:', error);
-      throw error;
     }
   };
 

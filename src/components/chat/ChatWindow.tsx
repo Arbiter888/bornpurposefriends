@@ -3,7 +3,14 @@ import { useEffect, useRef, useState } from "react";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
 import { Message } from "@/types/chat";
-import { ChatControls } from "./ChatControls";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "../ui/button";
+import { Image } from "lucide-react";
 
 interface ChatWindowProps {
   messages: Message[];
@@ -14,8 +21,13 @@ interface ChatWindowProps {
   characterName?: string;
   isLoading?: boolean;
   isGroupChat?: boolean;
-  onToggleGroupChat: () => void;
 }
+
+const backgrounds = [
+  { name: "None", value: "none" },
+  { name: "Futuristic City", value: "/lovable-uploads/6fd19bc5-2400-4d1d-ac86-b28dca510751.png" },
+  { name: "Gradient", value: "gradient" },
+];
 
 export const ChatWindow = ({
   messages,
@@ -25,21 +37,15 @@ export const ChatWindow = ({
   characterImage,
   characterName,
   isLoading,
-  isGroupChat,
-  onToggleGroupChat
+  isGroupChat
 }: ChatWindowProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [background, setBackground] = useState("none");
   const [prevMessagesLength, setPrevMessagesLength] = useState(messages.length);
-  const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  // Scroll to bottom when new messages arrive
   useEffect(() => {
-    if (messages.length > prevMessagesLength && messagesEndRef.current) {
-      const scrollContainer = chatContainerRef.current;
-      if (scrollContainer) {
-        scrollContainer.scrollTop = scrollContainer.scrollHeight;
-      }
+    if (messages.length > prevMessagesLength) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
     setPrevMessagesLength(messages.length);
   }, [messages, prevMessagesLength]);
@@ -64,11 +70,26 @@ export const ChatWindow = ({
 
   return (
     <div className="space-y-4">
-      <ChatControls
-        isGroupChat={isGroupChat}
-        onToggleGroupChat={onToggleGroupChat}
-        onChangeBackground={setBackground}
-      />
+      <div className="flex justify-end">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="flex items-center gap-2">
+              <Image className="w-4 h-4" />
+              Change Background
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            {backgrounds.map((bg) => (
+              <DropdownMenuItem
+                key={bg.value}
+                onClick={() => setBackground(bg.value)}
+              >
+                {bg.name}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
       <Card 
         className="p-6 relative overflow-hidden"
         style={getBackgroundStyle()}
@@ -77,10 +98,7 @@ export const ChatWindow = ({
           className={`absolute inset-0 ${background !== 'none' ? 'bg-black/30 backdrop-blur-xs' : ''}`}
         />
         <div className="relative z-10">
-          <div 
-            ref={chatContainerRef}
-            className="h-[500px] overflow-y-auto mb-4 space-y-4"
-          >
+          <div className="h-[500px] overflow-y-auto mb-4 space-y-4">
             {messages.map((message) => (
               <ChatMessage
                 key={message.id}

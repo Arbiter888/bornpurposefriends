@@ -11,7 +11,6 @@ interface ChatSectionProps {
   characterName?: string;
   isLoading?: boolean;
   isGroupChat?: boolean;
-  onToggleGroupChat: () => void;
 }
 
 export const ChatSection = ({
@@ -23,7 +22,6 @@ export const ChatSection = ({
   characterName,
   isLoading,
   isGroupChat,
-  onToggleGroupChat,
 }: ChatSectionProps) => {
   return (
     <div className="space-y-6">
@@ -36,7 +34,6 @@ export const ChatSection = ({
         characterName={characterName}
         isLoading={isLoading}
         isGroupChat={isGroupChat}
-        onToggleGroupChat={onToggleGroupChat}
       />
       <KanbanBoard />
     </div>
