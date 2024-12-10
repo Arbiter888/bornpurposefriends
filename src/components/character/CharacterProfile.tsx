@@ -1,10 +1,12 @@
 import { Character } from "@/lib/characters";
 import { Card } from "../ui/card";
-import { Badge } from "../ui/badge";
-import { Globe, MessageCircle, Clock, Phone } from "lucide-react";
+import { Phone } from "lucide-react";
 import { Button } from "../ui/button";
 import { AspectRatio } from "../ui/aspect-ratio";
 import { useEffect, useState } from "react";
+import { CharacterDetails } from "./CharacterDetails";
+import { CharacterTopics } from "./CharacterTopics";
+import { CharacterWidget } from "./CharacterWidget";
 
 interface CharacterProfileProps {
   character: Character;
@@ -84,54 +86,16 @@ export const CharacterProfile = ({ character, onQuickCall }: CharacterProfilePro
             <p className="text-sm text-muted-foreground">{character.description}</p>
           </div>
 
-          <div className="space-y-2">
-            <h3 className="text-sm font-medium">Details</h3>
-            <div className="flex items-center gap-2">
-              <Globe className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm">{character.nationality}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <MessageCircle className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm">{character.skills.join(", ")}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm">{character.relationshipStats.yearsKnown} years</span>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <h3 className="text-sm font-medium">Topics</h3>
-            <div className="flex flex-wrap gap-2">
-              {character.conversationTopics.map((topic) => (
-                <Badge key={topic} variant="secondary">
-                  {topic}
-                </Badge>
-              ))}
-            </div>
-          </div>
+          <CharacterDetails character={character} />
+          <CharacterTopics character={character} />
         </div>
       </Card>
 
       {showWidget && scriptLoaded && (
-        <div className="fixed bottom-4 right-4 z-50 animate-fade-in">
-          <div 
-            className="relative bg-black rounded-lg p-4 shadow-2xl"
-            style={{ width: '300px' }}
-          >
-            <button 
-              onClick={() => setShowWidget(false)}
-              className="absolute top-2 right-2 text-white hover:text-gray-300"
-            >
-              ×
-            </button>
-            <div 
-              dangerouslySetInnerHTML={{
-                __html: `<elevenlabs-convai agent-id="${character.widgetId}"></elevenlabs-convai>`
-              }}
-            />
-          </div>
-        </div>
+        <CharacterWidget 
+          widgetId={character.widgetId} 
+          onClose={() => setShowWidget(false)} 
+        />
       )}
     </>
   );
