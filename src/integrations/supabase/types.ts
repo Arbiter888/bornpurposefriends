@@ -11,6 +11,8 @@ export type Database = {
     Tables: {
       messages: {
         Row: {
+          character_image: string | null
+          character_name: string | null
           content: string
           conversation_id: string
           created_at: string
@@ -19,6 +21,8 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          character_image?: string | null
+          character_name?: string | null
           content: string
           conversation_id: string
           created_at?: string
@@ -27,6 +31,8 @@ export type Database = {
           user_id: string
         }
         Update: {
+          character_image?: string | null
+          character_name?: string | null
           content?: string
           conversation_id?: string
           created_at?: string

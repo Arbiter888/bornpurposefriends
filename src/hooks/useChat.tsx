@@ -116,7 +116,7 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
 
           setMessages(prev => [...prev, aiMessage]);
         }
-      } else {
+      } else if (!Array.isArray(character)) {
         // Handle single character chat
         const { data, error } = await supabase.functions.invoke('chat', {
           body: {

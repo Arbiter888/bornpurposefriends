@@ -12,6 +12,7 @@ interface ChatWindowProps {
   characterImage?: string;
   characterName?: string;
   isLoading?: boolean;
+  isGroupChat?: boolean;
 }
 
 export const ChatWindow = ({
@@ -21,7 +22,8 @@ export const ChatWindow = ({
   handleSendMessage,
   characterImage,
   characterName,
-  isLoading
+  isLoading,
+  isGroupChat
 }: ChatWindowProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -37,8 +39,8 @@ export const ChatWindow = ({
             key={message.id}
             role={message.role}
             content={message.content}
-            characterImage={characterImage}
-            characterName={characterName}
+            characterImage={isGroupChat ? message.characterImage : characterImage}
+            characterName={isGroupChat ? message.characterName : characterName}
           />
         ))}
         <div ref={messagesEndRef} />

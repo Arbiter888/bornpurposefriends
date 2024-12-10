@@ -10,6 +10,7 @@ interface ChatSectionProps {
   characterImage?: string;
   characterName?: string;
   isLoading?: boolean;
+  isGroupChat?: boolean;
 }
 
 export const ChatSection = ({
@@ -20,6 +21,7 @@ export const ChatSection = ({
   characterImage,
   characterName,
   isLoading,
+  isGroupChat,
 }: ChatSectionProps) => {
   return (
     <div className="space-y-6">
@@ -31,6 +33,7 @@ export const ChatSection = ({
         characterImage={characterImage}
         characterName={characterName}
         isLoading={isLoading}
+        isGroupChat={isGroupChat}
       />
       <KanbanBoard />
     </div>
