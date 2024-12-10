@@ -1,6 +1,6 @@
 import { Character } from "@/lib/characters";
 import { useEffect, useRef, useState } from "react";
-import { MessageSquare, Kanban, User } from "lucide-react";
+import { MessageSquare, Kanban, User, PhoneCall } from "lucide-react";
 import { Button } from "./ui/button";
 
 interface CharacterCardProps {
@@ -85,6 +85,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-100" />
         </div>
+
         <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
           <div className="mb-2">
             <h3 className="text-2xl font-bold mb-1">{character.name}</h3>
@@ -145,8 +146,8 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
               onClick={handleCardClick}
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
             >
-              <MessageSquare className="w-4 h-4 mr-2" />
-              Quick Chat
+              <PhoneCall className="w-4 h-4 mr-2" />
+              Quick Call
             </Button>
             <Button 
               onClick={openWorkspace}
