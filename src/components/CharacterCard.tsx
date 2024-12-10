@@ -1,6 +1,5 @@
 import { Character } from "@/lib/characters";
 import { useEffect, useRef, useState } from "react";
-import { Button } from "./ui/button";
 
 interface CharacterCardProps {
   character: Character;
@@ -59,14 +58,11 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     }
   };
 
-  const openWorkspace = () => {
-    window.open(`/workspace/${character.id}`, '_blank');
-  };
-
   return (
     <>
       <div 
         ref={containerRef}
+        onClick={handleCardClick}
         className="relative group bg-black rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer h-full"
         style={{
           backdropFilter: "blur(10px)",
@@ -138,22 +134,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
             </div>
           </div>
 
-          <div className="flex gap-2">
-            <Button 
-              onClick={handleCardClick}
-              className="w-1/2 bg-primary hover:bg-primary/90"
-            >
-              Quick Chat
-            </Button>
-            <Button 
-              onClick={openWorkspace}
-              className="w-1/2 bg-secondary hover:bg-secondary/90"
-            >
-              Open Workspace
-            </Button>
-          </div>
-
-          <p className="text-xs text-gray-400 mt-4">© George Jacklin 2024</p>
+          <p className="text-xs text-gray-400">© George Jacklin 2024</p>
         </div>
       </div>
 

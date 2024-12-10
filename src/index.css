@@ -3,20 +3,8 @@
 @tailwind utilities;
 
 @layer base {
-  :root {
-    --background: 351 100% 97%;
-    --foreground: 222 24% 14%;
-    --card: 222 24% 14%;
-    --card-foreground: 222 24% 14%;
-    --border: 222 24% 14%;
-    --input: 222 24% 14%;
-    --ring: 222 24% 14%;
-  }
-}
-
-@layer base {
   body {
-    @apply bg-background text-foreground min-h-screen;
+    @apply bg-background text-foreground;
     font-family: 'Tomorrow', sans-serif;
   }
 }
