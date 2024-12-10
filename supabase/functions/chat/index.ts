@@ -27,20 +27,33 @@ serve(async (req) => {
         messages: [
           { 
             role: 'system', 
-            content: `You are ${character.name}, ${character.role}. Respond in character, maintaining their personality and expertise. When appropriate, include actionable suggestions or tasks that the user might want to add to their todo list. Format these suggestions clearly within your response.` 
+            content: `You are ${character.name}, ${character.role}. Respond in character, maintaining their personality and expertise.` 
           },
           { role: 'user', content: message }
         ],
+        temperature: 0.7,
+        max_tokens: 500,
       }),
     });
 
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.error?.message || 'Failed to get AI response');
+    }
+
     const data = await response.json();
+    
+    if (!data.choices?.[0]?.message?.content) {
+      throw new Error('Invalid response format from OpenAI');
+    }
+
     return new Response(JSON.stringify({ 
       response: data.choices[0].message.content 
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (error) {
+    console.error('Error in chat function:', error);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
