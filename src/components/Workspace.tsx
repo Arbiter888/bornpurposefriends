@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { characters } from "@/lib/characters";
 import { useToast } from "./ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,6 +7,8 @@ import { useUser } from "@supabase/auth-helpers-react";
 import { Message } from "@/types/chat";
 import { CharacterProfile } from "./character/CharacterProfile";
 import { ChatSection } from "./chat/ChatSection";
+import { Home, LogOut } from "lucide-react";
+import { Button } from "./ui/button";
 
 const Workspace = () => {
   const { characterId } = useParams();
@@ -16,6 +18,7 @@ const Workspace = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const user = useUser();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!user?.id || !characterId) return;
@@ -131,6 +134,11 @@ const Workspace = () => {
     // Additional call logic would go here
   };
 
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate("/login");
+  };
+
   if (!character) {
     return <div>Character not found</div>;
   }
@@ -138,6 +146,24 @@ const Workspace = () => {
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto space-y-8">
+        <div className="flex justify-end gap-2 mb-4">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/")}
+            className="hover:bg-secondary/10"
+          >
+            <Home className="h-5 w-5" />
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleSignOut}
+            className="hover:bg-secondary/10"
+          >
+            <LogOut className="h-5 w-5" />
+          </Button>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <CharacterProfile 
             character={character}
