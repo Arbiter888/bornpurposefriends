@@ -25,6 +25,7 @@ export const useChat = (
         const messages = await messageService.fetchMessages(conversationUUID);
         setMessages(messages);
       } catch (error) {
+        console.error('Error fetching messages:', error);
         toast({
           title: "Error fetching messages",
           description: error.message,
@@ -37,7 +38,7 @@ export const useChat = (
   }, [user?.id, characterId, toast, conversationUUID]);
 
   const handleSendMessage = async (character: Character | Character[]) => {
-    if (!newMessage.trim() || !user?.id) return;
+    if (!newMessage.trim() || !user?.id || isLoading) return;
 
     setIsLoading(true);
     const messageId = crypto.randomUUID();
@@ -115,6 +116,7 @@ export const useChat = (
         setMessages(prev => [...prev, aiMessage]);
       }
     } catch (error) {
+      console.error('Error sending message:', error);
       toast({
         title: "Error sending message",
         description: error.message,

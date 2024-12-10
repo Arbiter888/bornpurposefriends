@@ -31,10 +31,11 @@ export const ChatWindow = ({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [background, setBackground] = useState("none");
   const [prevMessagesLength, setPrevMessagesLength] = useState(messages.length);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (messages.length > prevMessagesLength) {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messages.length > prevMessagesLength && messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
     setPrevMessagesLength(messages.length);
   }, [messages, prevMessagesLength]);
@@ -72,7 +73,10 @@ export const ChatWindow = ({
           className={`absolute inset-0 ${background !== 'none' ? 'bg-black/30 backdrop-blur-xs' : ''}`}
         />
         <div className="relative z-10">
-          <div className="h-[500px] overflow-y-auto mb-4 space-y-4">
+          <div 
+            ref={chatContainerRef}
+            className="h-[500px] overflow-y-auto mb-4 space-y-4 scroll-smooth"
+          >
             {messages.map((message) => (
               <ChatMessage
                 key={message.id}

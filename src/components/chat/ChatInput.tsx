@@ -10,8 +10,15 @@ interface ChatInputProps {
 }
 
 export const ChatInput = ({ value, onChange, onSubmit, disabled }: ChatInputProps) => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault(); // Prevent default form submission
+    if (value.trim()) { // Only submit if there's actual content
+      onSubmit(e);
+    }
+  };
+
   return (
-    <form onSubmit={onSubmit} className="flex gap-2">
+    <form onSubmit={handleSubmit} className="flex gap-2">
       <Input
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -19,7 +26,7 @@ export const ChatInput = ({ value, onChange, onSubmit, disabled }: ChatInputProp
         className="flex-1"
         disabled={disabled}
       />
-      <Button type="submit" disabled={disabled}>Send</Button>
+      <Button type="submit" disabled={disabled || !value.trim()}>Send</Button>
     </form>
   );
 };
