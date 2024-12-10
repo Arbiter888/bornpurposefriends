@@ -28,10 +28,18 @@ export const ChatWindow = ({
   background,
 }: ChatWindowProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
   }, [messages]);
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSendMessage(e);
+  };
 
   return (
     <Card 
@@ -43,7 +51,10 @@ export const ChatWindow = ({
       } : undefined}
     >
       <div className="relative z-10">
-        <div className="h-[500px] overflow-y-auto mb-4 space-y-4 backdrop-blur-sm bg-white/10 rounded-lg p-4">
+        <div 
+          ref={chatContainerRef}
+          className="h-[500px] overflow-y-auto mb-4 space-y-4 backdrop-blur-sm bg-white/10 rounded-lg p-4"
+        >
           {messages.map((message) => (
             <ChatMessage
               key={message.id}
@@ -58,7 +69,7 @@ export const ChatWindow = ({
         <ChatInput
           value={newMessage}
           onChange={setNewMessage}
-          onSubmit={handleSendMessage}
+          onSubmit={onSubmit}
           disabled={isLoading}
         />
       </div>
