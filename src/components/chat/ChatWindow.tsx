@@ -3,14 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
 import { Message } from "@/types/chat";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { Image } from "lucide-react";
+import { ChatControls } from "./ChatControls";
 
 interface ChatWindowProps {
   messages: Message[];
@@ -21,15 +14,8 @@ interface ChatWindowProps {
   characterName?: string;
   isLoading?: boolean;
   isGroupChat?: boolean;
+  onToggleGroupChat: () => void;
 }
-
-const backgrounds = [
-  { name: "None", value: "none" },
-  { name: "Futuristic City", value: "/lovable-uploads/6fd19bc5-2400-4d1d-ac86-b28dca510751.png" },
-  { name: "Futuristic Bar", value: "/lovable-uploads/36f22ffc-c4da-4934-b926-5d968e146e8b.png" },
-  { name: "Futuristic Park", value: "/lovable-uploads/16497daf-435f-46cf-a10b-8645efd2cd9f.png" },
-  { name: "Gradient", value: "gradient" },
-];
 
 export const ChatWindow = ({
   messages,
@@ -39,7 +25,8 @@ export const ChatWindow = ({
   characterImage,
   characterName,
   isLoading,
-  isGroupChat
+  isGroupChat,
+  onToggleGroupChat
 }: ChatWindowProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [background, setBackground] = useState("none");
@@ -72,26 +59,11 @@ export const ChatWindow = ({
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-end">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="flex items-center gap-2">
-              <Image className="w-4 h-4" />
-              Change Background
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            {backgrounds.map((bg) => (
-              <DropdownMenuItem
-                key={bg.value}
-                onClick={() => setBackground(bg.value)}
-              >
-                {bg.name}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+      <ChatControls
+        isGroupChat={isGroupChat}
+        onToggleGroupChat={onToggleGroupChat}
+        onChangeBackground={setBackground}
+      />
       <Card 
         className="p-6 relative overflow-hidden"
         style={getBackgroundStyle()}

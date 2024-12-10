@@ -7,8 +7,6 @@ import { WorkspaceHeader } from "./workspace/WorkspaceHeader";
 import { useChat } from "@/hooks/useChat";
 import { useToast } from "./ui/use-toast";
 import { useState } from "react";
-import { Button } from "./ui/button";
-import { Users } from "lucide-react";
 
 const Workspace = () => {
   const { characterId } = useParams();
@@ -51,16 +49,6 @@ const Workspace = () => {
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto space-y-8">
         <WorkspaceHeader />
-        <div className="flex justify-end">
-          <Button
-            onClick={toggleGroupChat}
-            variant={isGroupChat ? "default" : "outline"}
-            className="flex items-center gap-2"
-          >
-            <Users className="w-4 h-4" />
-            {isGroupChat ? "Exit Group Chat" : "Start Group Chat"}
-          </Button>
-        </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <CharacterProfile 
             character={character}
@@ -79,6 +67,7 @@ const Workspace = () => {
               characterName={character.name}
               isLoading={isLoading}
               isGroupChat={isGroupChat}
+              onToggleGroupChat={toggleGroupChat}
             />
           </div>
         </div>
