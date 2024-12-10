@@ -14,7 +14,7 @@ export const CharacterProfile = ({ character, onQuickCall }: CharacterProfilePro
   return (
     <Card className="p-6 space-y-6">
       {/* Full Image */}
-      <AspectRatio ratio={16 / 9} className="bg-muted rounded-lg overflow-hidden">
+      <AspectRatio ratio={3/4} className="bg-muted rounded-lg overflow-hidden">
         <img
           src={character.image}
           alt={character.name}
