@@ -60,25 +60,20 @@ export const messageService = {
 
   async getAIResponse(message: string, character: Character, isGroupChat: boolean = false): Promise<string> {
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-        },
-        body: JSON.stringify({
+      // Use the Supabase client's built-in functions.invoke method instead of raw fetch
+      const { data, error } = await supabase.functions.invoke('chat', {
+        body: {
           message,
           character,
           isGroupChat,
-        }),
+        },
       });
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to get AI response');
+      if (error) {
+        console.error('Error getting AI response:', error);
+        throw new Error('Failed to get AI response');
       }
 
-      const data = await response.json();
       return data.response;
     } catch (error) {
       console.error('Error getting AI response:', error);
