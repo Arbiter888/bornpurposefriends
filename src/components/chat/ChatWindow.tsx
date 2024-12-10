@@ -33,9 +33,13 @@ export const ChatWindow = ({
   const [prevMessagesLength, setPrevMessagesLength] = useState(messages.length);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
+  // Scroll to bottom when new messages arrive
   useEffect(() => {
     if (messages.length > prevMessagesLength && messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+      const scrollContainer = chatContainerRef.current;
+      if (scrollContainer) {
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+      }
     }
     setPrevMessagesLength(messages.length);
   }, [messages, prevMessagesLength]);
@@ -75,7 +79,7 @@ export const ChatWindow = ({
         <div className="relative z-10">
           <div 
             ref={chatContainerRef}
-            className="h-[500px] overflow-y-auto mb-4 space-y-4 scroll-smooth"
+            className="h-[500px] overflow-y-auto mb-4 space-y-4"
           >
             {messages.map((message) => (
               <ChatMessage
