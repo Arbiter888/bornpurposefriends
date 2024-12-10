@@ -92,7 +92,7 @@ export const CharacterProfile = ({ character, onQuickCall }: CharacterProfilePro
             </div>
             <div className="flex items-center gap-2">
               <MessageCircle className="w-4 h-4 text-muted-foreground" />
-              <span className="text-sm">{character.languages.join(", ")}</span>
+              <span className="text-sm">{character.skills.join(", ")}</span>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="w-4 h-4 text-muted-foreground" />
