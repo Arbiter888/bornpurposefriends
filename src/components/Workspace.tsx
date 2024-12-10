@@ -2,21 +2,13 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { characters } from "@/lib/characters";
 import { MessageSquare, Kanban } from "lucide-react";
-import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
-import { Input } from "./ui/input";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
-import { Label } from "./ui/label";
-import { Textarea } from "./ui/textarea";
-
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  timestamp: Date;
-}
+import { ChatWindow } from "./chat/ChatWindow";
+import { useToast } from "./ui/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useUser } from "@supabase/auth-helpers-react";
+import { Message } from "@/types/chat";
 
 interface Task {
   id: string;
@@ -31,58 +23,124 @@ const Workspace = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [newTask, setNewTask] = useState({ title: "", description: "" });
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
+  const user = useUser();
 
-  if (!character) {
-    return <div>Character not found</div>;
-  }
+  useEffect(() => {
+    if (!user?.id || !characterId) return;
+    
+    const fetchMessages = async () => {
+      const { data, error } = await supabase
+        .from('messages')
+        .select('*')
+        .eq('conversation_id', characterId)
+        .order('created_at', { ascending: true });
 
-  const handleSendMessage = (e: React.FormEvent) => {
+      if (error) {
+        toast({
+          title: "Error fetching messages",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (data) {
+        setMessages(data.map(msg => ({
+          id: msg.id,
+          role: msg.role as 'user' | 'assistant',
+          content: msg.content,
+          timestamp: new Date(msg.created_at),
+        })));
+      }
+    };
+
+    fetchMessages();
+  }, [user?.id, characterId, toast]);
+
+  const handleSendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() || !user?.id || !character) return;
 
+    setIsLoading(true);
+    const messageId = crypto.randomUUID();
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: messageId,
       role: 'user',
       content: newMessage,
       timestamp: new Date(),
     };
 
-    setMessages([...messages, userMessage]);
-    setNewMessage("");
+    try {
+      // Save user message to Supabase
+      const { error: insertError } = await supabase
+        .from('messages')
+        .insert({
+          id: messageId,
+          conversation_id: characterId,
+          content: newMessage,
+          role: 'user',
+          user_id: user.id,
+        });
 
-    // Simulate AI response
-    setTimeout(() => {
+      if (insertError) throw insertError;
+
+      setMessages(prev => [...prev, userMessage]);
+      setNewMessage("");
+
+      // Get AI response
+      const response = await fetch('/functions/v1/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${process.env.SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify({
+          message: newMessage,
+          character,
+        }),
+      });
+
+      if (!response.ok) throw new Error('Failed to get AI response');
+
+      const data = await response.json();
+      const aiMessageId = crypto.randomUUID();
       const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
+        id: aiMessageId,
         role: 'assistant',
-        content: `Hello! I'm ${character.name}. Thanks for your message: "${newMessage}"`,
+        content: data.response,
         timestamp: new Date(),
       };
+
+      // Save AI message to Supabase
+      const { error: aiInsertError } = await supabase
+        .from('messages')
+        .insert({
+          id: aiMessageId,
+          conversation_id: characterId,
+          content: data.response,
+          role: 'assistant',
+          user_id: user.id,
+        });
+
+      if (aiInsertError) throw aiInsertError;
+
       setMessages(prev => [...prev, aiMessage]);
-    }, 1000);
+    } catch (error) {
+      toast({
+        title: "Error sending message",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleAddTask = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newTask.title.trim()) return;
-
-    const task: Task = {
-      id: Date.now().toString(),
-      title: newTask.title,
-      description: newTask.description,
-      status: 'todo',
-    };
-
-    setTasks([...tasks, task]);
-    setNewTask({ title: "", description: "" });
-  };
-
-  const updateTaskStatus = (taskId: string, newStatus: Task['status']) => {
-    setTasks(tasks.map(task => 
-      task.id === taskId ? { ...task, status: newStatus } : task
-    ));
-  };
+  if (!character) {
+    return <div>Character not found</div>;
+  }
 
   return (
     <div className="min-h-screen bg-background p-6">
@@ -111,49 +169,19 @@ const Workspace = () => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="chat" className="space-y-4">
-            <Card className="p-6">
-              <div className="h-[500px] overflow-y-auto mb-4 space-y-4">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex gap-3 ${
-                      message.role === 'assistant' ? 'flex-row' : 'flex-row-reverse'
-                    }`}
-                  >
-                    <Avatar>
-                      <AvatarImage
-                        src={message.role === 'assistant' ? character.image : undefined}
-                      />
-                      <AvatarFallback>
-                        {message.role === 'assistant' ? character.name[0] : 'You'}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div
-                      className={`rounded-lg p-3 max-w-[80%] ${
-                        message.role === 'assistant'
-                          ? 'bg-card text-card-foreground'
-                          : 'bg-primary text-primary-foreground'
-                      }`}
-                    >
-                      {message.content}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <form onSubmit={handleSendMessage} className="flex gap-2">
-                <Input
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Type your message..."
-                  className="flex-1"
-                />
-                <Button type="submit">Send</Button>
-              </form>
-            </Card>
+          <TabsContent value="chat">
+            <ChatWindow
+              messages={messages}
+              newMessage={newMessage}
+              setNewMessage={setNewMessage}
+              handleSendMessage={handleSendMessage}
+              characterImage={character.image}
+              characterName={character.name}
+              isLoading={isLoading}
+            />
           </TabsContent>
 
-          <TabsContent value="kanban" className="space-y-4">
+          <TabsContent value="kanban">
             <Card className="p-6">
               <form onSubmit={handleAddTask} className="mb-6 space-y-4">
                 <div className="space-y-2">
