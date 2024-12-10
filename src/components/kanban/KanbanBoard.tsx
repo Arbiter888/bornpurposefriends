@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -23,6 +23,23 @@ export const KanbanBoard = () => {
     title: '',
     description: ''
   });
+
+  useEffect(() => {
+    const handleAddToKanban = (event: CustomEvent<NewTask>) => {
+      const task: Task = {
+        id: crypto.randomUUID(),
+        title: event.detail.title,
+        description: event.detail.description,
+        status: 'todo'
+      };
+      setTasks(prev => [...prev, task]);
+    };
+
+    window.addEventListener('addToKanban', handleAddToKanban as EventListener);
+    return () => {
+      window.removeEventListener('addToKanban', handleAddToKanban as EventListener);
+    };
+  }, []);
 
   const handleAddTask = (event: React.FormEvent) => {
     event.preventDefault();

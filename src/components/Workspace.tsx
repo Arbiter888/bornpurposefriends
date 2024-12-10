@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { characters } from "@/lib/characters";
-import { MessageSquare, Kanban } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ChatWindow } from "./chat/ChatWindow";
 import { useToast } from "./ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -69,7 +67,6 @@ const Workspace = () => {
     };
 
     try {
-      // Save user message to Supabase
       const { error: insertError } = await supabase
         .from('messages')
         .insert({
@@ -85,7 +82,6 @@ const Workspace = () => {
       setMessages(prev => [...prev, userMessage]);
       setNewMessage("");
 
-      // Get AI response using Supabase Edge Function
       const { data, error } = await supabase.functions.invoke('chat', {
         body: {
           message: newMessage,
@@ -103,7 +99,6 @@ const Workspace = () => {
         timestamp: new Date(),
       };
 
-      // Save AI message to Supabase
       const { error: aiInsertError } = await supabase
         .from('messages')
         .insert({
@@ -134,8 +129,8 @@ const Workspace = () => {
 
   return (
     <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center gap-4 mb-8">
+      <div className="max-w-7xl mx-auto space-y-8">
+        <div className="flex items-center gap-4">
           <img
             src={character.image}
             alt={character.name}
@@ -147,34 +142,17 @@ const Workspace = () => {
           </div>
         </div>
 
-        <Tabs defaultValue="chat" className="space-y-4">
-          <TabsList>
-            <TabsTrigger value="chat" className="flex items-center gap-2">
-              <MessageSquare className="w-4 h-4" />
-              Chat
-            </TabsTrigger>
-            <TabsTrigger value="kanban" className="flex items-center gap-2">
-              <Kanban className="w-4 h-4" />
-              Kanban Board
-            </TabsTrigger>
-          </TabsList>
+        <ChatWindow
+          messages={messages}
+          newMessage={newMessage}
+          setNewMessage={setNewMessage}
+          handleSendMessage={handleSendMessage}
+          characterImage={character.image}
+          characterName={character.name}
+          isLoading={isLoading}
+        />
 
-          <TabsContent value="chat">
-            <ChatWindow
-              messages={messages}
-              newMessage={newMessage}
-              setNewMessage={setNewMessage}
-              handleSendMessage={handleSendMessage}
-              characterImage={character.image}
-              characterName={character.name}
-              isLoading={isLoading}
-            />
-          </TabsContent>
-
-          <TabsContent value="kanban">
-            <KanbanBoard />
-          </TabsContent>
-        </Tabs>
+        <KanbanBoard />
       </div>
     </div>
   );
