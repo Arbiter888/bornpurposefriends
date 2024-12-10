@@ -26,6 +26,8 @@ interface ChatWindowProps {
 const backgrounds = [
   { name: "None", value: "none" },
   { name: "Futuristic City", value: "/lovable-uploads/6fd19bc5-2400-4d1d-ac86-b28dca510751.png" },
+  { name: "Futuristic Bar", value: "/lovable-uploads/36f22ffc-c4da-4934-b926-5d968e146e8b.png" },
+  { name: "Futuristic Park", value: "/lovable-uploads/16497daf-435f-46cf-a10b-8645efd2cd9f.png" },
   { name: "Gradient", value: "gradient" },
 ];
 
