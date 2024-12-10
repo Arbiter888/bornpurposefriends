@@ -30,7 +30,7 @@ export const ChatControls = ({
     <div className="flex items-center gap-2 mb-4">
       <Button
         onClick={onToggleGroupChat}
-        variant={isGroupChat ? "default" : "outline"}
+        variant={isGroupChat ? "custom" : "outline"}
         className="flex items-center gap-2"
       >
         <Users className="w-4 h-4" />
@@ -41,16 +41,17 @@ export const ChatControls = ({
       
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="flex items-center gap-2">
+          <Button variant="custom" className="flex items-center gap-2">
             <Image className="w-4 h-4" />
             <span className="hidden sm:inline">Change Background</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="bg-[#ea384c] text-white border-none">
           {backgrounds.map((bg) => (
             <DropdownMenuItem
               key={bg.value}
               onClick={() => onChangeBackground(bg.value)}
+              className="hover:bg-white/20 focus:bg-white/20 cursor-pointer"
             >
               {bg.name}
             </DropdownMenuItem>
