@@ -1,7 +1,8 @@
 import { Character } from "@/lib/characters";
 import { useEffect, useRef, useState } from "react";
-import { MessageSquare, Kanban, User, PhoneCall } from "lucide-react";
-import { Button } from "./ui/button";
+import CharacterStats from "./character/CharacterStats";
+import CharacterTags from "./character/CharacterTags";
+import CharacterActions from "./character/CharacterActions";
 
 interface CharacterCardProps {
   character: Character;
@@ -50,7 +51,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     }
   }, [isWidgetActive]);
 
-  const handleCardClick = () => {
+  const handleQuickCall = () => {
     if (scriptLoaded) {
       console.log("Opening widget for character:", character.name);
       onWidgetOpen();
@@ -58,11 +59,6 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     } else {
       console.warn("Widget script not loaded yet");
     }
-  };
-
-  const openWorkspace = () => {
-    const workspaceUrl = `/workspace/${character.id}`;
-    window.open(workspaceUrl, '_blank');
   };
 
   return (
@@ -100,64 +96,9 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
           </div>
           <p className="text-gray-300 text-sm mb-4">{character.description}</p>
           
-          <div className="space-y-3 mb-4">
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-400">Trust Level</span>
-              <span className="text-primary">{character.relationshipStats.trustLevel}%</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-400">Years Known</span>
-              <span className="text-primary">{character.relationshipStats.yearsKnown}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-400">Meetings/Month</span>
-              <span className="text-primary">{character.relationshipStats.meetingsPerMonth}</span>
-            </div>
-          </div>
-
-          <div className="mb-4">
-            <h4 className="text-sm text-gray-400 mb-2">Languages:</h4>
-            <div className="flex flex-wrap gap-2 mb-3">
-              {character.languages.map((language, index) => (
-                <span 
-                  key={index}
-                  className="text-xs px-2 py-1 rounded-full bg-[#8B0000]/10 text-[#FF0000]"
-                >
-                  {language}
-                </span>
-              ))}
-            </div>
-            
-            <h4 className="text-sm text-gray-400 mb-2">Common Topics:</h4>
-            <div className="flex flex-wrap gap-2">
-              {character.conversationTopics.map((topic, index) => (
-                <span 
-                  key={index}
-                  className="text-xs px-2 py-1 rounded-full bg-secondary/50 text-gray-300"
-                >
-                  {topic}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <Button 
-              onClick={handleCardClick}
-              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
-            >
-              <PhoneCall className="w-4 h-4 mr-2" />
-              Quick Call
-            </Button>
-            <Button 
-              onClick={openWorkspace}
-              variant="secondary"
-              className="w-full"
-            >
-              <User className="w-4 h-4 mr-2" />
-              Open Workspace
-            </Button>
-          </div>
+          <CharacterStats character={character} />
+          <CharacterTags character={character} />
+          <CharacterActions character={character} onQuickCall={handleQuickCall} />
 
           <p className="text-xs text-gray-400 mt-4">© George Jacklin 2024</p>
         </div>
