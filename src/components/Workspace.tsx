@@ -71,28 +71,32 @@ const Workspace = () => {
       <div className="max-w-7xl mx-auto space-y-8">
         <WorkspaceHeader />
         
-        <div className="space-y-4">
-          <h1 className="text-[#ea384c] text-3xl font-bold">Workspace</h1>
-          <p className="text-secondary/80 text-lg max-w-3xl">
-            Welcome to your AI workspace. Here you can chat with your AI companion, upload documents for analysis, 
-            and collaborate on various tasks. Use the tools on the right to enhance your experience.
-          </p>
+        <div className="flex justify-between items-end mb-8">
+          <div className="space-y-4">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-[#FF5757] to-[#FF1111] bg-clip-text text-transparent">
+              Workspace
+            </h1>
+            <p className="text-secondary/80 text-lg max-w-2xl">
+              Welcome to your AI workspace. Here you can chat with your AI companion, upload documents for analysis, 
+              and collaborate on various tasks. Use the tools on the right to enhance your experience.
+            </p>
+          </div>
+          <div className="flex gap-2">
+            {character.id === "atlas" && (
+              <TemplateQuestions onSelect={handleTemplateSelect} />
+            )}
+            <BackgroundSelector onSelect={handleBackgroundChange} />
+            <Button
+              onClick={toggleGroupChat}
+              variant={isGroupChat ? "default" : "outline"}
+              className="flex items-center gap-2"
+            >
+              <Users className="w-4 h-4" />
+              {isGroupChat ? "Exit Group Chat" : "Start Group Chat"}
+            </Button>
+          </div>
         </div>
 
-        <div className="flex justify-end gap-2">
-          {character.id === "atlas" && (
-            <TemplateQuestions onSelect={handleTemplateSelect} />
-          )}
-          <BackgroundSelector onSelect={handleBackgroundChange} />
-          <Button
-            onClick={toggleGroupChat}
-            variant={isGroupChat ? "default" : "outline"}
-            className="flex items-center gap-2"
-          >
-            <Users className="w-4 h-4" />
-            {isGroupChat ? "Exit Group Chat" : "Start Group Chat"}
-          </Button>
-        </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="space-y-6">
             <CharacterProfile 
