@@ -38,21 +38,17 @@ export const DocumentUploader = ({
     formData.append('file', file);
     
     try {
-      const response = await fetch('/api/extract-text', {
-        method: 'POST',
+      const { data, error } = await supabase.functions.invoke('extract-text', {
         body: formData,
       });
       
-      console.log('Text extraction response status:', response.status);
+      console.log('Text extraction response:', data);
       
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Text extraction failed:', errorData);
-        throw new Error(`Failed to extract text: ${errorData.error || 'Unknown error'}`);
+      if (error) {
+        console.error('Text extraction failed:', error);
+        throw error;
       }
       
-      const data = await response.json();
-      console.log('Text extraction successful');
       return data.text;
     } catch (error) {
       console.error('Error during text extraction:', error);

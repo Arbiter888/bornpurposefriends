@@ -14,8 +14,12 @@ serve(async (req) => {
   try {
     console.log('Starting text extraction...');
     
+    // Get the form data from the request
     const formData = await req.formData();
+    console.log('FormData received:', formData);
+    
     const file = formData.get('file');
+    console.log('File object:', file);
 
     if (!file) {
       console.error('No file provided in request');
