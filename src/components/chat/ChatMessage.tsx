@@ -65,7 +65,7 @@ export const ChatMessage = ({ role, content, characterImage, characterName }: Ch
         <div
           className={`rounded-lg p-4 ${
             role === 'assistant'
-              ? 'bg-card text-card-foreground'
+              ? 'bg-[#9b87f5] text-white'
               : 'bg-primary text-primary-foreground'
           }`}
         >
@@ -76,7 +76,7 @@ export const ChatMessage = ({ role, content, characterImage, characterName }: Ch
             <Button
               variant="ghost"
               size="sm"
-              className="mt-2 flex items-center gap-2"
+              className="mt-2 flex items-center gap-2 text-white hover:text-white/90"
               onClick={() => setIsExpanded(!isExpanded)}
             >
               {isExpanded ? (

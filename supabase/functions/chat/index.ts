@@ -38,10 +38,15 @@ serve(async (req) => {
   }
 
   try {
-    const { message, character } = await req.json();
+    const { message, character, knowledgeBaseContent } = await req.json();
 
     const systemPrompt = character.id === 'atlas' ? ATLAS_SYSTEM_PROMPT : 
       `You are ${character.name}, ${character.role}. Respond in character, maintaining their personality and expertise.`;
+
+    // Add knowledge base content to the system prompt if available
+    const fullSystemPrompt = knowledgeBaseContent 
+      ? `${systemPrompt}\n\nRelevant information from knowledge base:\n${knowledgeBaseContent}`
+      : systemPrompt;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -50,9 +55,9 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
+        model: 'gpt-4',
         messages: [
-          { role: 'system', content: systemPrompt },
+          { role: 'system', content: fullSystemPrompt },
           { role: 'user', content: message }
         ],
         response_format: { type: "text" },

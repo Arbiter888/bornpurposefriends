@@ -47,6 +47,25 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
     fetchMessages();
   }, [user?.id, characterId, toast]);
 
+  const searchKnowledgeBase = async (message: string) => {
+    if (!user?.id) return null;
+    
+    const { data: documents, error } = await supabase
+      .from('documents')
+      .select('content')
+      .textSearch('content', message, {
+        config: 'english'
+      })
+      .limit(1);
+
+    if (error) {
+      console.error('Error searching knowledge base:', error);
+      return null;
+    }
+
+    return documents?.[0]?.content || null;
+  };
+
   const handleSendMessage = async (character: Character | Character[]) => {
     if (!newMessage.trim() || !user?.id) return;
 
@@ -62,6 +81,9 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
     };
 
     try {
+      // Search knowledge base for relevant content
+      const knowledgeBaseContent = await searchKnowledgeBase(newMessage);
+      
       const { error: insertError } = await supabase
         .from('messages')
         .insert({
@@ -85,6 +107,7 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
               message: newMessage,
               character: char,
               isGroupChat: true,
+              knowledgeBaseContent: knowledgeBaseContent
             },
           });
 
@@ -122,6 +145,7 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
           body: {
             message: newMessage,
             character,
+            knowledgeBaseContent: knowledgeBaseContent
           },
         });
 
