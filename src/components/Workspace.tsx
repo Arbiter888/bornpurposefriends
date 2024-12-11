@@ -11,6 +11,7 @@ import { Button } from "./ui/button";
 import { Users } from "lucide-react";
 import { BackgroundSelector } from "./workspace/BackgroundSelector";
 import { TemplateQuestions } from "./workspace/TemplateQuestions";
+import { KnowledgeBase } from "./workspace/KnowledgeBase";
 
 const Workspace = () => {
   const { characterId } = useParams();
@@ -84,10 +85,13 @@ const Workspace = () => {
           </Button>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <CharacterProfile 
-            character={character}
-            onQuickCall={handleQuickCall}
-          />
+          <div className="space-y-6">
+            <CharacterProfile 
+              character={character}
+              onQuickCall={handleQuickCall}
+            />
+            <KnowledgeBase />
+          </div>
           <div className="md:col-span-3">
             <ChatSection
               messages={messages}
