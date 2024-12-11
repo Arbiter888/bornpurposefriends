@@ -66,6 +66,78 @@ export type Database = {
         }
         Relationships: []
       }
+      conversations: {
+        Row: {
+          id: string
+          user_id: string
+          character_id: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          character_id: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          character_id?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      kanban_items: {
+        Row: {
+          id: string
+          user_id: string
+          title: string
+          description: string
+          status: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          title: string
+          description: string
+          status: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          title?: string
+          description?: string
+          status?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
+      saved_messages: {
+        Row: {
+          id: string
+          user_id: string
+          title: string
+          description: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          title: string
+          description: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          title?: string
+          description?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
