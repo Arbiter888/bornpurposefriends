@@ -5,6 +5,8 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { Folder } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "../ui/use-toast";
 
 interface Task {
   id: string;
@@ -24,9 +26,10 @@ export const KanbanBoard = () => {
     title: '',
     description: ''
   });
+  const { toast } = useToast();
 
   useEffect(() => {
-    const handleAddToKanban = (event: CustomEvent<NewTask>) => {
+    const handleAddToKanban = async (event: CustomEvent<NewTask>) => {
       const task: Task = {
         id: crypto.randomUUID(),
         title: event.detail.title,
@@ -34,9 +37,28 @@ export const KanbanBoard = () => {
         status: 'todo'
       };
       setTasks(prev => [...prev, task]);
+
+      try {
+        await supabase
+          .from('kanban_items')
+          .insert({
+            id: task.id,
+            title: task.title,
+            description: task.description,
+            status: task.status,
+            user_id: (await supabase.auth.getUser()).data.user?.id
+          });
+      } catch (error: any) {
+        console.error('Error adding task:', error);
+        toast({
+          title: "Error adding task",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
     };
 
-    const handleSaveMessage = (event: CustomEvent<NewTask>) => {
+    const handleSaveMessage = async (event: CustomEvent<NewTask>) => {
       const task: Task = {
         id: crypto.randomUUID(),
         title: event.detail.title,
@@ -44,6 +66,25 @@ export const KanbanBoard = () => {
         status: 'saved'
       };
       setTasks(prev => [...prev, task]);
+
+      try {
+        await supabase
+          .from('kanban_items')
+          .insert({
+            id: task.id,
+            title: task.title,
+            description: task.description,
+            status: task.status,
+            user_id: (await supabase.auth.getUser()).data.user?.id
+          });
+      } catch (error: any) {
+        console.error('Error saving message:', error);
+        toast({
+          title: "Error saving message",
+          description: error.message,
+          variant: "destructive",
+        });
+      }
     };
 
     window.addEventListener('addToKanban', handleAddToKanban as EventListener);
@@ -53,9 +94,9 @@ export const KanbanBoard = () => {
       window.removeEventListener('addToKanban', handleAddToKanban as EventListener);
       window.removeEventListener('saveMessage', handleSaveMessage as EventListener);
     };
-  }, []);
+  }, [toast]);
 
-  const handleAddTask = (event: React.FormEvent) => {
+  const handleAddTask = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!newTask.title.trim()) return;
 
@@ -66,16 +107,52 @@ export const KanbanBoard = () => {
       status: 'todo'
     };
 
-    setTasks(prev => [...prev, task]);
-    setNewTask({ title: '', description: '' });
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('User not authenticated');
+
+      await supabase
+        .from('kanban_items')
+        .insert({
+          id: task.id,
+          title: task.title,
+          description: task.description,
+          status: task.status,
+          user_id: user.id
+        });
+
+      setTasks(prev => [...prev, task]);
+      setNewTask({ title: '', description: '' });
+    } catch (error: any) {
+      console.error('Error adding task:', error);
+      toast({
+        title: "Error adding task",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
-  const updateTaskStatus = (taskId: string, newStatus: Task['status']) => {
-    setTasks(prev =>
-      prev.map(task =>
-        task.id === taskId ? { ...task, status: newStatus } : task
-      )
-    );
+  const updateTaskStatus = async (taskId: string, newStatus: Task['status']) => {
+    try {
+      await supabase
+        .from('kanban_items')
+        .update({ status: newStatus })
+        .eq('id', taskId);
+
+      setTasks(prev =>
+        prev.map(task =>
+          task.id === taskId ? { ...task, status: newStatus } : task
+        )
+      );
+    } catch (error: any) {
+      console.error('Error updating task:', error);
+      toast({
+        title: "Error updating task",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   return (

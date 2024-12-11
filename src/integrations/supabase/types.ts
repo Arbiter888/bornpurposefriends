@@ -42,6 +42,57 @@ export type Database = {
         }
         Relationships: []
       }
+      conversations: {
+        Row: {
+          id: string
+          created_at: string
+          user_id: string
+          character_id: string
+          title: string | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          user_id: string
+          character_id: string
+          title?: string | null
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          user_id?: string
+          character_id?: string
+          title?: string | null
+        }
+        Relationships: []
+      }
+      kanban_items: {
+        Row: {
+          id: string
+          created_at: string
+          user_id: string
+          title: string
+          description: string
+          status: string
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          user_id: string
+          title: string
+          description: string
+          status: string
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          user_id?: string
+          title?: string
+          description?: string
+          status?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
