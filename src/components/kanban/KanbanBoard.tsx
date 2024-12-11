@@ -137,7 +137,7 @@ export const KanbanBoard = () => {
             description: "Your message has been saved successfully",
           });
         })
-        .catch((error) => {
+        .catch((error: Error) => {
           toast({
             title: "Error saving message",
             description: error.message,
