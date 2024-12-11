@@ -25,25 +25,39 @@ export const DocumentUploader = ({
   const user = useUser();
 
   const extractTextContent = async (file: File): Promise<string> => {
+    console.log('Starting text extraction for file:', file.name);
+    
     if (file.type === 'text/plain') {
+      console.log('Processing text file');
       return await file.text();
     }
     
     if (file.type === 'application/pdf') {
+      console.log('Processing PDF file');
       const formData = new FormData();
       formData.append('file', file);
       
-      const response = await fetch('/api/extract-text', {
-        method: 'POST',
-        body: formData,
-      });
-      
-      if (!response.ok) {
-        throw new Error('Failed to extract text from PDF');
+      try {
+        const response = await fetch('/api/extract-text', {
+          method: 'POST',
+          body: formData,
+        });
+        
+        console.log('Text extraction response status:', response.status);
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error('Text extraction failed:', errorData);
+          throw new Error(`Failed to extract text from PDF: ${errorData.error || 'Unknown error'}`);
+        }
+        
+        const data = await response.json();
+        console.log('Text extraction successful');
+        return data.text;
+      } catch (error) {
+        console.error('Error during text extraction:', error);
+        throw error;
       }
-      
-      const { text } = await response.json();
-      return text;
     }
     
     return `Content from ${file.name} (${file.type})`;
@@ -54,15 +68,19 @@ export const DocumentUploader = ({
     
     setIsUploading(true);
     const file = e.target.files[0];
+    console.log('Starting file upload for:', file.name, 'Type:', file.type);
 
     try {
       // First extract text content from the file
+      console.log('Extracting text content...');
       const textContent = await extractTextContent(file);
+      console.log('Text content extracted successfully');
       
       const fileExt = file.name.split('.').pop();
       const filePath = `${crypto.randomUUID()}.${fileExt}`;
 
       // Upload the original file to storage
+      console.log('Uploading file to storage...');
       const { error: uploadError } = await supabase.storage
         .from('documents')
         .upload(filePath, file, {
@@ -70,8 +88,12 @@ export const DocumentUploader = ({
           upsert: false
         });
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Storage upload error:', uploadError);
+        throw uploadError;
+      }
 
+      console.log('File uploaded successfully, creating database record...');
       // Create the document record with extracted text content
       const { error: dbError } = await supabase
         .from('documents')
@@ -83,8 +105,12 @@ export const DocumentUploader = ({
           user_id: user.id
         });
 
-      if (dbError) throw dbError;
+      if (dbError) {
+        console.error('Database insert error:', dbError);
+        throw dbError;
+      }
 
+      console.log('Document processed successfully');
       toast({
         title: "Success",
         description: "Document uploaded and processed successfully",
@@ -93,7 +119,7 @@ export const DocumentUploader = ({
       setTitle("");
       onSuccess();
     } catch (error: any) {
-      console.error('Upload error:', error);
+      console.error('Upload process error:', error);
       toast({
         title: "Error uploading document",
         description: error.message,
@@ -121,7 +147,7 @@ export const DocumentUploader = ({
         />
         <Button variant="outline" disabled={isUploading}>
           <Upload className="w-4 h-4 mr-2" />
-          Upload
+          {isUploading ? 'Uploading...' : 'Upload'}
         </Button>
       </div>
     </div>
