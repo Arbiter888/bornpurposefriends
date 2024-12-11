@@ -1,15 +1,10 @@
 import { useState } from "react";
 import { getAtlasResponse } from "@/services/atlasChat";
 import { useToast } from "@/components/ui/use-toast";
-
-export interface ChatMessage {
-  role: "user" | "assistant";
-  content: string;
-  timestamp: Date;
-}
+import { Message } from "@/types/chat"; // Import the Message type
 
 export const useAtlasChat = () => {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]); // Use Message type instead of ChatMessage
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
@@ -18,7 +13,8 @@ export const useAtlasChat = () => {
       setIsLoading(true);
       
       // Add user message
-      const userMessage: ChatMessage = {
+      const userMessage: Message = {
+        id: crypto.randomUUID(), // Add unique id
         role: "user",
         content: message,
         timestamp: new Date(),
@@ -35,10 +31,13 @@ export const useAtlasChat = () => {
       const response = await getAtlasResponse(message, conversationHistory);
 
       // Add Atlas's response
-      const assistantMessage: ChatMessage = {
+      const assistantMessage: Message = {
+        id: crypto.randomUUID(), // Add unique id
         role: "assistant",
         content: response || "I apologize, but I couldn't process that request. Could you try rephrasing it?",
         timestamp: new Date(),
+        characterName: "Atlas",
+        characterImage: "/lovable-uploads/c5dfc262-4e33-44a9-9ded-4ede0b241e17.png" // Atlas's image
       };
 
       setMessages(prev => [...prev, assistantMessage]);
