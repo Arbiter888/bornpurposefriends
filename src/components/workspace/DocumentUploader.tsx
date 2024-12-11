@@ -27,29 +27,24 @@ export const DocumentUploader = ({
   const extractTextContent = async (file: File): Promise<string> => {
     console.log('Starting text extraction for file:', file.name);
     
-    if (file.type === 'text/plain') {
-      console.log('Processing text file');
-      return await file.text();
-    }
-    
-    // For PDF, Word, and other document types
-    console.log('Processing document file');
     const formData = new FormData();
     formData.append('file', file);
     
     try {
       const { data, error } = await supabase.functions.invoke('extract-text', {
         body: formData,
+        headers: {
+          'Accept': 'application/json',
+        },
       });
-      
-      console.log('Text extraction response:', data);
       
       if (error) {
         console.error('Text extraction failed:', error);
         throw error;
       }
       
-      return data.text;
+      console.log('Text extraction response:', data);
+      return data.text || '';
     } catch (error) {
       console.error('Error during text extraction:', error);
       throw error;

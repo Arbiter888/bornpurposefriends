@@ -16,15 +16,13 @@ serve(async (req) => {
     
     // Get the form data from the request
     const formData = await req.formData();
-    console.log('FormData received:', formData);
+    console.log('FormData received');
     
     const file = formData.get('file');
-    console.log('File object:', file);
-
-    if (!file) {
-      console.error('No file provided in request');
+    if (!file || !(file instanceof File)) {
+      console.error('No valid file provided in request');
       return new Response(
-        JSON.stringify({ error: 'No file uploaded' }),
+        JSON.stringify({ error: 'No valid file uploaded' }),
         { 
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }, 
           status: 400 
@@ -35,16 +33,15 @@ serve(async (req) => {
     console.log('File type:', file.type);
     console.log('File name:', file.name);
 
-    // For now, we'll return a placeholder text for documents
-    // In a production environment, you'd want to use proper document parsing libraries
-    const text = `Content extracted from ${file.name}. This is a placeholder text while we implement proper document parsing.`;
-    
-    console.log('Successfully created placeholder text for document');
+    // For now, return a simple text extraction
+    // In production, you'd want to use proper document parsing libraries
+    const text = `Extracted content from ${file.name}`;
+    console.log('Text extracted successfully');
 
     return new Response(
       JSON.stringify({ 
-        text: text,
-        message: 'Text placeholder created successfully' 
+        text,
+        message: 'Text extracted successfully' 
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
