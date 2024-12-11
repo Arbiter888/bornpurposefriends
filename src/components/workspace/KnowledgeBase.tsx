@@ -50,6 +50,33 @@ export const KnowledgeBase = () => {
     setDocuments(data || []);
   };
 
+  const extractTextContent = async (file: File): Promise<string> => {
+    if (file.type === 'text/plain') {
+      return await file.text();
+    }
+    
+    // For PDF files, we'll use the edge function to extract text
+    if (file.type === 'application/pdf') {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await fetch('/api/extract-text', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to extract text from PDF');
+      }
+      
+      const { text } = await response.json();
+      return text;
+    }
+    
+    // For other file types, store a placeholder message
+    return `Content from ${file.name} (${file.type})`;
+  };
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!user || !e.target.files || !e.target.files[0]) return;
     
@@ -57,10 +84,13 @@ export const KnowledgeBase = () => {
     const file = e.target.files[0];
 
     try {
+      // First extract text content from the file
+      const textContent = await extractTextContent(file);
+      
       const fileExt = file.name.split('.').pop();
       const filePath = `${crypto.randomUUID()}.${fileExt}`;
 
-      // First upload the file to storage
+      // Upload the original file to storage
       const { error: uploadError } = await supabase.storage
         .from('documents')
         .upload(filePath, file, {
@@ -70,13 +100,14 @@ export const KnowledgeBase = () => {
 
       if (uploadError) throw uploadError;
 
-      // Then create the document record
+      // Create the document record with extracted text content
       const { error: dbError } = await supabase
         .from('documents')
         .insert({
           title: title || file.name,
           file_path: filePath,
           content_type: file.type,
+          content: textContent,
           user_id: user.id
         });
 
@@ -84,7 +115,7 @@ export const KnowledgeBase = () => {
 
       toast({
         title: "Success",
-        description: "Document uploaded successfully",
+        description: "Document uploaded and processed successfully",
       });
 
       setTitle("");
@@ -156,6 +187,7 @@ export const KnowledgeBase = () => {
               className="absolute inset-0 opacity-0 cursor-pointer"
               onChange={handleFileUpload}
               disabled={isUploading}
+              accept=".txt,.pdf"
             />
             <Button variant="outline" disabled={isUploading}>
               <Upload className="w-4 h-4 mr-2" />
