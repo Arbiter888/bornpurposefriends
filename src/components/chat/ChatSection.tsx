@@ -1,6 +1,8 @@
 import { Message } from "@/types/chat";
 import { ChatWindow } from "./ChatWindow";
 import { KanbanBoard } from "../kanban/KanbanBoard";
+import { useAtlasChat } from "@/hooks/useAtlasChat";
+import { useEffect } from "react";
 
 interface ChatSectionProps {
   messages: Message[];
@@ -15,26 +17,39 @@ interface ChatSectionProps {
 }
 
 export const ChatSection = ({
-  messages,
+  messages: defaultMessages,
   newMessage,
   setNewMessage,
   handleSendMessage,
   characterImage,
   characterName,
-  isLoading,
+  isLoading: defaultIsLoading,
   isGroupChat,
   background,
 }: ChatSectionProps) => {
+  const isAtlas = characterName === "Atlas";
+  const { messages: atlasMessages, isLoading: atlasIsLoading, sendMessage: sendAtlasMessage } = useAtlasChat();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isAtlas) {
+      await sendAtlasMessage(newMessage);
+      setNewMessage("");
+    } else {
+      handleSendMessage(e);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <ChatWindow
-        messages={messages}
+        messages={isAtlas ? atlasMessages : defaultMessages}
         newMessage={newMessage}
         setNewMessage={setNewMessage}
-        handleSendMessage={handleSendMessage}
+        handleSendMessage={handleSubmit}
         characterImage={characterImage}
         characterName={characterName}
-        isLoading={isLoading}
+        isLoading={isAtlas ? atlasIsLoading : defaultIsLoading}
         isGroupChat={isGroupChat}
         background={background}
       />
