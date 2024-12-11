@@ -23,17 +23,23 @@ export const TemplateQuestions = ({ onSelect }: TemplateQuestionsProps) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className="flex items-center gap-2">
+        <Button 
+          variant="outline" 
+          className="flex items-center gap-2 bg-gradient-to-r from-[#9b87f5] to-[#7E69AB] text-white border-0 hover:opacity-90"
+        >
           <MessageSquare className="w-4 h-4" />
           Template Questions
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[300px]">
+      <DropdownMenuContent 
+        align="end" 
+        className="w-[300px] bg-gradient-to-b from-[#F1F0FB] to-[#E5DEFF] backdrop-blur-sm border-0"
+      >
         {questions.map((question) => (
           <DropdownMenuItem
             key={question}
             onClick={() => onSelect(question)}
-            className="cursor-pointer"
+            className="cursor-pointer hover:bg-white/20 transition-colors duration-200"
           >
             {question}
           </DropdownMenuItem>

@@ -32,18 +32,21 @@ export const BackgroundSelector = ({ onSelect }: BackgroundSelectorProps) => {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="bg-[#ea384c] text-white hover:bg-[#ea384c]/90 border-0"
+          className="bg-gradient-to-r from-[#0EA5E9] to-[#6E59A5] text-white hover:opacity-90 border-0"
         >
           <Image className="w-4 h-4 mr-2" />
           Change Background
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-56">
+      <DropdownMenuContent 
+        align="end" 
+        className="w-56 bg-gradient-to-b from-[#F1F0FB] to-[#E5DEFF] backdrop-blur-sm border-0"
+      >
         {backgrounds.map((bg) => (
           <DropdownMenuItem
             key={bg.url}
             onClick={() => onSelect(bg.url)}
-            className="cursor-pointer"
+            className="cursor-pointer hover:bg-white/20 transition-colors duration-200"
           >
             <div className="flex items-center gap-2">
               <div
