@@ -32,35 +32,32 @@ export const DocumentUploader = ({
       return await file.text();
     }
     
-    if (file.type === 'application/pdf') {
-      console.log('Processing PDF file');
-      const formData = new FormData();
-      formData.append('file', file);
-      
-      try {
-        const response = await fetch('/api/extract-text', {
-          method: 'POST',
-          body: formData,
-        });
-        
-        console.log('Text extraction response status:', response.status);
-        
-        if (!response.ok) {
-          const errorData = await response.json();
-          console.error('Text extraction failed:', errorData);
-          throw new Error(`Failed to extract text from PDF: ${errorData.error || 'Unknown error'}`);
-        }
-        
-        const data = await response.json();
-        console.log('Text extraction successful');
-        return data.text;
-      } catch (error) {
-        console.error('Error during text extraction:', error);
-        throw error;
-      }
-    }
+    // For PDF, Word, and other document types
+    console.log('Processing document file');
+    const formData = new FormData();
+    formData.append('file', file);
     
-    return `Content from ${file.name} (${file.type})`;
+    try {
+      const response = await fetch('/api/extract-text', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      console.log('Text extraction response status:', response.status);
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Text extraction failed:', errorData);
+        throw new Error(`Failed to extract text: ${errorData.error || 'Unknown error'}`);
+      }
+      
+      const data = await response.json();
+      console.log('Text extraction successful');
+      return data.text;
+    } catch (error) {
+      console.error('Error during text extraction:', error);
+      throw error;
+    }
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -143,7 +140,7 @@ export const DocumentUploader = ({
           className="absolute inset-0 opacity-0 cursor-pointer"
           onChange={handleFileUpload}
           disabled={isUploading}
-          accept=".txt,.pdf"
+          accept=".txt,.pdf,.doc,.docx"
         />
         <Button variant="outline" disabled={isUploading}>
           <Upload className="w-4 h-4 mr-2" />

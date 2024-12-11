@@ -1,5 +1,4 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -13,7 +12,7 @@ serve(async (req) => {
   }
 
   try {
-    console.log('Starting PDF text extraction...');
+    console.log('Starting text extraction...');
     
     const formData = await req.formData();
     const file = formData.get('file');
@@ -32,16 +31,16 @@ serve(async (req) => {
     console.log('File type:', file.type);
     console.log('File name:', file.name);
 
-    // For now, we'll return the file content as text
-    // In a production environment, you'd want to use a proper PDF parsing library
-    const text = await file.text();
+    // For now, we'll return a placeholder text for documents
+    // In a production environment, you'd want to use proper document parsing libraries
+    const text = `Content extracted from ${file.name}. This is a placeholder text while we implement proper document parsing.`;
     
-    console.log('Successfully extracted text from file');
+    console.log('Successfully created placeholder text for document');
 
     return new Response(
       JSON.stringify({ 
         text: text,
-        message: 'Text extracted successfully' 
+        message: 'Text placeholder created successfully' 
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
