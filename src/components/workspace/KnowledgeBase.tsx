@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
@@ -23,12 +23,19 @@ export const KnowledgeBase = () => {
   const { toast } = useToast();
   const user = useUser();
 
+  useEffect(() => {
+    if (user) {
+      fetchDocuments();
+    }
+  }, [user]);
+
   const fetchDocuments = async () => {
     if (!user) return;
     
     const { data, error } = await supabase
       .from('documents')
       .select('*')
+      .eq('user_id', user.id)
       .order('created_at', { ascending: false });
 
     if (error) {
@@ -53,19 +60,24 @@ export const KnowledgeBase = () => {
       const fileExt = file.name.split('.').pop();
       const filePath = `${crypto.randomUUID()}.${fileExt}`;
 
+      // First upload the file to storage
       const { error: uploadError } = await supabase.storage
         .from('documents')
-        .upload(filePath, file);
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
       if (uploadError) throw uploadError;
 
+      // Then create the document record
       const { error: dbError } = await supabase
         .from('documents')
         .insert({
           title: title || file.name,
           file_path: filePath,
           content_type: file.type,
-          user_id: user.id,
+          user_id: user.id
         });
 
       if (dbError) throw dbError;
@@ -77,7 +89,8 @@ export const KnowledgeBase = () => {
 
       setTitle("");
       fetchDocuments();
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Upload error:', error);
       toast({
         title: "Error uploading document",
         description: error.message,
@@ -92,16 +105,19 @@ export const KnowledgeBase = () => {
     if (!user) return;
 
     try {
+      // First delete from storage
       const { error: storageError } = await supabase.storage
         .from('documents')
         .remove([filePath]);
 
       if (storageError) throw storageError;
 
+      // Then delete from the database
       const { error: dbError } = await supabase
         .from('documents')
         .delete()
-        .eq('id', id);
+        .eq('id', id)
+        .eq('user_id', user.id);
 
       if (dbError) throw dbError;
 
@@ -111,7 +127,8 @@ export const KnowledgeBase = () => {
       });
 
       fetchDocuments();
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Delete error:', error);
       toast({
         title: "Error deleting document",
         description: error.message,
@@ -119,6 +136,10 @@ export const KnowledgeBase = () => {
       });
     }
   };
+
+  if (!user) {
+    return null;
+  }
 
   return (
     <Card className="p-4">
