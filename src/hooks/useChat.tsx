@@ -110,12 +110,12 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
         // Handle group chat responses
         for (const char of character) {
           const { data, error } = await supabase.functions.invoke('chat', {
-            body: {
+            body: JSON.stringify({
               message: newMessage,
               character: char,
               isGroupChat: true,
               knowledgeBaseContent,
-            },
+            }),
           });
 
           if (error) throw error;
@@ -149,11 +149,11 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
       } else if (!Array.isArray(character)) {
         // Handle single character chat
         const { data, error } = await supabase.functions.invoke('chat', {
-          body: {
+          body: JSON.stringify({
             message: newMessage,
             character,
             knowledgeBaseContent,
-          },
+          }),
         });
 
         if (error) throw error;
@@ -185,6 +185,7 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
         setMessages(prev => [...prev, aiMessage]);
       }
     } catch (error: any) {
+      console.error('Chat error:', error);
       toast({
         title: "Error sending message",
         description: error.message,
