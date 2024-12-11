@@ -124,7 +124,7 @@ export const KanbanBoard = () => {
     const handleSaveMessage = (event: CustomEvent<NewTask>) => {
       if (!user?.id) return;
       
-      supabase
+      void supabase
         .from('saved_messages')
         .insert({
           user_id: user.id,
