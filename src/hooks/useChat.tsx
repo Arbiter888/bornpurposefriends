@@ -63,10 +63,17 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
       return null;
     }
 
+    if (documents && documents[0]?.content) {
+      toast({
+        title: "Knowledge Base Match Found",
+        description: "Using relevant information from your uploaded documents",
+      });
+    }
+
     return documents?.[0]?.content || null;
   };
 
-  const handleSendMessage = async (character: Character | Character[]) => {
+  const handleSendMessage = async (character: Character | Character[], useKnowledgeBase: boolean = false) => {
     if (!newMessage.trim() || !user?.id) return;
 
     setIsLoading(true);
@@ -81,8 +88,8 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
     };
 
     try {
-      // Search knowledge base for relevant content
-      const knowledgeBaseContent = await searchKnowledgeBase(newMessage);
+      // Search knowledge base for relevant content only if toggle is enabled
+      const knowledgeBaseContent = useKnowledgeBase ? await searchKnowledgeBase(newMessage) : null;
       
       const { error: insertError } = await supabase
         .from('messages')
@@ -107,7 +114,7 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
               message: newMessage,
               character: char,
               isGroupChat: true,
-              knowledgeBaseContent: knowledgeBaseContent
+              knowledgeBaseContent,
             },
           });
 
@@ -145,7 +152,7 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
           body: {
             message: newMessage,
             character,
-            knowledgeBaseContent: knowledgeBaseContent
+            knowledgeBaseContent,
           },
         });
 
@@ -177,7 +184,7 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
 
         setMessages(prev => [...prev, aiMessage]);
       }
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Error sending message",
         description: error.message,

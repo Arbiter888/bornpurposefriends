@@ -2,7 +2,7 @@ import { Message } from "@/types/chat";
 import { ChatWindow } from "./ChatWindow";
 import { KanbanBoard } from "../kanban/KanbanBoard";
 import { useAtlasChat } from "@/hooks/useAtlasChat";
-import { useEffect } from "react";
+import { useState } from "react";
 
 interface ChatSectionProps {
   messages: Message[];
@@ -29,6 +29,7 @@ export const ChatSection = ({
 }: ChatSectionProps) => {
   const isAtlas = characterName === "Atlas";
   const { messages: atlasMessages, isLoading: atlasIsLoading, sendMessage: sendAtlasMessage } = useAtlasChat();
+  const [useKnowledgeBase, setUseKnowledgeBase] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,6 +53,8 @@ export const ChatSection = ({
         isLoading={isAtlas ? atlasIsLoading : defaultIsLoading}
         isGroupChat={isGroupChat}
         background={background}
+        useKnowledgeBase={useKnowledgeBase}
+        onToggleKnowledgeBase={() => setUseKnowledgeBase(!useKnowledgeBase)}
       />
       <KanbanBoard />
     </div>
