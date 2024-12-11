@@ -15,13 +15,20 @@ export const useAtlasChat = () => {
       
       let documentContent = "";
       if (documentId) {
-        const { data: doc } = await supabase
+        const { data: doc, error } = await supabase
           .from('documents')
           .select('content')
           .eq('id', documentId)
           .single();
         
-        if (doc?.content) {
+        if (error) {
+          console.error("Error fetching document:", error);
+          toast({
+            title: "Error",
+            description: "Failed to fetch document content",
+            variant: "destructive",
+          });
+        } else if (doc?.content) {
           documentContent = doc.content;
         }
       }
