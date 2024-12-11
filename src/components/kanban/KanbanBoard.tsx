@@ -5,6 +5,9 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { Folder } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useUser } from "@supabase/auth-helpers-react";
+import { useToast } from "../ui/use-toast";
 
 interface Task {
   id: string;
@@ -24,26 +27,92 @@ export const KanbanBoard = () => {
     title: '',
     description: ''
   });
+  const user = useUser();
+  const { toast } = useToast();
 
+  // Fetch tasks on component mount
   useEffect(() => {
-    const handleAddToKanban = (event: CustomEvent<NewTask>) => {
-      const task: Task = {
-        id: crypto.randomUUID(),
-        title: event.detail.title,
-        description: event.detail.description,
-        status: 'todo'
-      };
-      setTasks(prev => [...prev, task]);
+    if (!user) return;
+    
+    const fetchTasks = async () => {
+      const { data, error } = await supabase
+        .from('tasks')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        toast({
+          title: "Error fetching tasks",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (data) {
+        setTasks(data);
+      }
     };
 
-    const handleSaveMessage = (event: CustomEvent<NewTask>) => {
-      const task: Task = {
-        id: crypto.randomUUID(),
-        title: event.detail.title,
-        description: event.detail.description,
-        status: 'saved'
-      };
-      setTasks(prev => [...prev, task]);
+    fetchTasks();
+  }, [user, toast]);
+
+  useEffect(() => {
+    const handleAddToKanban = async (event: CustomEvent<NewTask>) => {
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('tasks')
+        .insert({
+          user_id: user.id,
+          title: event.detail.title,
+          description: event.detail.description,
+          status: 'todo'
+        })
+        .select()
+        .single();
+
+      if (error) {
+        toast({
+          title: "Error adding task",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (data) {
+        setTasks(prev => [data, ...prev]);
+      }
+    };
+
+    const handleSaveMessage = async (event: CustomEvent<NewTask>) => {
+      if (!user) return;
+
+      const { data, error } = await supabase
+        .from('tasks')
+        .insert({
+          user_id: user.id,
+          title: event.detail.title,
+          description: event.detail.description,
+          status: 'saved'
+        })
+        .select()
+        .single();
+
+      if (error) {
+        toast({
+          title: "Error saving message",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (data) {
+        setTasks(prev => [data, ...prev]);
+      }
     };
 
     window.addEventListener('addToKanban', handleAddToKanban as EventListener);
@@ -53,24 +122,56 @@ export const KanbanBoard = () => {
       window.removeEventListener('addToKanban', handleAddToKanban as EventListener);
       window.removeEventListener('saveMessage', handleSaveMessage as EventListener);
     };
-  }, []);
+  }, [user, toast]);
 
-  const handleAddTask = (event: React.FormEvent) => {
+  const handleAddTask = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!newTask.title.trim()) return;
+    if (!newTask.title.trim() || !user) return;
 
-    const task: Task = {
-      id: crypto.randomUUID(),
-      title: newTask.title,
-      description: newTask.description,
-      status: 'todo'
-    };
+    const { data, error } = await supabase
+      .from('tasks')
+      .insert({
+        user_id: user.id,
+        title: newTask.title,
+        description: newTask.description,
+        status: 'todo'
+      })
+      .select()
+      .single();
 
-    setTasks(prev => [...prev, task]);
-    setNewTask({ title: '', description: '' });
+    if (error) {
+      toast({
+        title: "Error adding task",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (data) {
+      setTasks(prev => [data, ...prev]);
+      setNewTask({ title: '', description: '' });
+    }
   };
 
-  const updateTaskStatus = (taskId: string, newStatus: Task['status']) => {
+  const updateTaskStatus = async (taskId: string, newStatus: Task['status']) => {
+    if (!user) return;
+
+    const { error } = await supabase
+      .from('tasks')
+      .update({ status: newStatus })
+      .eq('id', taskId)
+      .eq('user_id', user.id);
+
+    if (error) {
+      toast({
+        title: "Error updating task",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
     setTasks(prev =>
       prev.map(task =>
         task.id === taskId ? { ...task, status: newStatus } : task
