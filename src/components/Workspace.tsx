@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Button } from "./ui/button";
 import { Users } from "lucide-react";
 import { BackgroundSelector } from "./workspace/BackgroundSelector";
+import { TemplateQuestions } from "./workspace/TemplateQuestions";
 
 const Workspace = () => {
   const { characterId } = useParams();
@@ -52,6 +53,14 @@ const Workspace = () => {
     });
   };
 
+  const handleTemplateSelect = (question: string) => {
+    setNewMessage(question);
+    toast({
+      title: "Template Question Selected",
+      description: "The message field has been populated with your selected question",
+    });
+  };
+
   if (!character) {
     return <div>Character not found</div>;
   }
@@ -61,6 +70,9 @@ const Workspace = () => {
       <div className="max-w-7xl mx-auto space-y-8">
         <WorkspaceHeader />
         <div className="flex justify-end gap-2">
+          {character.id === "atlas" && (
+            <TemplateQuestions onSelect={handleTemplateSelect} />
+          )}
           <BackgroundSelector onSelect={handleBackgroundChange} />
           <Button
             onClick={toggleGroupChat}
