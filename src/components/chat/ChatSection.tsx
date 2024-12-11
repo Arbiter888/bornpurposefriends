@@ -8,7 +8,7 @@ interface ChatSectionProps {
   messages: Message[];
   newMessage: string;
   setNewMessage: (message: string) => void;
-  handleSendMessage: (e: React.FormEvent) => void;
+  handleSendMessage: (e: React.FormEvent, documentId?: string) => void;
   characterImage?: string;
   characterName?: string;
   isLoading?: boolean;
@@ -31,13 +31,13 @@ export const ChatSection = ({
   const { messages: atlasMessages, isLoading: atlasIsLoading, sendMessage: sendAtlasMessage } = useAtlasChat();
   const [useKnowledgeBase, setUseKnowledgeBase] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent, documentId?: string) => {
     e.preventDefault();
     if (isAtlas) {
-      await sendAtlasMessage(newMessage);
+      await sendAtlasMessage(newMessage, documentId);
       setNewMessage("");
     } else {
-      handleSendMessage(e);
+      handleSendMessage(e, documentId);
     }
   };
 
