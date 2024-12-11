@@ -19,18 +19,32 @@ export const characters: Character[] = [
   {
     id: "atlas",
     name: "Atlas",
-    role: "Executive Officer",
-    description: "As an Executive Officer with neural-enhanced business acumen, Atlas helps you navigate the complexities of the quantum marketplace. Their expertise in AI-driven strategy and holographic team management makes them your go-to mentor for professional growth.",
+    role: "Venture Capitalist",
+    description: "A seasoned venture capitalist based in New London, Atlas combines sharp business acumen with charismatic leadership. With an MBA from New London's prestigious business school, they excel in mentoring entrepreneurs and identifying promising opportunities in the 2040 business landscape.",
     image: "/lovable-uploads/545221c7-1d0e-41c8-bda0-235b932c3a9f.png",
     widgetId: "8gJ0dMHzPVXRpxVpWpnj",
     nationality: "British",
-    skills: ["Strategic Planning", "Leadership Development", "AI Integration", "Team Management"],
+    skills: [
+      "Business Strategy",
+      "Financial Analysis",
+      "Mentorship",
+      "Communication",
+      "Market Analysis",
+      "Networking"
+    ],
     relationshipStats: {
-      trustLevel: 92,
-      yearsKnown: 3,
-      meetingsPerMonth: 8
+      trustLevel: 95,
+      yearsKnown: 5,
+      meetingsPerMonth: 12
     },
-    conversationTopics: ["Career Development", "Business Strategy", "Leadership Skills", "Team Building"]
+    conversationTopics: [
+      "Investment Strategies",
+      "Market Trends",
+      "Startup Growth",
+      "Leadership Development",
+      "Innovation",
+      "New London Business Scene"
+    ]
   },
   {
     id: "echo",
