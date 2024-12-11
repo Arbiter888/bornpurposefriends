@@ -70,6 +70,15 @@ const Workspace = () => {
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-7xl mx-auto space-y-8">
         <WorkspaceHeader />
+        
+        <div className="space-y-4">
+          <h1 className="text-[#ea384c] text-3xl font-bold">Workspace</h1>
+          <p className="text-secondary/80 text-lg max-w-3xl">
+            Welcome to your AI workspace. Here you can chat with your AI companion, upload documents for analysis, 
+            and collaborate on various tasks. Use the tools on the right to enhance your experience.
+          </p>
+        </div>
+
         <div className="flex justify-end gap-2">
           {character.id === "atlas" && (
             <TemplateQuestions onSelect={handleTemplateSelect} />
