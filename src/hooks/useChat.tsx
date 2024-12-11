@@ -4,145 +4,164 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { User } from "@supabase/auth-helpers-react";
 import { Character } from "@/lib/characters";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 export const useChat = (user: User | null, characterId: string | undefined, isGroupChat: boolean = false) => {
+  const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const queryClient = useQueryClient();
 
-  // Fetch or create conversation
-  const { data: conversation } = useQuery({
-    queryKey: ['conversation', user?.id, characterId],
-    queryFn: async () => {
-      if (!user?.id || !characterId) return null;
+  useEffect(() => {
+    if (!user?.id || !characterId) return;
+    
+    const fetchMessages = async () => {
+      const conversationUUID = crypto.randomUUID();
       
-      // Try to find existing conversation
-      let { data: existingConversation } = await supabase
-        .from('conversations')
-        .select('*')
-        .eq('user_id', user.id)
-        .eq('character_id', characterId)
-        .single();
-
-      if (!existingConversation) {
-        // Create new conversation if none exists
-        const { data: newConversation } = await supabase
-          .from('conversations')
-          .insert({
-            user_id: user.id,
-            character_id: characterId,
-          })
-          .select()
-          .single();
-        
-        existingConversation = newConversation;
-      }
-
-      return existingConversation;
-    },
-    enabled: !!user?.id && !!characterId,
-  });
-
-  // Fetch messages for current conversation
-  const { data: messages = [] } = useQuery({
-    queryKey: ['messages', conversation?.id],
-    queryFn: async () => {
-      if (!conversation?.id) return [];
-
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('messages')
         .select('*')
-        .eq('conversation_id', conversation.id)
+        .eq('conversation_id', conversationUUID)
         .order('created_at', { ascending: true });
 
-      return data?.map(msg => ({
-        id: msg.id,
-        role: msg.role as 'user' | 'assistant',
-        content: msg.content,
-        characterName: msg.character_name,
-        characterImage: msg.character_image,
-        timestamp: new Date(msg.created_at),
-      })) || [];
-    },
-    enabled: !!conversation?.id,
-  });
+      if (error) {
+        toast({
+          title: "Error fetching messages",
+          description: error.message,
+          variant: "destructive",
+        });
+        return;
+      }
 
-  // Mutation for sending messages
-  const sendMessageMutation = useMutation({
-    mutationFn: async (messageData: {
-      content: string;
-      character: Character | Character[];
-    }) => {
-      if (!user?.id || !conversation?.id) throw new Error('Not authenticated');
+      if (data) {
+        setMessages(data.map(msg => ({
+          id: msg.id,
+          role: msg.role as 'user' | 'assistant',
+          content: msg.content,
+          timestamp: new Date(msg.created_at),
+          characterName: msg.character_name,
+          characterImage: msg.character_image,
+        })));
+      }
+    };
 
-      const userMessage = {
-        conversation_id: conversation.id,
-        user_id: user.id,
-        role: 'user',
-        content: messageData.content,
-      };
+    fetchMessages();
+  }, [user?.id, characterId, toast]);
 
-      await supabase.from('messages').insert(userMessage);
+  const handleSendMessage = async (character: Character | Character[]) => {
+    if (!newMessage.trim() || !user?.id) return;
 
-      // Handle AI response(s)
-      if (Array.isArray(messageData.character)) {
-        for (const char of messageData.character) {
-          const { data } = await supabase.functions.invoke('chat', {
+    setIsLoading(true);
+    const messageId = crypto.randomUUID();
+    const conversationUUID = crypto.randomUUID();
+    
+    const userMessage: Message = {
+      id: messageId,
+      role: 'user',
+      content: newMessage,
+      timestamp: new Date(),
+    };
+
+    try {
+      const { error: insertError } = await supabase
+        .from('messages')
+        .insert({
+          id: messageId,
+          conversation_id: conversationUUID,
+          content: newMessage,
+          role: 'user',
+          user_id: user.id,
+        });
+
+      if (insertError) throw insertError;
+
+      setMessages(prev => [...prev, userMessage]);
+      setNewMessage("");
+
+      if (isGroupChat && Array.isArray(character)) {
+        // Handle group chat responses
+        for (const char of character) {
+          const { data, error } = await supabase.functions.invoke('chat', {
             body: {
-              message: messageData.content,
+              message: newMessage,
               character: char,
               isGroupChat: true,
             },
           });
 
-          await supabase.from('messages').insert({
-            conversation_id: conversation.id,
-            user_id: user.id,
+          if (error) throw error;
+
+          const aiMessageId = crypto.randomUUID();
+          const aiMessage: Message = {
+            id: aiMessageId,
             role: 'assistant',
             content: data.response,
-            character_name: char.name,
-            character_image: char.image,
-          });
+            timestamp: new Date(),
+            characterName: char.name,
+            characterImage: char.image,
+          };
+
+          const { error: aiInsertError } = await supabase
+            .from('messages')
+            .insert({
+              id: aiMessageId,
+              conversation_id: conversationUUID,
+              content: data.response,
+              role: 'assistant',
+              user_id: user.id,
+              character_name: char.name,
+              character_image: char.image,
+            });
+
+          if (aiInsertError) throw aiInsertError;
+
+          setMessages(prev => [...prev, aiMessage]);
         }
-      } else {
-        const { data } = await supabase.functions.invoke('chat', {
+      } else if (!Array.isArray(character)) {
+        // Handle single character chat
+        const { data, error } = await supabase.functions.invoke('chat', {
           body: {
-            message: messageData.content,
-            character: messageData.character,
+            message: newMessage,
+            character,
           },
         });
 
-        await supabase.from('messages').insert({
-          conversation_id: conversation.id,
-          user_id: user.id,
+        if (error) throw error;
+
+        const aiMessageId = crypto.randomUUID();
+        const aiMessage: Message = {
+          id: aiMessageId,
           role: 'assistant',
           content: data.response,
-          character_name: messageData.character.name,
-          character_image: messageData.character.image,
-        });
+          timestamp: new Date(),
+          characterName: character.name,
+          characterImage: character.image,
+        };
+
+        const { error: aiInsertError } = await supabase
+          .from('messages')
+          .insert({
+            id: aiMessageId,
+            conversation_id: conversationUUID,
+            content: data.response,
+            role: 'assistant',
+            user_id: user.id,
+            character_name: character.name,
+            character_image: character.image,
+          });
+
+        if (aiInsertError) throw aiInsertError;
+
+        setMessages(prev => [...prev, aiMessage]);
       }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['messages', conversation?.id] });
-      setNewMessage("");
-      setIsLoading(false);
-    },
-    onError: (error) => {
+    } catch (error) {
       toast({
         title: "Error sending message",
         description: error.message,
         variant: "destructive",
       });
+    } finally {
       setIsLoading(false);
-    },
-  });
-
-  const handleSendMessage = async (character: Character | Character[]) => {
-    if (!newMessage.trim()) return;
-    setIsLoading(true);
-    sendMessageMutation.mutate({ content: newMessage, character });
+    }
   };
 
   return {

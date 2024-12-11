@@ -5,10 +5,6 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 import { Folder } from "lucide-react";
-import { useUser } from "@supabase/auth-helpers-react";
-import { supabase } from "@/integrations/supabase/client";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useToast } from "../ui/use-toast";
 
 interface Task {
   id: string;
@@ -23,127 +19,31 @@ interface NewTask {
 }
 
 export const KanbanBoard = () => {
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState<NewTask>({
     title: '',
     description: ''
   });
-  const user = useUser();
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
-
-  // Fetch tasks
-  const { data: tasks = [] } = useQuery({
-    queryKey: ['tasks', user?.id],
-    queryFn: async () => {
-      if (!user?.id) return [];
-
-      const { data } = await supabase
-        .from('kanban_items')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      return data?.map(item => ({
-        id: item.id,
-        title: item.title,
-        description: item.description,
-        status: item.status,
-      })) || [];
-    },
-    enabled: !!user?.id,
-  });
-
-  // Add task mutation
-  const addTaskMutation = useMutation({
-    mutationFn: async (task: NewTask) => {
-      if (!user?.id) throw new Error('Not authenticated');
-
-      const { data, error } = await supabase
-        .from('kanban_items')
-        .insert({
-          user_id: user.id,
-          title: task.title,
-          description: task.description,
-          status: 'todo',
-        })
-        .select()
-        .single();
-
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
-      setNewTask({ title: '', description: '' });
-      toast({
-        title: "Task added",
-        description: "Your task has been added successfully",
-      });
-    },
-    onError: (error) => {
-      toast({
-        title: "Error adding task",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
-
-  // Update task status mutation
-  const updateTaskMutation = useMutation({
-    mutationFn: async ({ taskId, newStatus }: { taskId: string; newStatus: Task['status'] }) => {
-      if (!user?.id) throw new Error('Not authenticated');
-
-      const { data, error } = await supabase
-        .from('kanban_items')
-        .update({ status: newStatus })
-        .eq('id', taskId)
-        .select()
-        .single();
-
-      if (error) throw error;
-      return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks'] });
-    },
-    onError: (error) => {
-      toast({
-        title: "Error updating task",
-        description: error.message,
-        variant: "destructive",
-      });
-    },
-  });
 
   useEffect(() => {
     const handleAddToKanban = (event: CustomEvent<NewTask>) => {
-      addTaskMutation.mutate(event.detail);
+      const task: Task = {
+        id: crypto.randomUUID(),
+        title: event.detail.title,
+        description: event.detail.description,
+        status: 'todo'
+      };
+      setTasks(prev => [...prev, task]);
     };
 
     const handleSaveMessage = (event: CustomEvent<NewTask>) => {
-      if (!user?.id) return;
-      
-      void supabase
-        .from('saved_messages')
-        .insert({
-          user_id: user.id,
-          title: event.detail.title,
-          description: event.detail.description,
-        })
-        .then(() => {
-          toast({
-            title: "Message saved",
-            description: "Your message has been saved successfully",
-          });
-        })
-        .catch((error: Error) => {
-          toast({
-            title: "Error saving message",
-            description: error.message,
-            variant: "destructive",
-          });
-        });
+      const task: Task = {
+        id: crypto.randomUUID(),
+        title: event.detail.title,
+        description: event.detail.description,
+        status: 'saved'
+      };
+      setTasks(prev => [...prev, task]);
     };
 
     window.addEventListener('addToKanban', handleAddToKanban as EventListener);
@@ -153,16 +53,29 @@ export const KanbanBoard = () => {
       window.removeEventListener('addToKanban', handleAddToKanban as EventListener);
       window.removeEventListener('saveMessage', handleSaveMessage as EventListener);
     };
-  }, [user?.id, addTaskMutation, toast]);
+  }, []);
 
   const handleAddTask = (event: React.FormEvent) => {
     event.preventDefault();
     if (!newTask.title.trim()) return;
-    addTaskMutation.mutate(newTask);
+
+    const task: Task = {
+      id: crypto.randomUUID(),
+      title: newTask.title,
+      description: newTask.description,
+      status: 'todo'
+    };
+
+    setTasks(prev => [...prev, task]);
+    setNewTask({ title: '', description: '' });
   };
 
   const updateTaskStatus = (taskId: string, newStatus: Task['status']) => {
-    updateTaskMutation.mutate({ taskId, newStatus });
+    setTasks(prev =>
+      prev.map(task =>
+        task.id === taskId ? { ...task, status: newStatus } : task
+      )
+    );
   };
 
   return (
