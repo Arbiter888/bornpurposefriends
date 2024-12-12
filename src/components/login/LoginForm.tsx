@@ -43,6 +43,31 @@ const LoginForm = () => {
     return true;
   };
 
+  const handleSignUp = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    
+    if (!validateForm()) return;
+    
+    setLoading(true);
+
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: email.trim(),
+        password,
+      });
+
+      if (error) {
+        toast.error(error.message);
+      } else if (data.user) {
+        toast.success('Sign up successful! Please check your email for verification.');
+      }
+    } catch (error: any) {
+      toast.error('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -60,7 +85,7 @@ const LoginForm = () => {
         if (error.message.includes('Email not confirmed')) {
           toast.error('Please verify your email address before logging in.');
         } else if (error.message === 'Invalid login credentials') {
-          toast.error('Invalid email or password. If you haven\'t registered yet, please sign up first.');
+          toast.error('Invalid email or password. Please check your credentials.');
         } else {
           toast.error(error.message);
         }
@@ -118,11 +143,15 @@ const LoginForm = () => {
             {loading ? 'Signing in...' : 'Sign in'}
           </button>
           <div className="text-center space-y-2 text-sm">
+            <button
+              onClick={handleSignUp}
+              disabled={loading}
+              className="text-gray-600 hover:underline block w-full"
+            >
+              Don't have an account? Sign up
+            </button>
             <a href="#" className="text-gray-600 hover:underline block">
               Forgot your password?
-            </a>
-            <a href="#" className="text-gray-600 hover:underline block">
-              Don't have an account? Sign up
             </a>
           </div>
         </form>
