@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -11,6 +11,26 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Clear any existing session on component mount
+  useEffect(() => {
+    const clearExistingSession = async () => {
+      const { error } = await supabase.auth.signOut();
+      if (error) console.error('Error clearing session:', error);
+    };
+    clearExistingSession();
+  }, []);
+
+  // Listen for auth state changes
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        navigate('/');
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [navigate]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -21,11 +41,14 @@ const LoginForm = () => {
         password,
       });
 
-      if (error) throw error;
-      
-      navigate("/");
+      if (error) {
+        toast.error(error.message);
+        // If there's an auth error, ensure we're fully signed out
+        await supabase.auth.signOut();
+      }
     } catch (error: any) {
       toast.error(error.message);
+      await supabase.auth.signOut();
     } finally {
       setLoading(false);
     }
@@ -64,7 +87,7 @@ const LoginForm = () => {
             disabled={loading}
             className="w-full bg-[#990000] text-white py-2 rounded-md hover:bg-[#800000] transition-colors"
           >
-            Sign in
+            {loading ? 'Signing in...' : 'Sign in'}
           </button>
           <div className="text-center space-y-2 text-sm">
             <a href="#" className="text-gray-600 hover:underline block">
