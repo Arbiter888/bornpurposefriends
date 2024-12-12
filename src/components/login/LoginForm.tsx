@@ -31,23 +31,42 @@ const LoginForm = () => {
     return () => subscription.unsubscribe();
   }, [navigate]);
 
+  const validateForm = () => {
+    if (!email || !email.includes('@')) {
+      toast.error('Please enter a valid email address');
+      return false;
+    }
+    if (!password || password.length < 6) {
+      toast.error('Password must be at least 6 characters long');
+      return false;
+    }
+    return true;
+  };
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!validateForm()) return;
+    
     setLoading(true);
 
     try {
       const { error } = await supabase.auth.signInWithPassword({
-        email,
+        email: email.trim(),
         password,
       });
 
       if (error) {
-        toast.error(error.message);
+        if (error.message === 'Invalid login credentials') {
+          toast.error('Invalid email or password. Please try again.');
+        } else {
+          toast.error(error.message);
+        }
         // If there's an auth error, ensure we're fully signed out
         await supabase.auth.signOut();
       }
     } catch (error: any) {
-      toast.error(error.message);
+      toast.error('An unexpected error occurred. Please try again.');
       await supabase.auth.signOut();
     } finally {
       setLoading(false);
@@ -70,6 +89,8 @@ const LoginForm = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={loading}
+              className="bg-gray-50"
             />
           </div>
           <div className="space-y-2">
@@ -80,12 +101,15 @@ const LoginForm = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={loading}
+              className="bg-gray-50"
+              minLength={6}
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#990000] text-white py-2 rounded-md hover:bg-[#800000] transition-colors"
+            className="w-full bg-[#990000] text-white py-2 rounded-md hover:bg-[#800000] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Signing in...' : 'Sign in'}
           </button>
