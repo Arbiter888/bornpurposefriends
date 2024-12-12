@@ -4,11 +4,13 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { useSession } from "@supabase/auth-helpers-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { HomeBackgroundSelector } from "@/components/home/HomeBackgroundSelector";
 
 const Index = () => {
   const navigate = useNavigate();
   const session = useSession();
+  const [background, setBackground] = useState("");
 
   useEffect(() => {
     if (!session) {
@@ -18,10 +20,7 @@ const Index = () => {
 
   const handleLogout = async () => {
     try {
-      // First clear any existing session
       await supabase.auth.signOut({ scope: 'local' });
-      
-      // Then navigate to login page
       navigate("/login");
     } catch (error) {
       console.error("Logout error:", error);
@@ -33,24 +32,44 @@ const Index = () => {
     }
   };
 
+  const handleBackgroundChange = (newBackground: string) => {
+    setBackground(newBackground);
+    toast({
+      title: "Background Updated",
+      description: "Home background has been changed successfully",
+    });
+  };
+
   if (!session) {
     return null;
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex justify-end">
-          <button
-            onClick={handleLogout}
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
-          >
-            Sign Out
-          </button>
+    <div 
+      className="min-h-screen text-foreground relative"
+      style={{
+        backgroundImage: background ? `url(${background})` : undefined,
+        backgroundColor: background ? undefined : "#FDF4F5",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
+      <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" />
+      <div className="relative">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex justify-between items-center">
+            <HomeBackgroundSelector onSelect={handleBackgroundChange} />
+            <button
+              onClick={handleLogout}
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
+            >
+              Sign Out
+            </button>
+          </div>
         </div>
+        <Hero />
+        <CharacterGrid />
       </div>
-      <Hero />
-      <CharacterGrid />
     </div>
   );
 };
