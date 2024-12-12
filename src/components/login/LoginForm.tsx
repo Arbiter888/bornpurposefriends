@@ -57,8 +57,10 @@ const LoginForm = () => {
       });
 
       if (error) {
-        if (error.message === 'Invalid login credentials') {
-          toast.error('Invalid email or password. Please try again.');
+        if (error.message.includes('Email not confirmed')) {
+          toast.error('Please verify your email address before logging in.');
+        } else if (error.message === 'Invalid login credentials') {
+          toast.error('Invalid email or password. If you haven\'t registered yet, please sign up first.');
         } else {
           toast.error(error.message);
         }
