@@ -51,7 +51,7 @@ const LoginForm = () => {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
       });
@@ -64,6 +64,8 @@ const LoginForm = () => {
         }
         // If there's an auth error, ensure we're fully signed out
         await supabase.auth.signOut();
+      } else if (data.user) {
+        toast.success('Successfully logged in!');
       }
     } catch (error: any) {
       toast.error('An unexpected error occurred. Please try again.');
