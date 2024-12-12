@@ -67,38 +67,44 @@ const Workspace = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-7xl mx-auto space-y-8">
+    <div className="min-h-screen bg-background p-4 md:p-6">
+      <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
         <WorkspaceHeader />
         
-        <div className="flex justify-between items-end mb-8">
+        <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:justify-between md:items-end mb-4 md:mb-8">
           <div className="space-y-4">
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-[#FF5757] to-[#FF1111] bg-clip-text text-transparent">
+            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#FF5757] to-[#FF1111] bg-clip-text text-transparent">
               Workspace
             </h1>
-            <p className="text-secondary/80 text-lg max-w-2xl">
+            <p className="text-secondary/80 text-base md:text-lg max-w-2xl">
               Welcome to your AI workspace. Here you can chat with your AI companion, upload documents for analysis, 
               and collaborate on various tasks. Use the tools on the right to enhance your experience.
             </p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2 w-full md:w-auto">
             {character.id === "atlas" && (
-              <TemplateQuestions onSelect={handleTemplateSelect} />
+              <div className="w-full sm:w-auto">
+                <TemplateQuestions onSelect={handleTemplateSelect} />
+              </div>
             )}
-            <BackgroundSelector onSelect={handleBackgroundChange} />
-            <Button
-              onClick={toggleGroupChat}
-              variant={isGroupChat ? "default" : "outline"}
-              className="flex items-center gap-2"
-            >
-              <Users className="w-4 h-4" />
-              {isGroupChat ? "Exit Group Chat" : "Start Group Chat"}
-            </Button>
+            <div className="w-full sm:w-auto">
+              <BackgroundSelector onSelect={handleBackgroundChange} />
+            </div>
+            <div className="w-full sm:w-auto">
+              <Button
+                onClick={toggleGroupChat}
+                variant={isGroupChat ? "default" : "outline"}
+                className="w-full sm:w-auto flex items-center justify-center gap-2"
+              >
+                <Users className="w-4 h-4" />
+                {isGroupChat ? "Exit Group Chat" : "Start Group Chat"}
+              </Button>
+            </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
+          <div className="space-y-4 md:space-y-6">
             <CharacterProfile 
               character={character}
               onQuickCall={handleQuickCall}
