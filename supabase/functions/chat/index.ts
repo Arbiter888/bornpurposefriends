@@ -17,13 +17,21 @@ serve(async (req) => {
 
   try {
     const { message, character, isGroupChat, knowledgeBaseContent, conversationId } = await req.json();
-    console.log('Received request for character:', character.name);
+    console.log('Received request for character:', character?.name);
     console.log('Is group debate:', isGroupChat);
     console.log('Conversation ID:', conversationId);
 
+    // Safely handle potentially undefined character properties
+    const characterSkills = character?.skills || [];
+    const characterTopics = character?.conversationTopics || [];
+    const characterNationality = character?.nationality || 'Unknown';
+    const characterDescription = character?.description || '';
+    const characterName = character?.name || 'AI Assistant';
+    const characterRole = character?.role || 'Assistant';
+
     const systemPrompt = isGroupChat 
-      ? `${DEBATE_SYSTEM_PROMPT}\nYou are ${character.name}, ${character.role}. ${character.description}`
-      : `You are ${character.name}, ${character.role}. ${character.description}`;
+      ? `${DEBATE_SYSTEM_PROMPT}\nYou are ${characterName}, ${characterRole}. ${characterDescription}`
+      : `You are ${characterName}, ${characterRole}. ${characterDescription}`;
 
     const messages = [
       { 
@@ -40,17 +48,17 @@ serve(async (req) => {
       });
     }
 
-    // Add character-specific context
+    // Add character-specific context with safe array handling
     messages.push({
       role: 'system',
-      content: `Your nationality is ${character.nationality}. Your key skills are: ${character.skills.join(', ')}. Common topics you discuss: ${character.conversationTopics.join(', ')}.`
+      content: `Your nationality is ${characterNationality}. Your key skills are: ${characterSkills.join(', ')}. Common topics you discuss: ${characterTopics.join(', ')}.`
     });
 
     // Add the user's message
     messages.push({
       role: 'user',
       content: isGroupChat 
-        ? `As ${character.name}, provide your perspective on this topic for the group debate: ${message}`
+        ? `As ${characterName}, provide your perspective on this topic for the group debate: ${message}`
         : message
     });
 
@@ -74,7 +82,7 @@ serve(async (req) => {
     });
 
     const data = await response.json();
-    console.log('OpenAI response received for character:', character.name);
+    console.log('OpenAI response received for character:', characterName);
 
     if (!data.choices || !data.choices[0]) {
       throw new Error('Invalid response from OpenAI');
