@@ -39,10 +39,10 @@ const Workspace = () => {
   const toggleGroupChat = () => {
     setIsGroupChat(!isGroupChat);
     toast({
-      title: isGroupChat ? "Single Chat Mode" : "Group Chat Mode",
+      title: isGroupChat ? "Single Chat Mode" : "Group Debate Mode",
       description: isGroupChat 
         ? `Switching to chat with ${character?.name}`
-        : "Switching to group chat with all AI companions",
+        : "Starting a group debate with all AI companions. Each will provide their unique perspective.",
     });
   };
 
@@ -77,7 +77,7 @@ const Workspace = () => {
               Workspace
             </h1>
             <p className="text-secondary/80 text-base md:text-lg max-w-2xl">
-              Welcome to your AI workspace. Here you can chat with your AI companion, upload documents for analysis, 
+              Welcome to your AI workspace. Here you can chat with your AI companion, start group debates, 
               and collaborate on various tasks. Use the tools on the right to enhance your experience.
             </p>
           </div>
@@ -97,7 +97,7 @@ const Workspace = () => {
                 className="w-full sm:w-auto flex items-center justify-center gap-2"
               >
                 <Users className="w-4 h-4" />
-                {isGroupChat ? "Exit Group Chat" : "Start Group Chat"}
+                {isGroupChat ? "Exit Group Debate" : "Start Group Debate"}
               </Button>
             </div>
           </div>

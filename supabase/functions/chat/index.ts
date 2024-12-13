@@ -8,16 +8,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const ATLAS_SYSTEM_PROMPT = `You are Atlas, a venture capitalist AI assistant. You have deep expertise in:
-- Startup evaluation and funding
-- Business model analysis
-- Market research and competitive analysis
-- Financial modeling and metrics
-- Pitch deck review
-- Growth strategies
-- Investment thesis development
-
-Respond in a professional yet approachable manner, providing actionable insights and constructive feedback. When analyzing documents or business plans, focus on key metrics, market opportunities, and potential risks.`;
+const DEBATE_SYSTEM_PROMPT = `You are participating in a group debate. Based on your character's background, expertise, and perspective, provide your unique viewpoint on the topic. Be respectful but don't hesitate to disagree with others if your character would have a different opinion. Support your arguments with your character's expertise and experience.`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -25,18 +16,11 @@ serve(async (req) => {
   }
 
   try {
-    const { message, character, documentContent } = await req.json();
-    console.log('Received request:', { message, character, documentContent: !!documentContent });
+    const { message, character, isGroupChat } = await req.json();
 
-    const systemPrompt = character.id === 'atlas' ? ATLAS_SYSTEM_PROMPT : 
-      `You are ${character.name}, ${character.role}. Respond in character, maintaining their personality and expertise.`;
-
-    // Add document content to the system prompt if available
-    const fullSystemPrompt = documentContent 
-      ? `${systemPrompt}\n\nRelevant document content:\n${documentContent}`
-      : systemPrompt;
-
-    console.log('Using system prompt:', fullSystemPrompt);
+    const systemPrompt = isGroupChat 
+      ? `${DEBATE_SYSTEM_PROMPT}\nYou are ${character.name}, ${character.role}. ${character.description}`
+      : `You are ${character.name}, ${character.role}. Respond in character, maintaining their personality and expertise.`;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -47,8 +31,11 @@ serve(async (req) => {
       body: JSON.stringify({
         model: 'gpt-4o-mini',
         messages: [
-          { role: 'system', content: fullSystemPrompt },
-          { role: 'user', content: message }
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: isGroupChat 
+            ? `As ${character.name}, provide your perspective on this topic for the group debate: ${message}`
+            : message 
+          }
         ],
         response_format: { type: "text" },
         temperature: 1,
