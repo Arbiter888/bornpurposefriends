@@ -74,19 +74,24 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
       const knowledgeBaseContent = await searchKnowledgeBase(newMessage);
 
       if (isGroupChat && Array.isArray(character)) {
-        // Handle group debate responses sequentially
+        // Handle group debate responses
         for (const char of character) {
+          console.log('Processing character in group debate:', char.name);
+          
           const { data, error } = await supabase.functions.invoke('chat', {
-            body: JSON.stringify({
+            body: {
               message: newMessage,
               character: char,
               isGroupChat: true,
               knowledgeBaseContent,
               conversationId,
-            }),
+            },
           });
 
-          if (error) throw error;
+          if (error) {
+            console.error('Error in group debate for character:', char.name, error);
+            throw error;
+          }
 
           const aiMessageId = crypto.randomUUID();
           const aiMessage: Message = {
@@ -104,16 +109,22 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
         }
       } else if (!Array.isArray(character)) {
         // Handle single character chat
+        console.log('Processing single character chat:', character.name);
+        
         const { data, error } = await supabase.functions.invoke('chat', {
-          body: JSON.stringify({
+          body: {
             message: newMessage,
             character,
+            isGroupChat: false,
             knowledgeBaseContent,
             conversationId,
-          }),
+          },
         });
 
-        if (error) throw error;
+        if (error) {
+          console.error('Error in single chat:', error);
+          throw error;
+        }
 
         const aiMessageId = crypto.randomUUID();
         const aiMessage: Message = {

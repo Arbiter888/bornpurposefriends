@@ -1,5 +1,5 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 
@@ -17,21 +17,18 @@ serve(async (req) => {
 
   try {
     const { message, character, isGroupChat, knowledgeBaseContent, conversationId } = await req.json();
-    console.log('Received request for character:', character?.name);
+    
+    if (!character) {
+      throw new Error('Character information is missing');
+    }
+
+    console.log('Processing request for character:', character.name);
     console.log('Is group debate:', isGroupChat);
     console.log('Conversation ID:', conversationId);
 
-    // Safely handle potentially undefined character properties
-    const characterSkills = character?.skills || [];
-    const characterTopics = character?.conversationTopics || [];
-    const characterNationality = character?.nationality || 'Unknown';
-    const characterDescription = character?.description || '';
-    const characterName = character?.name || 'AI Assistant';
-    const characterRole = character?.role || 'Assistant';
-
     const systemPrompt = isGroupChat 
-      ? `${DEBATE_SYSTEM_PROMPT}\nYou are ${characterName}, ${characterRole}. ${characterDescription}`
-      : `You are ${characterName}, ${characterRole}. ${characterDescription}`;
+      ? `${DEBATE_SYSTEM_PROMPT}\nYou are ${character.name}, ${character.role}. ${character.description}`
+      : `You are ${character.name}, ${character.role}. ${character.description}`;
 
     const messages = [
       { 
@@ -48,17 +45,23 @@ serve(async (req) => {
       });
     }
 
-    // Add character-specific context with safe array handling
+    // Add character-specific context
+    const characterContext = [
+      `Your nationality is ${character.nationality}.`,
+      `Your key skills are: ${Array.isArray(character.skills) ? character.skills.join(', ') : 'varied'}.`,
+      `Common topics you discuss: ${Array.isArray(character.conversationTopics) ? character.conversationTopics.join(', ') : 'various topics'}.`
+    ].join(' ');
+
     messages.push({
       role: 'system',
-      content: `Your nationality is ${characterNationality}. Your key skills are: ${characterSkills.join(', ')}. Common topics you discuss: ${characterTopics.join(', ')}.`
+      content: characterContext
     });
 
     // Add the user's message
     messages.push({
       role: 'user',
       content: isGroupChat 
-        ? `As ${characterName}, provide your perspective on this topic for the group debate: ${message}`
+        ? `As ${character.name}, provide your perspective on this topic for the group debate: ${message}`
         : message
     });
 
@@ -82,7 +85,7 @@ serve(async (req) => {
     });
 
     const data = await response.json();
-    console.log('OpenAI response received for character:', characterName);
+    console.log('OpenAI response received for character:', character.name);
 
     if (!data.choices || !data.choices[0]) {
       throw new Error('Invalid response from OpenAI');
