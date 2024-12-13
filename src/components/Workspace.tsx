@@ -62,6 +62,17 @@ const Workspace = () => {
     });
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isGroupChat) {
+      // In group chat mode, send message to all characters
+      await handleSendMessage(characters);
+    } else {
+      // In single chat mode, send message to current character
+      await handleSendMessage(character!);
+    }
+  };
+
   if (!character) {
     return <div>Character not found</div>;
   }
@@ -116,10 +127,7 @@ const Workspace = () => {
               messages={messages}
               newMessage={newMessage}
               setNewMessage={setNewMessage}
-              handleSendMessage={(e) => {
-                e.preventDefault();
-                handleSendMessage(isGroupChat ? characters : character);
-              }}
+              handleSendMessage={handleSubmit}
               characterImage={character.image}
               characterName={character.name}
               isLoading={isLoading}
