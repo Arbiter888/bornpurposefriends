@@ -59,7 +59,7 @@ const LoginForm = () => {
       if (error) {
         toast.error(error.message);
       } else if (data.user) {
-        toast.success('Sign up successful! Please check your email for verification.');
+        toast.success('Account created successfully! You can now sign in.');
       }
     } catch (error: any) {
       toast.error('An unexpected error occurred. Please try again.');
@@ -82,21 +82,16 @@ const LoginForm = () => {
       });
 
       if (error) {
-        if (error.message.includes('Email not confirmed')) {
-          toast.error('Please verify your email address before logging in.');
-        } else if (error.message === 'Invalid login credentials') {
-          toast.error('Invalid email or password. Please check your credentials.');
+        if (error.message.includes('Invalid login credentials')) {
+          toast.error('Invalid email or password. If you haven\'t created an account yet, please sign up first.');
         } else {
           toast.error(error.message);
         }
-        // If there's an auth error, ensure we're fully signed out
-        await supabase.auth.signOut();
       } else if (data.user) {
         toast.success('Successfully logged in!');
       }
     } catch (error: any) {
       toast.error('An unexpected error occurred. Please try again.');
-      await supabase.auth.signOut();
     } finally {
       setLoading(false);
     }
