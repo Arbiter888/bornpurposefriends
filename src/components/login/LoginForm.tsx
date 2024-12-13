@@ -4,14 +4,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 const LoginForm = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(false);
 
-  // Clear any existing session on component mount
   useEffect(() => {
     const clearExistingSession = async () => {
       const { error } = await supabase.auth.signOut();
@@ -20,7 +21,6 @@ const LoginForm = () => {
     clearExistingSession();
   }, []);
 
-  // Listen for auth state changes
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_IN' && session) {
@@ -57,9 +57,15 @@ const LoginForm = () => {
       });
 
       if (error) {
-        toast.error(error.message);
+        if (error.message.includes('User already registered')) {
+          toast.error('An account with this email already exists. Please sign in instead.');
+          setIsSignUp(false);
+        } else {
+          toast.error(error.message);
+        }
       } else if (data.user) {
         toast.success('Sign up successful! Please check your email for verification.');
+        setIsSignUp(false);
       }
     } catch (error: any) {
       toast.error('An unexpected error occurred. Please try again.');
@@ -82,19 +88,20 @@ const LoginForm = () => {
       });
 
       if (error) {
+        console.log('Login error:', error); // For debugging
         if (error.message.includes('Email not confirmed')) {
           toast.error('Please verify your email address before logging in.');
         } else if (error.message === 'Invalid login credentials') {
-          toast.error('Invalid email or password. Please check your credentials.');
+          toast.error('Invalid email or password. Please check your credentials or sign up if you don\'t have an account.');
         } else {
           toast.error(error.message);
         }
-        // If there's an auth error, ensure we're fully signed out
         await supabase.auth.signOut();
       } else if (data.user) {
         toast.success('Successfully logged in!');
       }
     } catch (error: any) {
+      console.error('Login error:', error); // For debugging
       toast.error('An unexpected error occurred. Please try again.');
       await supabase.auth.signOut();
     } finally {
@@ -103,10 +110,12 @@ const LoginForm = () => {
   };
 
   return (
-    <Card className="bg-white shadow-lg">
-      <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Welcome to BornPurpose</CardTitle>
-        <CardDescription>Sign in to access your AI companions</CardDescription>
+    <Card className="w-full max-w-md mx-auto bg-white shadow-lg">
+      <CardHeader className="text-center space-y-1">
+        <CardTitle className="text-2xl font-bold">Welcome to BornPurpose</CardTitle>
+        <CardDescription>
+          {isSignUp ? 'Create an account to get started' : 'Sign in to access your AI companions'}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleLogin} className="space-y-4">
@@ -114,7 +123,7 @@ const LoginForm = () => {
             <label className="text-sm font-medium">Email address</label>
             <Input
               type="email"
-              placeholder="Your email address"
+              placeholder="name@example.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -123,10 +132,10 @@ const LoginForm = () => {
             />
           </div>
           <div className="space-y-2">
-            <label className="text-sm font-medium">Your Password</label>
+            <label className="text-sm font-medium">Password</label>
             <Input
               type="password"
-              placeholder="Your password"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
@@ -135,24 +144,33 @@ const LoginForm = () => {
               minLength={6}
             />
           </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-[#990000] text-white py-2 rounded-md hover:bg-[#800000] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? 'Signing in...' : 'Sign in'}
-          </button>
-          <div className="text-center space-y-2 text-sm">
-            <button
+          {isSignUp ? (
+            <Button
+              type="button"
               onClick={handleSignUp}
               disabled={loading}
-              className="text-gray-600 hover:underline block w-full"
+              className="w-full bg-[#990000] text-white hover:bg-[#800000]"
             >
-              Don't have an account? Sign up
-            </button>
-            <a href="#" className="text-gray-600 hover:underline block">
-              Forgot your password?
-            </a>
+              {loading ? 'Creating account...' : 'Create account'}
+            </Button>
+          ) : (
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-[#990000] text-white hover:bg-[#800000]"
+            >
+              {loading ? 'Signing in...' : 'Sign in'}
+            </Button>
+          )}
+          <div className="text-center space-y-2">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => setIsSignUp(!isSignUp)}
+              className="text-sm text-gray-600 hover:text-gray-900"
+            >
+              {isSignUp ? 'Already have an account? Sign in' : "Don't have an account? Sign up"}
+            </Button>
           </div>
         </form>
       </CardContent>
