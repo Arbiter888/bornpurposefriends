@@ -82,11 +82,9 @@ const Workspace = () => {
             </p>
           </div>
           <div className="flex flex-wrap gap-2 w-full md:w-auto">
-            {character.id === "atlas" && (
-              <div className="w-full sm:w-auto">
-                <TemplateQuestions onSelect={handleTemplateSelect} />
-              </div>
-            )}
+            <div className="w-full sm:w-auto">
+              <TemplateQuestions onSelect={handleTemplateSelect} />
+            </div>
             <div className="w-full sm:w-auto">
               <BackgroundSelector onSelect={handleBackgroundChange} />
             </div>
