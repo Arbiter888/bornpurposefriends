@@ -8,7 +8,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const DEBATE_SYSTEM_PROMPT = `You are participating in a group debate. Based on your character's background, expertise, and perspective, provide your unique viewpoint on the topic. Be respectful but don't hesitate to disagree with others if your character would have a different opinion. Support your arguments with your character's expertise and experience.`;
+const DEBATE_SYSTEM_PROMPT = `You are participating in a group debate. Based on your character's background, expertise, and perspective, provide your unique viewpoint on the topic. Be respectful but don't hesitate to disagree with others if your character would have a different opinion. Support your arguments with your character's expertise and experience. Keep responses concise and focused.`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -16,11 +16,38 @@ serve(async (req) => {
   }
 
   try {
-    const { message, character, isGroupChat } = await req.json();
+    const { message, character, isGroupChat, knowledgeBaseContent } = await req.json();
+    console.log('Received request for character:', character.name);
+    console.log('Is group debate:', isGroupChat);
 
     const systemPrompt = isGroupChat 
       ? `${DEBATE_SYSTEM_PROMPT}\nYou are ${character.name}, ${character.role}. ${character.description}`
-      : `You are ${character.name}, ${character.role}. Respond in character, maintaining their personality and expertise.`;
+      : `You are ${character.name}, ${character.role}. ${character.description}`;
+
+    const messages = [
+      { 
+        role: 'system', 
+        content: systemPrompt 
+      }
+    ];
+
+    // Add knowledge base context if available
+    if (knowledgeBaseContent) {
+      messages.push({
+        role: 'system',
+        content: `Consider this relevant information: ${knowledgeBaseContent}`
+      });
+    }
+
+    // Add the user's message
+    messages.push({
+      role: 'user',
+      content: isGroupChat 
+        ? `As ${character.name}, provide your perspective on this topic for the group debate: ${message}`
+        : message
+    });
+
+    console.log('Sending request to OpenAI with messages:', messages);
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -30,24 +57,21 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: isGroupChat 
-            ? `As ${character.name}, provide your perspective on this topic for the group debate: ${message}`
-            : message 
-          }
-        ],
-        response_format: { type: "text" },
+        messages: messages,
         temperature: 1,
         max_tokens: 2048,
         top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0
+        frequency_penalty: 0.3,
+        presence_penalty: 0.3
       }),
     });
 
     const data = await response.json();
-    console.log('OpenAI response received');
+    console.log('OpenAI response received for character:', character.name);
+
+    if (!data.choices || !data.choices[0]) {
+      throw new Error('Invalid response from OpenAI');
+    }
 
     return new Response(JSON.stringify({ 
       response: data.choices[0].message.content 
