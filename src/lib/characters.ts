@@ -21,7 +21,7 @@ export const characters: Character[] = [
     name: "Atlas",
     role: "Venture Capitalist",
     description: "A seasoned venture capitalist based in New London, Atlas combines sharp business acumen with charismatic leadership. With an MBA from New London's prestigious business school, they excel in mentoring entrepreneurs and identifying promising opportunities in the 2040 business landscape.",
-    image: "/lovable-uploads/atlas-profile.mp4", // Update this with your actual video file path
+    image: "/lovable-uploads/545221c7-1d0e-41c8-bda0-235b932c3a9f.png",
     widgetId: "8gJ0dMHzPVXRpxVpWpnj",
     nationality: "British",
     skills: [
