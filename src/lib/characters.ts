@@ -13,6 +13,10 @@ export interface Character {
     meetingsPerMonth: number;
   };
   conversationTopics: string[];
+  gallery?: {
+    videos?: string[];
+    images?: string[];
+  };
 }
 
 export const characters: Character[] = [
@@ -44,7 +48,10 @@ export const characters: Character[] = [
       "Leadership Development",
       "Innovation",
       "New London Business Scene"
-    ]
+    ],
+    gallery: {
+      videos: ["https://youtube.com/shorts/wgS9VEhg8nA"]
+    }
   },
   {
     id: "echo",

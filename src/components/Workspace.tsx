@@ -12,6 +12,7 @@ import { Users } from "lucide-react";
 import { BackgroundSelector } from "./workspace/BackgroundSelector";
 import { TemplateQuestions } from "./workspace/TemplateQuestions";
 import { KnowledgeBase } from "./workspace/KnowledgeBase";
+import { Gallery } from "./workspace/Gallery";
 
 const Workspace = () => {
   const { characterId } = useParams();
@@ -106,6 +107,11 @@ const Workspace = () => {
             <CharacterProfile 
               character={character}
               onQuickCall={handleQuickCall}
+            />
+            <Gallery
+              videos={character.gallery?.videos}
+              images={character.gallery?.images}
+              characterId={character.id}
             />
             <KnowledgeBase />
           </div>
