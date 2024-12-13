@@ -56,15 +56,28 @@ export const CharacterProfile = ({ character, onQuickCall }: CharacterProfilePro
     }
   };
 
+  const isVideo = character.image.endsWith('.mp4') || character.image.endsWith('.webm');
+
   return (
     <>
       <Card className="p-6 space-y-6">
         <AspectRatio ratio={3/4} className="bg-muted rounded-lg overflow-hidden">
-          <img
-            src={character.image}
-            alt={character.name}
-            className="object-cover w-full h-full object-top"
-          />
+          {isVideo ? (
+            <video 
+              src={character.image}
+              className="object-cover w-full h-full"
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+          ) : (
+            <img
+              src={character.image}
+              alt={character.name}
+              className="object-cover w-full h-full object-top"
+            />
+          )}
         </AspectRatio>
 
         <div className="flex flex-col items-center text-center">
