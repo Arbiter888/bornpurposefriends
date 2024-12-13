@@ -12,6 +12,7 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
   const [newMessage, setNewMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const [conversationId] = useState(() => crypto.randomUUID());
 
   useEffect(() => {
     if (!user?.id || !characterId) return;
@@ -21,6 +22,7 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
         .from('messages')
         .select('*')
         .eq('user_id', user.id)
+        .eq('conversation_id', conversationId)
         .order('created_at', { ascending: true });
 
       if (error) {
@@ -40,12 +42,13 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
           timestamp: new Date(msg.created_at),
           characterName: msg.character_name,
           characterImage: msg.character_image,
+          conversationId: msg.conversation_id,
         })));
       }
     };
 
     fetchMessages();
-  }, [user?.id, characterId, toast]);
+  }, [user?.id, characterId, conversationId, toast]);
 
   const handleSendMessage = async (character: Character | Character[]) => {
     if (!newMessage.trim() || !user?.id) return;
@@ -58,6 +61,7 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
       role: 'user',
       content: newMessage,
       timestamp: new Date(),
+      conversationId,
     };
 
     try {
@@ -66,10 +70,11 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
       setMessages(prev => [...prev, userMessage]);
       setNewMessage("");
 
+      // Get knowledge base content
+      const knowledgeBaseContent = await searchKnowledgeBase(newMessage);
+
       if (isGroupChat && Array.isArray(character)) {
-        // Handle group debate responses
-        const knowledgeBaseContent = await searchKnowledgeBase(newMessage);
-        
+        // Handle group debate responses sequentially
         for (const char of character) {
           const { data, error } = await supabase.functions.invoke('chat', {
             body: JSON.stringify({
@@ -77,6 +82,7 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
               character: char,
               isGroupChat: true,
               knowledgeBaseContent,
+              conversationId,
             }),
           });
 
@@ -90,6 +96,7 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
             timestamp: new Date(),
             characterName: char.name,
             characterImage: char.image,
+            conversationId,
           };
 
           await handleMessageStorage(aiMessage, user.id, char.name, char.image);
@@ -97,13 +104,12 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
         }
       } else if (!Array.isArray(character)) {
         // Handle single character chat
-        const knowledgeBaseContent = await searchKnowledgeBase(newMessage);
-        
         const { data, error } = await supabase.functions.invoke('chat', {
           body: JSON.stringify({
             message: newMessage,
             character,
             knowledgeBaseContent,
+            conversationId,
           }),
         });
 
@@ -117,6 +123,7 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
           timestamp: new Date(),
           characterName: character.name,
           characterImage: character.image,
+          conversationId,
         };
 
         await handleMessageStorage(aiMessage, user.id, character.name, character.image);

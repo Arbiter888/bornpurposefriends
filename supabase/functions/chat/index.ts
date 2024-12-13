@@ -8,7 +8,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const DEBATE_SYSTEM_PROMPT = `You are participating in a group debate. Based on your character's background, expertise, and perspective, provide your unique viewpoint on the topic. Be respectful but don't hesitate to disagree with others if your character would have a different opinion. Support your arguments with your character's expertise and experience. Keep responses concise and focused.`;
+const DEBATE_SYSTEM_PROMPT = `You are participating in a group debate. Based on your character's background, expertise, and perspective, provide your unique viewpoint on the topic. Be respectful but don't hesitate to disagree with others if your character would have a different opinion. Support your arguments with your character's expertise and experience. Keep responses concise, focused, and engaging. Remember to maintain your character's unique voice and perspective throughout the debate.`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -16,9 +16,10 @@ serve(async (req) => {
   }
 
   try {
-    const { message, character, isGroupChat, knowledgeBaseContent } = await req.json();
+    const { message, character, isGroupChat, knowledgeBaseContent, conversationId } = await req.json();
     console.log('Received request for character:', character.name);
     console.log('Is group debate:', isGroupChat);
+    console.log('Conversation ID:', conversationId);
 
     const systemPrompt = isGroupChat 
       ? `${DEBATE_SYSTEM_PROMPT}\nYou are ${character.name}, ${character.role}. ${character.description}`
@@ -38,6 +39,12 @@ serve(async (req) => {
         content: `Consider this relevant information: ${knowledgeBaseContent}`
       });
     }
+
+    // Add character-specific context
+    messages.push({
+      role: 'system',
+      content: `Your nationality is ${character.nationality}. Your key skills are: ${character.skills.join(', ')}. Common topics you discuss: ${character.conversationTopics.join(', ')}.`
+    });
 
     // Add the user's message
     messages.push({
