@@ -5,4 +5,5 @@ export interface Message {
   timestamp: Date;
   characterName?: string;
   characterImage?: string;
+  conversationId?: string;
 }

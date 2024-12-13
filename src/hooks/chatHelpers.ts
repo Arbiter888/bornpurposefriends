@@ -16,6 +16,7 @@ export const handleMessageStorage = async (
       user_id: userId,
       character_name: characterName,
       character_image: characterImage,
+      conversation_id: message.conversationId || crypto.randomUUID(),
     });
 
   if (error) {
