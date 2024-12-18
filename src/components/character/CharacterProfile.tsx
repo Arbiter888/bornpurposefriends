@@ -1,6 +1,6 @@
 import { Character } from "@/lib/characters";
 import { Card } from "../ui/card";
-import { PrayingHands } from "lucide-react";
+import { Cross } from "lucide-react";
 import { Button } from "../ui/button";
 import { AspectRatio } from "../ui/aspect-ratio";
 import { useEffect, useState } from "react";
@@ -76,7 +76,7 @@ export const CharacterProfile = ({ character, onQuickCall }: CharacterProfilePro
           className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"
           onClick={handlePrayerRequest}
         >
-          <PrayingHands className="w-4 h-4 mr-2" />
+          <Cross className="w-4 h-4 mr-2" />
           Submit Prayer Request
         </Button>
         
