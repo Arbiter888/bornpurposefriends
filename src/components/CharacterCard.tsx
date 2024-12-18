@@ -2,6 +2,7 @@ import { Character } from "@/lib/characters";
 import { useEffect, useRef, useState } from "react";
 import { Cross, BookOpen } from "lucide-react";
 import { Button } from "./ui/button";
+import { useNavigate } from "react-router-dom";
 
 interface CharacterCardProps {
   character: Character;
@@ -13,6 +14,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
   const [showWidget, setShowWidget] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scriptLoaded, setScriptLoaded] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadScript = () => {
@@ -50,7 +52,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     }
   }, [isWidgetActive]);
 
-  const handleQuickCall = () => {
+  const handlePrayerRequest = () => {
     if (scriptLoaded) {
       console.log("Opening widget for character:", character.name);
       onWidgetOpen();
@@ -60,25 +62,29 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     }
   };
 
+  const handleBibleStudy = () => {
+    navigate(`/workspace/${character.id}`);
+  };
+
   return (
     <>
       <div 
         ref={containerRef}
-        className="relative group bg-black rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl h-full"
+        className="relative group bg-black rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl h-[500px]"
         style={{
           backdropFilter: "blur(10px)",
           WebkitBackdropFilter: "blur(10px)",
           fontFamily: 'Tomorrow'
         }}
       >
-        <div className="relative">
+        <div className="relative h-full">
           <img
             src={character.image}
             alt={character.name}
-            className="w-full h-[300px] object-cover"
+            className="w-full h-full object-cover"
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-100" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90" />
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
@@ -86,22 +92,20 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
             <h3 className="text-2xl font-bold mb-2">{character.name}</h3>
             <div className="flex items-center gap-2 mb-2">
               <span className="text-blue-400">{character.role}</span>
-              <span className="text-gray-400">•</span>
-              <span className="text-blue-400">{character.nationality}</span>
             </div>
             <p className="text-gray-300 text-sm">{character.description}</p>
           </div>
 
           <div className="flex gap-2">
             <Button
-              onClick={handleQuickCall}
+              onClick={handlePrayerRequest}
               className="flex-1 bg-blue-500 hover:bg-blue-600"
             >
               <Cross className="w-4 h-4 mr-2" />
               Prayer Request
             </Button>
             <Button
-              onClick={handleQuickCall}
+              onClick={handleBibleStudy}
               className="flex-1 bg-blue-500 hover:bg-blue-600"
             >
               <BookOpen className="w-4 h-4 mr-2" />

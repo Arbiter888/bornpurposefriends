@@ -14,6 +14,10 @@ interface BackgroundSelectorProps {
 export const BackgroundSelector = ({ onSelect }: BackgroundSelectorProps) => {
   const backgrounds = [
     {
+      name: "Church Interior",
+      url: "/lovable-uploads/9c927bab-2450-41ce-bd53-fa2ea84cce37.png",
+    },
+    {
       name: "Futuristic Park",
       url: "/lovable-uploads/849ab32f-d325-40ba-bf3e-5e55edce5f7c.png",
     },
