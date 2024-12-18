@@ -61,29 +61,57 @@ export const characters: Character[] = [
     image: "/lovable-uploads/3ed1979a-c47e-4d48-b773-ead55dd2ed84.png",
     widgetId: "6uUzWns28me6nq7WB2Ch",
     nationality: "Brazilian",
-    skills: ["Intercessory Prayer", "Spiritual Warfare", "Prayer Guidance", "Faith Building"],
+    skills: [
+      "Intercessory Prayer",
+      "Spiritual Warfare",
+      "Prayer Guidance",
+      "Biblical Prayer Studies",
+      "Faith Building",
+      "Prayer Journaling"
+    ],
     relationshipStats: {
       trustLevel: 88,
       yearsKnown: 4,
       meetingsPerMonth: 6
     },
-    conversationTopics: ["Prayer Strategies", "Spiritual Warfare", "Faith Development", "Divine Intervention"]
+    conversationTopics: [
+      "Prayer Strategies",
+      "Spiritual Warfare",
+      "Faith Development",
+      "Divine Intervention",
+      "Prayer in Scripture",
+      "Building Prayer Habits"
+    ]
   },
   {
     id: "pace",
     name: "Pace",
     role: "Youth Minister",
-    description: "Pace specializes in connecting with young believers, making faith relevant to modern youth while staying true to biblical principles. They excel at bridging generational gaps in faith and fostering spiritual growth in young people.",
+    description: "Pace specializes in connecting with young believers, making Scripture relevant to modern youth while staying true to biblical principles. They excel at bridging generational gaps in faith and fostering spiritual growth in young people.",
     image: "/lovable-uploads/ba86daaf-2e7c-4615-9b24-5cdfb9adfdda.png",
     widgetId: "WO8DnLMvodLhjPDCkk24",
     nationality: "Japanese",
-    skills: ["Youth Ministry", "Modern Worship", "Biblical Application", "Mentorship"],
+    skills: [
+      "Youth Ministry",
+      "Modern Worship",
+      "Biblical Application",
+      "Mentorship",
+      "Scripture Study",
+      "Youth Engagement"
+    ],
     relationshipStats: {
       trustLevel: 95,
       yearsKnown: 3,
       meetingsPerMonth: 12
     },
-    conversationTopics: ["Youth Faith", "Modern Christianity", "Worship", "Life Application"]
+    conversationTopics: [
+      "Youth Faith",
+      "Modern Christianity",
+      "Biblical Wisdom",
+      "Life Application",
+      "Scripture Study",
+      "Faith Questions"
+    ]
   },
   {
     id: "aria",
@@ -93,44 +121,86 @@ export const characters: Character[] = [
     image: "/lovable-uploads/d13f4738-2c22-4587-a616-b0cee2931b0b.png",
     widgetId: "RFVLgNGutYmjTtsIGNX1",
     nationality: "Russian",
-    skills: ["Biblical Languages", "Hermeneutics", "Historical Context", "Theological Studies"],
+    skills: [
+      "Biblical Languages",
+      "Hermeneutics",
+      "Historical Context",
+      "Theological Studies",
+      "Scripture Analysis",
+      "Biblical Research"
+    ],
     relationshipStats: {
       trustLevel: 85,
       yearsKnown: 1.5,
       meetingsPerMonth: 4
     },
-    conversationTopics: ["Biblical Languages", "Scripture Study", "Historical Context", "Theological Insights"]
+    conversationTopics: [
+      "Biblical Languages",
+      "Scripture Study",
+      "Historical Context",
+      "Theological Insights",
+      "Bible Translation",
+      "Ancient Manuscripts"
+    ]
   },
   {
     id: "cipher",
     name: "Cipher",
     role: "Apologetics Expert",
-    description: "Cipher specializes in Christian apologetics, helping believers understand and defend their faith in an increasingly secular world. They provide thoughtful answers to challenging questions about Christianity and faith.",
+    description: "Cipher specializes in Christian apologetics, helping believers understand and defend their faith through Scripture. They provide thoughtful, Bible-based answers to challenging questions about Christianity and faith.",
     image: "/lovable-uploads/761f3623-3775-4357-be2c-383985df2544.png",
     widgetId: "2TrHp4U7CtvKYhNlPx6U",
     nationality: "American",
-    skills: ["Apologetics", "Theological Defense", "Cultural Analysis", "Faith Defense"],
+    skills: [
+      "Biblical Apologetics",
+      "Theological Defense",
+      "Scripture Analysis",
+      "Faith Defense",
+      "Biblical Reasoning",
+      "Doctrinal Studies"
+    ],
     relationshipStats: {
       trustLevel: 97,
       yearsKnown: 2,
       meetingsPerMonth: 10
     },
-    conversationTopics: ["Christian Defense", "Faith Questions", "Cultural Christianity", "Truth Claims"]
+    conversationTopics: [
+      "Christian Defense",
+      "Faith Questions",
+      "Biblical Truth",
+      "Doctrinal Studies",
+      "Scripture Evidence",
+      "Theological Reasoning"
+    ]
   },
   {
     id: "nova",
     name: "Nova",
     role: "Missions Coordinator",
-    description: "Nova focuses on global missions and cross-cultural ministry, helping believers understand and engage with missions work worldwide. They provide insights into different cultural approaches to Christianity and effective ministry strategies.",
+    description: "Nova focuses on global missions and cross-cultural ministry through a Biblical lens. They help believers understand God's heart for missions and engage with Scripture's call to spread the Gospel worldwide.",
     image: "/lovable-uploads/13d26c54-f985-4e90-92f2-dca91eca7a1b.png",
     widgetId: "cJZziDTpqaTCZzKseAKK",
     nationality: "Korean",
-    skills: ["Cross-Cultural Ministry", "Missions Strategy", "Cultural Integration", "Global Outreach"],
+    skills: [
+      "Biblical Missions",
+      "Cross-Cultural Ministry",
+      "Gospel Strategy",
+      "Cultural Integration",
+      "Scripture Teaching",
+      "Global Outreach"
+    ],
     relationshipStats: {
       trustLevel: 90,
       yearsKnown: 2,
       meetingsPerMonth: 7
     },
-    conversationTopics: ["Global Missions", "Cultural Ministry", "Evangelism", "Mission Strategy"]
+    conversationTopics: [
+      "Biblical Missions",
+      "Great Commission",
+      "Cultural Ministry",
+      "Gospel Sharing",
+      "Mission Strategy",
+      "Scripture Application"
+    ]
   }
 ];
