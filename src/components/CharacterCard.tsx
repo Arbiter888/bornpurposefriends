@@ -70,7 +70,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     <>
       <div 
         ref={containerRef}
-        className="relative group overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
+        className="relative group overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl rounded-2xl"
         style={{
           height: 'auto',
           fontFamily: 'Tomorrow'
@@ -80,12 +80,12 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
           <img
             src={character.image}
             alt={character.name}
-            className="w-full h-full object-contain"
+            className="w-full h-full object-contain rounded-2xl"
             loading="lazy"
           />
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent rounded-b-2xl">
           <div className="mb-4">
             <h3 className="text-2xl font-bold mb-2 text-white">{character.name}</h3>
             <div className="flex items-center gap-2 mb-2">
@@ -97,14 +97,14 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
           <div className="flex gap-2">
             <Button
               onClick={handlePrayerRequest}
-              className="flex-1 bg-blue-500 hover:bg-blue-600"
+              className="flex-1 bg-blue-500 hover:bg-blue-600 rounded-xl"
             >
               <Phone className="w-4 h-4 mr-2" />
               Prayer Request Call
             </Button>
             <Button
               onClick={handleBibleStudy}
-              className="flex-1 bg-blue-500 hover:bg-blue-600"
+              className="flex-1 bg-blue-500 hover:bg-blue-600 rounded-xl"
             >
               <BookOpen className="w-4 h-4 mr-2" />
               Bible Study

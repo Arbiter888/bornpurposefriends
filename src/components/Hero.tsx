@@ -5,7 +5,19 @@ const Hero = () => {
         <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
         <span className="text-sm font-medium text-gray-700">Ministry Team Online</span>
       </div>
-      <h1 className="text-4xl md:text-6xl font-bold mb-6 animate-fade-up bg-gradient-to-r from-[#0EA5E9] to-[#2563EB] bg-clip-text text-transparent drop-shadow-lg" style={{ fontFamily: 'Tomorrow' }}>
+      <h1 
+        className="text-4xl md:text-6xl font-bold mb-6 animate-fade-up drop-shadow-lg"
+        style={{ 
+          fontFamily: 'Tomorrow',
+          background: 'linear-gradient(to right, #0EA5E9, #2563EB)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+          padding: '0.5rem',
+          borderRadius: '0.5rem',
+          backgroundColor: 'rgba(255,255,255,0.9)',
+        }}
+      >
         bornpurpose
       </h1>
       <p className="text-lg md:text-xl text-white max-w-2xl mx-auto mb-8 animate-fade-up bg-black/40 backdrop-blur-sm p-4 rounded-lg" style={{ animationDelay: "0.2s", fontFamily: 'Tomorrow' }}>

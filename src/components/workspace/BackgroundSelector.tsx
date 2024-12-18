@@ -16,7 +16,7 @@ export const BackgroundSelector = ({ onSelect }: BackgroundSelectorProps) => {
   const backgrounds = [
     {
       name: "Church Interior",
-      url: "/lovable-uploads/photo-1473177104440-ffee2f376098",
+      url: "/lovable-uploads/f38e5804-f357-4a22-bbe2-5c6f6b44791f.png",
     },
     {
       name: "Futuristic Park",
