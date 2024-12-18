@@ -5,7 +5,7 @@ export const hope: Character = {
   name: "Hope",
   role: "Bible Study Leader",
   description: "Hope brings Scripture to life through her deep understanding of biblical languages and historical context. She helps believers discover the richness of God's Word through careful study and practical application.",
-  image: "/lovable-uploads/ec509fd7-d8b1-4491-8920-d37802f0a0d5.png",
+  image: "/lovable-uploads/ebecd4f4-59bc-4a68-80a5-2873d26be8bf.png",
   widgetId: "RFVLgNGutYmjTtsIGNX1",
   nationality: "American",
   skills: [

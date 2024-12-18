@@ -16,7 +16,7 @@ export const BackgroundSelector = ({ onSelect }: BackgroundSelectorProps) => {
   const backgrounds = [
     {
       name: "Church Interior",
-      url: "/lovable-uploads/f38e5804-f357-4a22-bbe2-5c6f6b44791f.png",
+      url: "/lovable-uploads/e5022c69-9adb-495b-bb18-b9710c0567c6.png",
     },
     {
       name: "Futuristic Park",
@@ -38,7 +38,7 @@ export const BackgroundSelector = ({ onSelect }: BackgroundSelectorProps) => {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="w-full sm:w-auto bg-gradient-to-r from-[#0EA5E9] to-[#6E59A5] text-white hover:opacity-90 border-0"
+          className="w-full sm:w-auto bg-gradient-to-r from-[#1EAEDB] to-[#0FA0CE] text-white hover:opacity-90 border-0"
         >
           <Image className="w-4 h-4 mr-2" />
           Change Background
