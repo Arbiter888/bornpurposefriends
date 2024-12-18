@@ -6,34 +6,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MessageSquare } from "lucide-react";
-import { useParams } from "react-router-dom";
-import { characters } from "@/lib/characters";
 
 interface TemplateQuestionsProps {
   onSelect: (question: string) => void;
 }
 
 export const TemplateQuestions = ({ onSelect }: TemplateQuestionsProps) => {
-  const { characterId } = useParams();
-  const character = characters.find((c) => c.id === characterId);
-
-  // Default questions that work for any character
-  const defaultQuestions = [
-    `What's your perspective on artificial intelligence and its impact on society?`,
-    `How do you approach problem-solving in your area of expertise?`,
-    `What are your thoughts on the future of human-AI collaboration?`,
-    `Can you share some insights about your field of specialization?`,
-    `How do you handle ethical dilemmas in your work?`,
+  const questions = [
+    "What does the Bible say about finding peace in difficult times?",
+    "How can I apply biblical wisdom to my current situation?",
+    "What scriptures can help me understand God's purpose for my life?",
+    "Can you help me understand what the Bible teaches about relationships?",
+    "What does the Bible say about making important life decisions?",
+    "How can I grow stronger in my faith according to scripture?",
+    "What verses can help me overcome fear and anxiety?",
+    "How does the Bible guide us in showing love to others?",
   ];
-
-  // Character-specific questions (if character is Atlas, use the original questions)
-  const questions = character?.id === "atlas" ? [
-    "Can you help me refine my pitch for investors?",
-    "What are the key trends in venture capital right now?",
-    "How should I approach scaling my startup?",
-    "What metrics should I focus on for my next funding round?",
-    "Can you help me develop a market entry strategy?",
-  ] : defaultQuestions;
 
   return (
     <DropdownMenu>
@@ -43,7 +31,7 @@ export const TemplateQuestions = ({ onSelect }: TemplateQuestionsProps) => {
           className="w-full sm:w-auto flex items-center gap-2 bg-gradient-to-r from-[#9b87f5] to-[#7E69AB] text-white border-0 hover:opacity-90"
         >
           <MessageSquare className="w-4 h-4" />
-          Template Questions
+          Bible Study Questions
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 

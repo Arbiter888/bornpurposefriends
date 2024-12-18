@@ -70,7 +70,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     <>
       <div 
         ref={containerRef}
-        className="relative group bg-black rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl h-[500px]"
+        className="relative group bg-black rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl h-[700px]"
         style={{
           backdropFilter: "blur(10px)",
           WebkitBackdropFilter: "blur(10px)",
@@ -81,7 +81,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
           <img
             src={character.image}
             alt={character.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90" />

@@ -1,6 +1,6 @@
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
-import { Folder, ChevronDown, ChevronUp } from "lucide-react";
+import { Folder, ChevronDown, ChevronUp, Trash2 } from "lucide-react";
 import { Task, TaskStatus } from "@/types/kanban";
 import { useState } from "react";
 
@@ -8,9 +8,10 @@ interface TaskColumnProps {
   status: TaskStatus;
   tasks: Task[];
   onUpdateStatus: (taskId: string, newStatus: TaskStatus) => void;
+  onDeleteTask: (taskId: string) => void;
 }
 
-export const TaskColumn = ({ status, tasks, onUpdateStatus }: TaskColumnProps) => {
+export const TaskColumn = ({ status, tasks, onUpdateStatus, onDeleteTask }: TaskColumnProps) => {
   const [expandedTasks, setExpandedTasks] = useState<Record<string, boolean>>({});
 
   const toggleTaskExpansion = (taskId: string) => {
@@ -18,6 +19,21 @@ export const TaskColumn = ({ status, tasks, onUpdateStatus }: TaskColumnProps) =
       ...prev,
       [taskId]: !prev[taskId]
     }));
+  };
+
+  const getStatusLabel = (status: TaskStatus) => {
+    switch (status) {
+      case 'todo':
+        return 'Scripture to Read';
+      case 'in-progress':
+        return 'Currently Reading';
+      case 'done':
+        return 'Scripture Read';
+      case 'saved':
+        return 'Saved Verses';
+      default:
+        return status;
+    }
   };
 
   const getDisplayContent = (content: string, isExpanded: boolean) => {
@@ -30,14 +46,24 @@ export const TaskColumn = ({ status, tasks, onUpdateStatus }: TaskColumnProps) =
     <div className="space-y-4">
       <h3 className="font-semibold capitalize flex items-center gap-2">
         {status === 'saved' && <Folder className="w-4 h-4" />}
-        {status.replace('-', ' ')}
+        {getStatusLabel(status)}
       </h3>
       <div className="space-y-2">
         {tasks
           .filter((task) => task.status === status)
           .map((task) => (
             <Card key={task.id} className="p-4">
-              <h4 className="font-medium">{task.title}</h4>
+              <div className="flex justify-between items-start">
+                <h4 className="font-medium">{task.title}</h4>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => onDeleteTask(task.id)}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </div>
               <div className="text-sm text-gray-500 mt-1">
                 {getDisplayContent(task.description || '', expandedTasks[task.id])}
                 {task.description && task.description.length > 100 && (
@@ -69,7 +95,7 @@ export const TaskColumn = ({ status, tasks, onUpdateStatus }: TaskColumnProps) =
                       variant="outline"
                       onClick={() => onUpdateStatus(task.id, 'todo')}
                     >
-                      Move to Todo
+                      Move to Scripture to Read
                     </Button>
                   )}
                   {status !== 'in-progress' && (
@@ -78,7 +104,7 @@ export const TaskColumn = ({ status, tasks, onUpdateStatus }: TaskColumnProps) =
                       variant="outline"
                       onClick={() => onUpdateStatus(task.id, 'in-progress')}
                     >
-                      Move to In Progress
+                      Move to Currently Reading
                     </Button>
                   )}
                   {status !== 'done' && (
@@ -87,7 +113,7 @@ export const TaskColumn = ({ status, tasks, onUpdateStatus }: TaskColumnProps) =
                       variant="outline"
                       onClick={() => onUpdateStatus(task.id, 'done')}
                     >
-                      Move to Done
+                      Move to Scripture Read
                     </Button>
                   )}
                 </div>

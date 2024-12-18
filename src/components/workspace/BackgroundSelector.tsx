@@ -15,7 +15,7 @@ export const BackgroundSelector = ({ onSelect }: BackgroundSelectorProps) => {
   const backgrounds = [
     {
       name: "Church Interior",
-      url: "/lovable-uploads/9c927bab-2450-41ce-bd53-fa2ea84cce37.png",
+      url: "/lovable-uploads/photo-1473177104440-ffee2f376098",
     },
     {
       name: "Futuristic Park",
@@ -24,10 +24,6 @@ export const BackgroundSelector = ({ onSelect }: BackgroundSelectorProps) => {
     {
       name: "City Bridge",
       url: "/lovable-uploads/99d080ba-0e2a-4a82-9a69-dc9eb998c110.png",
-    },
-    {
-      name: "Neon Bar",
-      url: "/lovable-uploads/2176061c-7f6f-4c32-a6c9-ecc4507c172b.png",
     },
   ];
 
