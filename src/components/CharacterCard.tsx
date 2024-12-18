@@ -1,8 +1,7 @@
 import { Character } from "@/lib/characters";
 import { useEffect, useRef, useState } from "react";
-import CharacterStats from "./character/CharacterStats";
-import CharacterTags from "./character/CharacterTags";
-import CharacterActions from "./character/CharacterActions";
+import { Cross, BookOpen } from "lucide-react";
+import { Button } from "./ui/button";
 
 interface CharacterCardProps {
   character: Character;
@@ -76,31 +75,39 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
           <img
             src={character.image}
             alt={character.name}
-            className="w-full object-cover"
+            className="w-full h-[300px] object-cover"
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-100" />
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-          <div className="mb-2">
-            <h3 className="text-2xl font-bold mb-1">{character.name}</h3>
-            <div className="flex flex-wrap gap-2 mb-2">
-              <span className="inline-block px-3 py-1 rounded-full text-sm bg-blue-500/10 text-blue-500">
-                {character.role}
-              </span>
-              <span className="inline-block px-3 py-1 rounded-full text-sm bg-blue-500/10 text-blue-500">
-                {character.nationality}
-              </span>
+          <div className="mb-4">
+            <h3 className="text-2xl font-bold mb-2">{character.name}</h3>
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-blue-400">{character.role}</span>
+              <span className="text-gray-400">•</span>
+              <span className="text-blue-400">{character.nationality}</span>
             </div>
+            <p className="text-gray-300 text-sm">{character.description}</p>
           </div>
-          <p className="text-gray-300 text-sm mb-4">{character.description}</p>
-          
-          <CharacterStats character={character} />
-          <CharacterTags character={character} />
-          <CharacterActions character={character} onQuickCall={handleQuickCall} />
 
-          <p className="text-xs text-gray-400 mt-4">© George Jacklin 2024</p>
+          <div className="flex gap-2">
+            <Button
+              onClick={handleQuickCall}
+              className="flex-1 bg-blue-500 hover:bg-blue-600"
+            >
+              <Cross className="w-4 h-4 mr-2" />
+              Prayer Request
+            </Button>
+            <Button
+              onClick={handleQuickCall}
+              className="flex-1 bg-blue-500 hover:bg-blue-600"
+            >
+              <BookOpen className="w-4 h-4 mr-2" />
+              Bible Study
+            </Button>
+          </div>
         </div>
       </div>
 

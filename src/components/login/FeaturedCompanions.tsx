@@ -1,5 +1,4 @@
 import { motion } from "framer-motion";
-import { Lock } from "lucide-react";
 import { characters } from "@/lib/characters";
 
 const FeaturedCompanions = () => {
@@ -30,12 +29,6 @@ const FeaturedCompanions = () => {
                 className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90" />
-              {character.id !== 'andrew' && (
-                <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center">
-                  <Lock className="w-8 h-8 mb-2 text-blue-500" />
-                  <span className="text-sm font-semibold text-white">Premium Only</span>
-                </div>
-              )}
               <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
                 <h3 className="text-xl font-bold">{character.name}</h3>
                 <p className="text-sm text-gray-300">{character.role}</p>
