@@ -6,11 +6,11 @@ const FeaturedCompanions = () => {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-[#990000] to-[#ff4d4d] bg-clip-text text-transparent backdrop-blur-sm">
-          Featured Companions
+        <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-[#0EA5E9] to-[#2563EB] bg-clip-text text-transparent backdrop-blur-sm">
+          Welcome to BornPurpose
         </h1>
         <p className="text-lg text-gray-700">
-          Experience personalized growth through advanced neural-linked conversations with our AI companions. Connect across multiple languages and cultures for meaningful interactions.
+          Join our digital sanctuary for prayer, Bible study, and spiritual growth. Connect with our dedicated ministry team for meaningful conversations and biblical guidance.
         </p>
       </div>
       
@@ -32,7 +32,7 @@ const FeaturedCompanions = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90" />
               {character.id !== 'atlas' && (
                 <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center">
-                  <Lock className="w-8 h-8 mb-2 text-red-500" />
+                  <Lock className="w-8 h-8 mb-2 text-blue-500" />
                   <span className="text-sm font-semibold text-white">Premium Only</span>
                 </div>
               )}
