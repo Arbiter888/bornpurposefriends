@@ -1,18 +1,16 @@
-import { Card } from "../ui/card";
-import { Button } from "../ui/button";
-import { Folder, ChevronDown, ChevronUp, Trash2 } from "lucide-react";
-import { Task, TaskStatus } from "@/types/kanban";
 import { useState } from "react";
+import { Task, TaskStatus } from "@/types/kanban";
+import { Button } from "../ui/button";
+import { Trash2 } from "lucide-react";
 
 interface TaskColumnProps {
   status: TaskStatus;
-  label?: string; // Added label prop as optional
   tasks: Task[];
   onUpdateStatus: (taskId: string, newStatus: TaskStatus) => void;
   onDeleteTask: (taskId: string) => void;
 }
 
-export const TaskColumn = ({ status, label, tasks, onUpdateStatus, onDeleteTask }: TaskColumnProps) => {
+export const TaskColumn = ({ status, tasks, onUpdateStatus, onDeleteTask }: TaskColumnProps) => {
   const [expandedTasks, setExpandedTasks] = useState<Record<string, boolean>>({});
 
   const toggleTaskExpansion = (taskId: string) => {
@@ -23,106 +21,64 @@ export const TaskColumn = ({ status, label, tasks, onUpdateStatus, onDeleteTask 
   };
 
   const getStatusLabel = (status: TaskStatus) => {
-    if (label) return label;
-    
     switch (status) {
       case 'todo':
         return 'Scripture to Read';
       case 'in-progress':
         return 'Currently Reading';
       case 'done':
-        return 'Scripture Read';
+        return 'Completed Reading';
       case 'saved':
-        return 'Saved Verses';
+        return 'Saved Scriptures';
       default:
         return status;
     }
   };
 
-  const getDisplayContent = (content: string, isExpanded: boolean) => {
-    const maxLength = 100;
-    if (content.length <= maxLength) return content;
-    return isExpanded ? content : content.slice(0, maxLength) + "...";
-  };
-
   return (
-    <div className="space-y-4">
-      <h3 className="font-semibold capitalize flex items-center gap-2">
-        {status === 'saved' && <Folder className="w-4 h-4" />}
+    <div className="flex flex-col gap-4">
+      <h3 className="text-lg font-semibold text-center bg-gradient-to-r from-blue-500 to-purple-600 text-white py-2 rounded-t-lg">
         {getStatusLabel(status)}
       </h3>
-      <div className="space-y-2">
-        {tasks
-          .filter((task) => task.status === status)
-          .map((task) => (
-            <Card key={task.id} className="p-4">
-              <div className="flex justify-between items-start">
-                <h4 className="font-medium">{task.title}</h4>
+      <div className="space-y-3">
+        {tasks.map((task) => (
+          <div
+            key={task.id}
+            className="p-3 bg-white rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow"
+          >
+            <div className="flex justify-between items-start gap-2">
+              <div 
+                className="flex-1 cursor-pointer"
+                onClick={() => toggleTaskExpansion(task.id)}
+              >
+                <h4 className="font-medium text-gray-900">{task.title}</h4>
+                {expandedTasks[task.id] && (
+                  <p className="mt-1 text-sm text-gray-600">{task.description}</p>
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <select
+                  value={status}
+                  onChange={(e) => onUpdateStatus(task.id, e.target.value as TaskStatus)}
+                  className="text-sm border rounded p-1"
+                >
+                  <option value="todo">To Read</option>
+                  <option value="in-progress">Reading</option>
+                  <option value="done">Completed</option>
+                  <option value="saved">Save</option>
+                </select>
                 <Button
                   variant="ghost"
                   size="icon"
                   onClick={() => onDeleteTask(task.id)}
                   className="text-red-500 hover:text-red-700"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="h-4 w-4" />
                 </Button>
               </div>
-              <div className="text-sm text-gray-500 mt-1">
-                {getDisplayContent(task.description || '', expandedTasks[task.id])}
-                {task.description && task.description.length > 100 && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="mt-1 flex items-center gap-2"
-                    onClick={() => toggleTaskExpansion(task.id)}
-                  >
-                    {expandedTasks[task.id] ? (
-                      <>
-                        <ChevronUp className="w-4 h-4" />
-                        Show less
-                      </>
-                    ) : (
-                      <>
-                        <ChevronDown className="w-4 h-4" />
-                        Read more
-                      </>
-                    )}
-                  </Button>
-                )}
-              </div>
-              {status !== 'saved' && (
-                <div className="flex gap-2 mt-4">
-                  {status !== 'todo' && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => onUpdateStatus(task.id, 'todo')}
-                    >
-                      Move to Scripture to Read
-                    </Button>
-                  )}
-                  {status !== 'in-progress' && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => onUpdateStatus(task.id, 'in-progress')}
-                    >
-                      Move to Currently Reading
-                    </Button>
-                  )}
-                  {status !== 'done' && (
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      onClick={() => onUpdateStatus(task.id, 'done')}
-                    >
-                      Move to Scripture Read
-                    </Button>
-                  )}
-                </div>
-              )}
-            </Card>
-          ))}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );

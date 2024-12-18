@@ -1,94 +1,142 @@
 import { useState, useEffect } from "react";
+import { Task, TaskStatus } from "@/types/kanban";
+import { TaskColumn } from "./TaskColumn";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
+import { useToast } from "../ui/use-toast";
 import { useUser } from "@supabase/auth-helpers-react";
-import { TaskColumn } from "./TaskColumn";
 import { useKanbanTasks } from "@/hooks/useKanbanTasks";
-import { NewTask, TaskStatus } from "@/types/kanban";
-import { BookOpen, CalendarDays } from "lucide-react";
 
 export const KanbanBoard = () => {
-  const [newTask, setNewTask] = useState<NewTask>({
-    title: '',
-    description: ''
-  });
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [newTaskTitle, setNewTaskTitle] = useState("");
+  const [newTaskDescription, setNewTaskDescription] = useState("");
+  const { toast } = useToast();
   const user = useUser();
-  const { tasks, addTask, updateTaskStatus, deleteTask } = useKanbanTasks(user);
+  const { fetchTasks, createTask, updateTask, deleteTask } = useKanbanTasks();
 
   useEffect(() => {
-    const handleAddToKanban = async (event: CustomEvent<NewTask>) => {
-      await addTask(event.detail);
-    };
+    if (user) {
+      loadTasks();
+    }
+  }, [user]);
 
-    const handleSaveMessage = async (event: CustomEvent<NewTask>) => {
-      await addTask(event.detail, 'saved');
-    };
+  const loadTasks = async () => {
+    try {
+      const tasks = await fetchTasks();
+      setTasks(tasks);
+    } catch (error: any) {
+      toast({
+        title: "Error loading tasks",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
 
-    window.addEventListener('addToKanban', handleAddToKanban as EventListener);
-    window.addEventListener('saveMessage', handleSaveMessage as EventListener);
-    
-    return () => {
-      window.removeEventListener('addToKanban', handleAddToKanban as EventListener);
-      window.removeEventListener('saveMessage', handleSaveMessage as EventListener);
-    };
-  }, [addTask]);
+  const handleCreateTask = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newTaskTitle.trim()) return;
 
-  const handleAddTask = async (event: React.FormEvent) => {
-    event.preventDefault();
-    if (!newTask.title.trim()) return;
+    try {
+      const newTask = await createTask(newTaskTitle, newTaskDescription);
+      setTasks([...tasks, newTask]);
+      setNewTaskTitle("");
+      setNewTaskDescription("");
+      toast({
+        title: "Scripture study task created",
+        description: "Your new study task has been added",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error creating task",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
 
-    await addTask(newTask);
-    setNewTask({ title: '', description: '' });
+  const updateTaskStatus = async (taskId: string, newStatus: TaskStatus) => {
+    try {
+      await updateTask(taskId, { status: newStatus });
+      setTasks(tasks.map(task => 
+        task.id === taskId ? { ...task, status: newStatus } : task
+      ));
+      toast({
+        title: "Status updated",
+        description: "Scripture study status has been updated",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error updating status",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDeleteTask = async (taskId: string) => {
+    try {
+      await deleteTask(taskId);
+      setTasks(tasks.filter(task => task.id !== taskId));
+      toast({
+        title: "Task deleted",
+        description: "Scripture study task has been removed",
+      });
+    } catch (error: any) {
+      toast({
+        title: "Error deleting task",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   const statuses: TaskStatus[] = ['todo', 'in-progress', 'done', 'saved'];
 
   return (
     <Card className="p-6 bg-white/90 backdrop-blur-sm shadow-lg">
-      <form onSubmit={handleAddTask} className="mb-6 space-y-4">
-        <div className="flex items-center gap-2 mb-4">
-          <BookOpen className="w-6 h-6 text-[#0EA5E9]" />
-          <h2 className="text-2xl font-bold text-gray-800">Scripture Study Planner</h2>
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-2xl font-bold mb-4 text-center bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
+            Bible Study Planner
+          </h2>
+          <form onSubmit={handleCreateTask} className="space-y-4">
+            <div>
+              <Input
+                placeholder="Enter scripture reference or study topic..."
+                value={newTaskTitle}
+                onChange={(e) => setNewTaskTitle(e.target.value)}
+                className="w-full"
+              />
+            </div>
+            <div>
+              <Textarea
+                placeholder="Add study notes or questions..."
+                value={newTaskDescription}
+                onChange={(e) => setNewTaskDescription(e.target.value)}
+                className="w-full"
+              />
+            </div>
+            <Button type="submit" className="w-full">
+              Add Study Task
+            </Button>
+          </form>
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="title" className="text-gray-700">Scripture Reference</Label>
-          <Input
-            id="title"
-            value={newTask.title}
-            onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-            placeholder="Enter scripture reference (e.g. Proverbs 5:11)"
-            className="border-[#0EA5E9]/20 focus:border-[#0EA5E9]"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="description" className="text-gray-700">Study Notes</Label>
-          <Textarea
-            id="description"
-            value={newTask.description}
-            onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-            placeholder="Enter any notes or reflections about this scripture"
-            className="border-[#0EA5E9]/20 focus:border-[#0EA5E9]"
-          />
-        </div>
-        <Button type="submit" className="w-full bg-gradient-to-r from-[#0EA5E9] to-[#2563EB] hover:opacity-90">
-          <CalendarDays className="w-4 h-4 mr-2" />
-          Add to Bible Study Plan
-        </Button>
-      </form>
 
-      <div className="grid grid-cols-4 gap-4">
-        {statuses.map((status) => (
-          <TaskColumn
-            key={status}
-            status={status}
-            tasks={tasks}
-            onUpdateStatus={updateTaskStatus}
-            onDeleteTask={deleteTask}
-          />
-        ))}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {statuses.map(status => (
+            <TaskColumn
+              key={status}
+              status={status}
+              tasks={tasks.filter(task => task.status === status)}
+              onUpdateStatus={updateTaskStatus}
+              onDeleteTask={handleDeleteTask}
+            />
+          ))}
+        </div>
       </div>
     </Card>
   );
