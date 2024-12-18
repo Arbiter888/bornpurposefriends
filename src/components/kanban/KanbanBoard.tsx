@@ -15,34 +15,23 @@ export const KanbanBoard = () => {
   const [newTaskDescription, setNewTaskDescription] = useState("");
   const { toast } = useToast();
   const user = useUser();
-  const { fetchTasks, createTask, updateTask, deleteTask } = useKanbanTasks();
+  const { tasks: hookTasks, addTask, updateTaskStatus, deleteTask } = useKanbanTasks(user);
 
   useEffect(() => {
-    if (user) {
-      loadTasks();
+    if (hookTasks) {
+      setTasks(hookTasks);
     }
-  }, [user]);
-
-  const loadTasks = async () => {
-    try {
-      const tasks = await fetchTasks();
-      setTasks(tasks);
-    } catch (error: any) {
-      toast({
-        title: "Error loading tasks",
-        description: error.message,
-        variant: "destructive",
-      });
-    }
-  };
+  }, [hookTasks]);
 
   const handleCreateTask = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTaskTitle.trim()) return;
 
     try {
-      const newTask = await createTask(newTaskTitle, newTaskDescription);
-      setTasks([...tasks, newTask]);
+      await addTask({
+        title: newTaskTitle,
+        description: newTaskDescription
+      });
       setNewTaskTitle("");
       setNewTaskDescription("");
       toast({
@@ -58,9 +47,9 @@ export const KanbanBoard = () => {
     }
   };
 
-  const updateTaskStatus = async (taskId: string, newStatus: TaskStatus) => {
+  const handleUpdateStatus = async (taskId: string, newStatus: TaskStatus) => {
     try {
-      await updateTask(taskId, { status: newStatus });
+      await updateTaskStatus(taskId, newStatus);
       setTasks(tasks.map(task => 
         task.id === taskId ? { ...task, status: newStatus } : task
       ));
@@ -132,7 +121,7 @@ export const KanbanBoard = () => {
               key={status}
               status={status}
               tasks={tasks.filter(task => task.status === status)}
-              onUpdateStatus={updateTaskStatus}
+              onUpdateStatus={handleUpdateStatus}
               onDeleteTask={handleDeleteTask}
             />
           ))}
