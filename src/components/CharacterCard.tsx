@@ -1,6 +1,6 @@
 import { Character } from "@/lib/characters";
 import { useEffect, useRef, useState } from "react";
-import { Cross, BookOpen } from "lucide-react";
+import { Phone, BookOpen } from "lucide-react";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
 
@@ -70,26 +70,24 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     <>
       <div 
         ref={containerRef}
-        className="relative group bg-black rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl h-[700px]"
+        className="relative group overflow-hidden transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
         style={{
-          backdropFilter: "blur(10px)",
-          WebkitBackdropFilter: "blur(10px)",
+          height: 'auto',
           fontFamily: 'Tomorrow'
         }}
       >
-        <div className="relative h-full">
+        <div className="relative">
           <img
             src={character.image}
             alt={character.name}
             className="w-full h-full object-contain"
             loading="lazy"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-90" />
         </div>
 
-        <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+        <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
           <div className="mb-4">
-            <h3 className="text-2xl font-bold mb-2">{character.name}</h3>
+            <h3 className="text-2xl font-bold mb-2 text-white">{character.name}</h3>
             <div className="flex items-center gap-2 mb-2">
               <span className="text-blue-400">{character.role}</span>
             </div>
@@ -101,8 +99,8 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
               onClick={handlePrayerRequest}
               className="flex-1 bg-blue-500 hover:bg-blue-600"
             >
-              <Cross className="w-4 h-4 mr-2" />
-              Prayer Request
+              <Phone className="w-4 h-4 mr-2" />
+              Prayer Request Call
             </Button>
             <Button
               onClick={handleBibleStudy}

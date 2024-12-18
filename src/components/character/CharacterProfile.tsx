@@ -1,6 +1,6 @@
 import { Character } from "@/lib/characters";
 import { Card } from "../ui/card";
-import { Cross } from "lucide-react";
+import { Phone } from "lucide-react";
 import { Button } from "../ui/button";
 import { AspectRatio } from "../ui/aspect-ratio";
 import { useEffect, useState } from "react";
@@ -76,8 +76,8 @@ export const CharacterProfile = ({ character, onQuickCall }: CharacterProfilePro
           className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"
           onClick={handlePrayerRequest}
         >
-          <Cross className="w-4 h-4 mr-2" />
-          Submit Prayer Request
+          <Phone className="w-4 h-4 mr-2" />
+          Prayer Request Call
         </Button>
         
         <div className="space-y-4">

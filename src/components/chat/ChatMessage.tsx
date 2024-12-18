@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, BookmarkPlus, ChevronDown, ChevronUp } from "lucide-react";
+import { BookmarkPlus, ChevronDown, ChevronUp, CalendarPlus } from "lucide-react";
 import { useToast } from "../ui/use-toast";
 import { useState } from "react";
 
@@ -14,13 +14,13 @@ interface ChatMessageProps {
 export const ChatMessage = ({ role, content, characterImage, characterName }: ChatMessageProps) => {
   const { toast } = useToast();
   const [isExpanded, setIsExpanded] = useState(false);
-  const messageLength = 300; // Characters to show before "read more"
+  const messageLength = 300;
   const shouldTruncate = content.length > messageLength;
   const displayContent = shouldTruncate && !isExpanded 
     ? content.slice(0, messageLength) + "..."
     : content;
 
-  const handleAddToKanban = () => {
+  const handleAddToPlanner = () => {
     const event = new CustomEvent('addToKanban', { 
       detail: { 
         title: content.slice(0, 50) + (content.length > 50 ? '...' : ''),
@@ -30,8 +30,8 @@ export const ChatMessage = ({ role, content, characterImage, characterName }: Ch
     window.dispatchEvent(event);
     
     toast({
-      title: "Added to Kanban",
-      description: "The suggestion has been added to your todo list",
+      title: "Added to Bible Study Planner",
+      description: "The scripture has been added to your planner",
     });
   };
 
@@ -99,10 +99,10 @@ export const ChatMessage = ({ role, content, characterImage, characterName }: Ch
               variant="outline"
               size="sm"
               className="flex items-center gap-2"
-              onClick={handleAddToKanban}
+              onClick={handleAddToPlanner}
             >
-              <PlusCircle className="w-4 h-4" />
-              Add to Kanban
+              <CalendarPlus className="w-4 h-4" />
+              Add to Bible Study Planner
             </Button>
           )}
           <Button

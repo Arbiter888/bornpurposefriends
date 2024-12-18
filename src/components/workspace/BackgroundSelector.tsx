@@ -6,6 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useEffect } from "react";
 
 interface BackgroundSelectorProps {
   onSelect: (background: string) => void;
@@ -26,6 +27,11 @@ export const BackgroundSelector = ({ onSelect }: BackgroundSelectorProps) => {
       url: "/lovable-uploads/99d080ba-0e2a-4a82-9a69-dc9eb998c110.png",
     },
   ];
+
+  useEffect(() => {
+    // Set default background on component mount
+    onSelect(backgrounds[0].url);
+  }, []);
 
   return (
     <DropdownMenu>

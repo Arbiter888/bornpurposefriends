@@ -8,7 +8,7 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const DEBATE_SYSTEM_PROMPT = `You are participating in a group debate. Based on your character's background, expertise, and perspective, provide your unique viewpoint on the topic. Be respectful but don't hesitate to disagree with others if your character would have a different opinion. Support your arguments with your character's expertise and experience. Keep responses concise, focused, and engaging. Remember to maintain your character's unique voice and perspective throughout the debate.`;
+const DEBATE_SYSTEM_PROMPT = `You are participating in a group debate. Based on your character's background, expertise, and perspective, provide your unique viewpoint on the topic. Your response should be distinctly different from what other characters might say, drawing from your specific background and beliefs. Be respectful but don't hesitate to disagree with others if your character would have a different opinion. Support your arguments with your character's expertise and experience. Keep responses concise, focused, and engaging. Remember to maintain your character's unique voice and perspective throughout the debate.`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -27,7 +27,7 @@ serve(async (req) => {
     console.log('Conversation ID:', conversationId);
 
     const systemPrompt = isGroupChat 
-      ? `${DEBATE_SYSTEM_PROMPT}\nYou are ${character.name}, ${character.role}. ${character.description}`
+      ? `${DEBATE_SYSTEM_PROMPT}\nYou are ${character.name}, ${character.role}. ${character.description}. You must provide a unique perspective that differs from what other characters might say, based on your specific background and beliefs.`
       : `You are ${character.name}, ${character.role}. ${character.description}`;
 
     const messages = [
@@ -37,7 +37,6 @@ serve(async (req) => {
       }
     ];
 
-    // Add knowledge base context if available
     if (knowledgeBaseContent) {
       messages.push({
         role: 'system',
@@ -45,7 +44,6 @@ serve(async (req) => {
       });
     }
 
-    // Add character-specific context
     const characterContext = [
       `Your nationality is ${character.nationality}.`,
       `Your key skills are: ${Array.isArray(character.skills) ? character.skills.join(', ') : 'varied'}.`,
@@ -57,11 +55,10 @@ serve(async (req) => {
       content: characterContext
     });
 
-    // Add the user's message
     messages.push({
       role: 'user',
       content: isGroupChat 
-        ? `As ${character.name}, provide your perspective on this topic for the group debate: ${message}`
+        ? `As ${character.name}, provide your unique perspective on this topic for the group debate, ensuring your response is distinctly different from other characters: ${message}`
         : message
     });
 
