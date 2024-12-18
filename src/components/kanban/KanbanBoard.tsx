@@ -45,12 +45,6 @@ export const KanbanBoard = () => {
   };
 
   const statuses: TaskStatus[] = ['todo', 'in-progress', 'done', 'saved'];
-  const statusLabels = {
-    'todo': 'To Study',
-    'in-progress': 'Currently Studying',
-    'done': 'Studied',
-    'saved': 'Saved Scriptures'
-  };
 
   return (
     <Card className="p-6 bg-white/90 backdrop-blur-sm shadow-lg">
@@ -90,7 +84,6 @@ export const KanbanBoard = () => {
           <TaskColumn
             key={status}
             status={status}
-            label={statusLabels[status]}
             tasks={tasks}
             onUpdateStatus={updateTaskStatus}
             onDeleteTask={deleteTask}

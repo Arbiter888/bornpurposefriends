@@ -6,12 +6,13 @@ import { useState } from "react";
 
 interface TaskColumnProps {
   status: TaskStatus;
+  label?: string; // Added label prop as optional
   tasks: Task[];
   onUpdateStatus: (taskId: string, newStatus: TaskStatus) => void;
   onDeleteTask: (taskId: string) => void;
 }
 
-export const TaskColumn = ({ status, tasks, onUpdateStatus, onDeleteTask }: TaskColumnProps) => {
+export const TaskColumn = ({ status, label, tasks, onUpdateStatus, onDeleteTask }: TaskColumnProps) => {
   const [expandedTasks, setExpandedTasks] = useState<Record<string, boolean>>({});
 
   const toggleTaskExpansion = (taskId: string) => {
@@ -22,6 +23,8 @@ export const TaskColumn = ({ status, tasks, onUpdateStatus, onDeleteTask }: Task
   };
 
   const getStatusLabel = (status: TaskStatus) => {
+    if (label) return label;
+    
     switch (status) {
       case 'todo':
         return 'Scripture to Read';
