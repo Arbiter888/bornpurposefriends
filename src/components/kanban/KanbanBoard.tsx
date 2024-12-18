@@ -15,7 +15,7 @@ export const KanbanBoard = () => {
     description: ''
   });
   const user = useUser();
-  const { tasks, addTask, updateTaskStatus } = useKanbanTasks(user);
+  const { tasks, addTask, updateTaskStatus, deleteTask } = useKanbanTasks(user);
 
   useEffect(() => {
     const handleAddToKanban = async (event: CustomEvent<NewTask>) => {
@@ -49,24 +49,24 @@ export const KanbanBoard = () => {
     <Card className="p-6">
       <form onSubmit={handleAddTask} className="mb-6 space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="title">Task Title</Label>
+          <Label htmlFor="title">Scripture Reference</Label>
           <Input
             id="title"
             value={newTask.title}
             onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
-            placeholder="Enter task title"
+            placeholder="Enter scripture reference (e.g. Proverbs 5:11)"
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
+          <Label htmlFor="description">Notes</Label>
           <Textarea
             id="description"
             value={newTask.description}
             onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-            placeholder="Enter task description"
+            placeholder="Enter any notes or reflections about this scripture"
           />
         </div>
-        <Button type="submit">Add Task</Button>
+        <Button type="submit">Add Scripture</Button>
       </form>
 
       <div className="grid grid-cols-4 gap-4">
@@ -76,6 +76,7 @@ export const KanbanBoard = () => {
             status={status}
             tasks={tasks}
             onUpdateStatus={updateTaskStatus}
+            onDeleteTask={deleteTask}
           />
         ))}
       </div>

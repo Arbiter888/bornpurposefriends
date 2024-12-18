@@ -95,9 +95,35 @@ export const useKanbanTasks = (user: User | null) => {
     );
   };
 
+  const deleteTask = async (taskId: string) => {
+    if (!user) return;
+
+    const { error } = await supabase
+      .from('tasks')
+      .delete()
+      .eq('id', taskId)
+      .eq('user_id', user.id);
+
+    if (error) {
+      toast({
+        title: "Error deleting task",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setTasks(prev => prev.filter(task => task.id !== taskId));
+    toast({
+      title: "Task deleted",
+      description: "The scripture task has been removed from your board",
+    });
+  };
+
   return {
     tasks,
     addTask,
-    updateTaskStatus
+    updateTaskStatus,
+    deleteTask
   };
 };
