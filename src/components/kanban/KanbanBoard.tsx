@@ -56,7 +56,7 @@ export const KanbanBoard = () => {
     <Card className="p-6 bg-white/90 backdrop-blur-sm shadow-lg">
       <form onSubmit={handleAddTask} className="mb-6 space-y-4">
         <div className="flex items-center gap-2 mb-4">
-          <BookOpen className="w-6 h-6 text-primary" />
+          <BookOpen className="w-6 h-6 text-[#0EA5E9]" />
           <h2 className="text-2xl font-bold text-gray-800">Scripture Study Planner</h2>
         </div>
         <div className="space-y-2">
@@ -66,7 +66,7 @@ export const KanbanBoard = () => {
             value={newTask.title}
             onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
             placeholder="Enter scripture reference (e.g. Proverbs 5:11)"
-            className="border-primary/20 focus:border-primary"
+            className="border-[#0EA5E9]/20 focus:border-[#0EA5E9]"
           />
         </div>
         <div className="space-y-2">
@@ -76,12 +76,12 @@ export const KanbanBoard = () => {
             value={newTask.description}
             onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
             placeholder="Enter any notes or reflections about this scripture"
-            className="border-primary/20 focus:border-primary"
+            className="border-[#0EA5E9]/20 focus:border-[#0EA5E9]"
           />
         </div>
-        <Button type="submit" className="w-full bg-primary hover:bg-primary/90">
+        <Button type="submit" className="w-full bg-gradient-to-r from-[#0EA5E9] to-[#2563EB] hover:opacity-90">
           <CalendarDays className="w-4 h-4 mr-2" />
-          Add to Study Plan
+          Add to Bible Study Plan
         </Button>
       </form>
 

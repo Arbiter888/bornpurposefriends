@@ -28,7 +28,7 @@ export const HomeBackgroundSelector = ({ onSelect }: HomeBackgroundSelectorProps
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="bg-white/80 hover:bg-white/90 transition-colors"
+          className="bg-gradient-to-r from-[#0EA5E9] to-[#2563EB] text-white hover:opacity-90 border-0"
         >
           <Image className="w-4 h-4 mr-2" />
           Change Background
