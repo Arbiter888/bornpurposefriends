@@ -7,13 +7,17 @@ interface ChatInputProps {
   onChange: (value: string) => void;
   onSubmit: (e: FormEvent) => void;
   disabled?: boolean;
+  useKnowledgeBase?: boolean;
+  onToggleKnowledgeBase?: () => void;
 }
 
 export const ChatInput = ({ 
   value, 
   onChange, 
   onSubmit, 
-  disabled
+  disabled,
+  useKnowledgeBase,
+  onToggleKnowledgeBase
 }: ChatInputProps) => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
