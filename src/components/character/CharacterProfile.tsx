@@ -1,6 +1,6 @@
 import { Character } from "@/lib/characters";
 import { Card } from "../ui/card";
-import { Phone } from "lucide-react";
+import { PrayingHands } from "lucide-react";
 import { Button } from "../ui/button";
 import { AspectRatio } from "../ui/aspect-ratio";
 import { useEffect, useState } from "react";
@@ -47,9 +47,9 @@ export const CharacterProfile = ({ character, onQuickCall }: CharacterProfilePro
     loadScript();
   }, []);
 
-  const handleQuickCall = () => {
+  const handlePrayerRequest = () => {
     if (scriptLoaded) {
-      console.log("Opening widget for character:", character.name);
+      console.log("Opening prayer request widget for:", character.name);
       setShowWidget(true);
     } else {
       console.warn("Widget script not loaded yet");
@@ -73,11 +73,11 @@ export const CharacterProfile = ({ character, onQuickCall }: CharacterProfilePro
         </div>
 
         <Button 
-          className="w-full"
-          onClick={handleQuickCall}
+          className="w-full bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"
+          onClick={handlePrayerRequest}
         >
-          <Phone className="w-4 h-4 mr-2" />
-          Call {character.name}
+          <PrayingHands className="w-4 h-4 mr-2" />
+          Submit Prayer Request
         </Button>
         
         <div className="space-y-4">

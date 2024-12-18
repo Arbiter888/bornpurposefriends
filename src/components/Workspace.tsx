@@ -30,20 +30,20 @@ const Workspace = () => {
     handleSendMessage,
   } = useChat(user, characterId, isGroupChat);
 
-  const handleQuickCall = () => {
+  const handlePrayerRequest = () => {
     toast({
-      title: "Starting call...",
-      description: `Initiating a call with ${character?.name}`,
+      title: "Opening prayer request...",
+      description: `Connecting with ${character?.name} for prayer`,
     });
   };
 
   const toggleGroupChat = () => {
     setIsGroupChat(!isGroupChat);
     toast({
-      title: isGroupChat ? "Single Chat Mode" : "Group Debate Mode",
+      title: isGroupChat ? "Individual Study Mode" : "Group Bible Study Mode",
       description: isGroupChat 
-        ? `Switching to chat with ${character?.name}`
-        : "Starting a group debate with all AI companions. Each will provide their unique perspective.",
+        ? `Switching to individual study with ${character?.name}`
+        : "Starting a group Bible study session with all spiritual mentors. Each will provide their unique perspective.",
     });
   };
 
@@ -51,14 +51,14 @@ const Workspace = () => {
     setBackground(newBackground);
     toast({
       title: "Background Updated",
-      description: "Chat background has been changed successfully",
+      description: "Study environment background has been changed",
     });
   };
 
   const handleTemplateSelect = (question: string) => {
     setNewMessage(question);
     toast({
-      title: "Template Question Selected",
+      title: "Bible Study Question Selected",
       description: "The message field has been populated with your selected question",
     });
   };
@@ -74,12 +74,13 @@ const Workspace = () => {
         
         <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row md:justify-between md:items-end mb-4 md:mb-8">
           <div className="space-y-4">
-            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-[#FF5757] to-[#FF1111] bg-clip-text text-transparent">
-              Workspace
+            <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-indigo-500 to-purple-600 bg-clip-text text-transparent">
+              Bible Study Workspace
             </h1>
             <p className="text-secondary/80 text-base md:text-lg max-w-2xl">
-              Welcome to your AI workspace. Here you can chat with your AI companion, start group debates, 
-              and collaborate on various tasks. Use the tools on the right to enhance your experience.
+              Welcome to your spiritual growth workspace. Here you can engage in Bible study, 
+              join group discussions, and seek spiritual guidance. Use the tools provided to 
+              enhance your learning and prayer experience.
             </p>
           </div>
           <div className="flex flex-wrap gap-2 w-full md:w-auto">
@@ -96,7 +97,7 @@ const Workspace = () => {
                 className="w-full sm:w-auto flex items-center justify-center gap-2"
               >
                 <Users className="w-4 h-4" />
-                {isGroupChat ? "Exit Group Debate" : "Start Group Debate"}
+                {isGroupChat ? "Exit Group Study" : "Join Group Study"}
               </Button>
             </div>
           </div>
@@ -106,7 +107,7 @@ const Workspace = () => {
           <div className="space-y-4 md:space-y-6">
             <CharacterProfile 
               character={character}
-              onQuickCall={handleQuickCall}
+              onQuickCall={handlePrayerRequest}
             />
             <Gallery
               videos={character.gallery?.videos}

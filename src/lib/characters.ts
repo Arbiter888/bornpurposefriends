@@ -22,32 +22,32 @@ export interface Character {
 export const characters: Character[] = [
   {
     id: "atlas",
-    name: "Atlas",
-    role: "Venture Capitalist",
-    description: "A seasoned venture capitalist based in New London, Atlas combines sharp business acumen with charismatic leadership. With an MBA from New London's prestigious business school, they excel in mentoring entrepreneurs and identifying promising opportunities in the 2040 business landscape.",
+    name: "Pastor Atlas",
+    role: "Senior Pastor",
+    description: "A compassionate spiritual leader with decades of experience in ministry and Biblical teaching. Pastor Atlas specializes in making Scripture accessible and relevant to modern life while maintaining deep theological understanding.",
     image: "/lovable-uploads/545221c7-1d0e-41c8-bda0-235b932c3a9f.png",
     widgetId: "8gJ0dMHzPVXRpxVpWpnj",
-    nationality: "British",
+    nationality: "American",
     skills: [
-      "Business Strategy",
-      "Financial Analysis",
-      "Mentorship",
-      "Communication",
-      "Market Analysis",
-      "Networking"
+      "Biblical Teaching",
+      "Pastoral Care",
+      "Prayer Ministry",
+      "Spiritual Guidance",
+      "Biblical Interpretation",
+      "Community Building"
     ],
     relationshipStats: {
       trustLevel: 95,
-      yearsKnown: 5,
+      yearsKnown: 15,
       meetingsPerMonth: 12
     },
     conversationTopics: [
-      "Investment Strategies",
-      "Market Trends",
-      "Startup Growth",
-      "Leadership Development",
-      "Innovation",
-      "New London Business Scene"
+      "Biblical Studies",
+      "Prayer and Devotion",
+      "Faith Journey",
+      "Christian Living",
+      "Spiritual Growth",
+      "Church Community"
     ],
     gallery: {
       videos: ["https://youtube.com/shorts/wgS9VEhg8nA"]
