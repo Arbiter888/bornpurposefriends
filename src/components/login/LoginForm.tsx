@@ -100,8 +100,8 @@ const LoginForm = () => {
   return (
     <Card className="bg-white shadow-lg">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl">Welcome to BornPurpose</CardTitle>
-        <CardDescription>Sign in to access your AI companions</CardDescription>
+        <CardTitle className="text-2xl font-bold">Welcome to BornPurpose</CardTitle>
+        <CardDescription>Sign in to begin your spiritual journey</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleLogin} className="space-y-4">
@@ -133,7 +133,7 @@ const LoginForm = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#990000] text-white py-2 rounded-md hover:bg-[#800000] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-[#0EA5E9] text-white py-2 rounded-md hover:bg-[#0284C7] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {loading ? 'Signing in...' : 'Sign in'}
           </button>

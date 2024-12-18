@@ -8,7 +8,7 @@ const PremiumFeatures = () => {
       <CardHeader className="text-center">
         <CardTitle>Premium Access</CardTitle>
         <CardDescription>
-          Unlock unlimited conversations with all AI companions and experience personalized growth through advanced neural-linked interactions
+          Deepen your spiritual journey with unlimited access to our ministry team and enhanced Bible study features
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -17,20 +17,20 @@ const PremiumFeatures = () => {
             <h4 className="font-semibold text-center">What's included:</h4>
             <ul className="space-y-2">
               {[
-                "Unlimited character interactions",
-                "Premium character access",
-                "Priority support",
-                "Advanced conversation features",
-                "Customizable AI responses"
+                "Unlimited Bible study sessions",
+                "Access to all ministry team members",
+                "Priority prayer support",
+                "Advanced study tools and resources",
+                "Personalized spiritual guidance"
               ].map((feature, i) => (
                 <li key={i} className="flex items-center justify-center gap-2 text-gray-600">
-                  <Star className="w-4 h-4 text-[#990000]" /> {feature}
+                  <Star className="w-4 h-4 text-[#0EA5E9]" /> {feature}
                 </li>
               ))}
             </ul>
           </div>
           <p className="text-sm text-gray-500 italic text-center">
-            Join our premium members and unlock the full potential of AI companionship
+            Join our community of believers and enhance your spiritual growth journey
           </p>
           <SubscriptionButton />
         </div>
