@@ -5,7 +5,7 @@ interface CharacterWidgetProps {
 
 export const CharacterWidget = ({ widgetId, onClose }: CharacterWidgetProps) => {
   return (
-    <div className="fixed bottom-4 right-4 z-50 animate-fade-in">
+    <div className="fixed bottom-4 right-4 z-[9999] animate-fade-in">
       <div 
         className="relative bg-black rounded-lg p-4 shadow-2xl"
         style={{ width: '300px' }}
