@@ -18,14 +18,11 @@ export default {
       },
     },
     extend: {
-      fontFamily: {
-        sans: ['Anime Ace', 'sans-serif'],
-      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "#FAFAFA",
+        background: "#FAFAFA", // Brighter white background
         foreground: "#1A1F2C",
         primary: {
           DEFAULT: "#0EA5E9",

@@ -5,7 +5,7 @@
 @layer base {
   body {
     @apply bg-background text-foreground;
-    font-family: 'Anime Ace', sans-serif;
+    font-family: 'Tomorrow', sans-serif;
   }
 }
 
