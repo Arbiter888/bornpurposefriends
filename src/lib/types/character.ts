@@ -21,4 +21,8 @@ export interface Character {
       widgetId: string;
     };
   };
+  gallery?: {
+    videos?: string[];
+    images?: string[];
+  };
 }
