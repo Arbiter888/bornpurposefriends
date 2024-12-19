@@ -2,11 +2,51 @@ import { Star } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import SubscriptionButton from "@/components/SubscriptionButton";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CharacterWidget } from "../character/CharacterWidget";
 
 const PremiumFeatures = () => {
   const [showPrayerWidget, setShowPrayerWidget] = useState(false);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
+
+  useEffect(() => {
+    const loadScript = () => {
+      const existingScript = document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]');
+      
+      if (existingScript) {
+        setScriptLoaded(true);
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = "https://elevenlabs.io/convai-widget/index.js";
+      script.async = true;
+      script.defer = true;
+      
+      script.onload = () => {
+        console.log("Script loaded successfully");
+        setScriptLoaded(true);
+      };
+
+      script.onerror = (error) => {
+        console.error("Script loading error:", error);
+        setScriptLoaded(false);
+      };
+      
+      document.head.appendChild(script);
+    };
+
+    loadScript();
+  }, []);
+
+  const handlePrayerRequest = () => {
+    if (scriptLoaded) {
+      console.log("Opening prayer request widget");
+      setShowPrayerWidget(true);
+    } else {
+      console.warn("Widget script not loaded yet");
+    }
+  };
 
   return (
     <Card className="bg-white shadow-lg">
@@ -39,7 +79,7 @@ const PremiumFeatures = () => {
           </p>
           <SubscriptionButton />
           <Button 
-            onClick={() => setShowPrayerWidget(true)}
+            onClick={handlePrayerRequest}
             className="w-full bg-[#0EA5E9] hover:bg-[#0284C7] text-white"
           >
             Try a Prayer Request
@@ -47,7 +87,7 @@ const PremiumFeatures = () => {
         </div>
       </CardContent>
 
-      {showPrayerWidget && (
+      {showPrayerWidget && scriptLoaded && (
         <CharacterWidget
           widgetId="d1CQmaU4op8GfEiw8o6k"
           onClose={() => setShowPrayerWidget(false)}
