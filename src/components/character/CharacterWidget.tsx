@@ -3,6 +3,16 @@ interface CharacterWidgetProps {
   onClose: () => void;
 }
 
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      'elevenlabs-convai': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement> & {
+        'agent-id': string;
+      }, HTMLElement>;
+    }
+  }
+}
+
 export const CharacterWidget = ({ widgetId, onClose }: CharacterWidgetProps) => {
   return (
     <div className="fixed bottom-4 right-4 z-[9999] animate-fade-in">
