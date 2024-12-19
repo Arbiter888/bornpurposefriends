@@ -44,7 +44,7 @@ const LoginForm = () => {
     return true;
   };
 
-  const handleSignUp = async (e: React.MouseEvent) => {
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!validateForm()) return;
@@ -69,7 +69,7 @@ const LoginForm = () => {
     }
   };
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     if (!validateForm()) return;
@@ -99,7 +99,7 @@ const LoginForm = () => {
   };
 
   const renderForm = (isSignUp: boolean) => (
-    <form onSubmit={isSignUp ? (e) => { e.preventDefault(); handleSignUp(e); } : handleLogin} className="space-y-4">
+    <form onSubmit={isSignUp ? handleSignUp : handleLogin} className="space-y-4">
       <div className="space-y-2">
         <label className="text-sm font-medium">Email address</label>
         <Input
