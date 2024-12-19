@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { BookmarkPlus, ChevronDown, ChevronUp, CalendarPlus } from "lucide-react";
 import { useToast } from "../ui/use-toast";
 import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useUser } from "@supabase/auth-helpers-react";
 
 interface ChatMessageProps {
   role: 'user' | 'assistant';
@@ -19,19 +21,29 @@ export const ChatMessage = ({ role, content, characterImage, characterName }: Ch
   const displayContent = shouldTruncate && !isExpanded 
     ? content.slice(0, messageLength) + "..."
     : content;
+  const user = useUser();
 
-  const handleAddToPlanner = () => {
-    try {
-      const newTask = {
-        title: content.slice(0, 50) + (content.length > 50 ? '...' : ''),
-        description: content,
-        status: 'todo'
-      };
-      
-      const event = new CustomEvent('addToKanban', { 
-        detail: newTask
+  const handleAddToPlanner = async () => {
+    if (!user) {
+      toast({
+        title: "Error",
+        description: "You must be logged in to add to planner",
+        variant: "destructive"
       });
-      window.dispatchEvent(event);
+      return;
+    }
+
+    try {
+      const { error } = await supabase
+        .from('tasks')
+        .insert({
+          user_id: user.id,
+          title: content.slice(0, 50) + (content.length > 50 ? '...' : ''),
+          description: content,
+          status: 'todo'
+        });
+
+      if (error) throw error;
       
       toast({
         title: "Added to Bible Study Planner",
