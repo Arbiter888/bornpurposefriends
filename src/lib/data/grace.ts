@@ -5,7 +5,7 @@ export const grace: Character = {
   name: "Grace",
   role: "Prayer Ministry Leader",
   description: "Grace leads our prayer ministry with a heart for intercessory prayer and spiritual encouragement. She helps believers deepen their prayer life and understand the power of consistent, faithful communion with God.",
-  image: "/lovable-uploads/8bea8b20-f24b-4a88-86fc-22bcabebc576.png",
+  image: "/lovable-uploads/5fc1496c-108f-4453-8045-0c83066bd319.png",
   widgetId: "xijflrZuOlQ7ym3luVwv",
   nationality: "American",
   skills: [
