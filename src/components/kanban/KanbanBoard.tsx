@@ -75,6 +75,7 @@ export const KanbanBoard = () => {
         description: "Scripture study task has been removed",
       });
     } catch (error: any) {
+      console.error('Delete error:', error);
       toast({
         title: "Error deleting task",
         description: error.message,

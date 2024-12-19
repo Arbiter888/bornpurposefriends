@@ -34,11 +34,33 @@ export const ChatMessage = ({ role, content, characterImage, characterName }: Ch
     }
 
     try {
+      const taskTitle = content.slice(0, 50) + (content.length > 50 ? '...' : '');
+      
+      const { data: existingTasks, error: fetchError } = await supabase
+        .from('tasks')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('title', taskTitle)
+        .single();
+
+      if (fetchError && fetchError.code !== 'PGRST116') {
+        throw fetchError;
+      }
+
+      if (existingTasks) {
+        toast({
+          title: "Already in Planner",
+          description: "This scripture is already in your study planner",
+          variant: "default"
+        });
+        return;
+      }
+
       const { error } = await supabase
         .from('tasks')
         .insert({
           user_id: user.id,
-          title: content.slice(0, 50) + (content.length > 50 ? '...' : ''),
+          title: taskTitle,
           description: content,
           status: 'todo'
         });

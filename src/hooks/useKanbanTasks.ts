@@ -20,6 +20,7 @@ export const useKanbanTasks = (user: User | null) => {
         .order('created_at', { ascending: false });
 
       if (error) {
+        console.error('Error fetching tasks:', error);
         toast({
           title: "Error fetching tasks",
           description: error.message,
@@ -37,10 +38,38 @@ export const useKanbanTasks = (user: User | null) => {
     };
 
     fetchTasks();
+
+    // Set up real-time subscription
+    const tasksSubscription = supabase
+      .channel('tasks_channel')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'tasks',
+          filter: `user_id=eq.${user.id}`,
+        },
+        () => {
+          fetchTasks();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      tasksSubscription.unsubscribe();
+    };
   }, [user, toast]);
 
-  const addTask = async (newTask: NewTask, status: Task['status'] = 'todo') => {
-    if (!user) return;
+  const addTask = async (newTask: NewTask) => {
+    if (!user) {
+      toast({
+        title: "Error",
+        description: "You must be logged in to add tasks",
+        variant: "destructive",
+      });
+      return;
+    }
 
     const { data, error } = await supabase
       .from('tasks')
@@ -48,12 +77,13 @@ export const useKanbanTasks = (user: User | null) => {
         user_id: user.id,
         title: newTask.title,
         description: newTask.description,
-        status
+        status: 'todo'
       })
       .select()
       .single();
 
     if (error) {
+      console.error('Error adding task:', error);
       toast({
         title: "Error adding task",
         description: error.message,
@@ -80,6 +110,7 @@ export const useKanbanTasks = (user: User | null) => {
       .eq('user_id', user.id);
 
     if (error) {
+      console.error('Error updating task:', error);
       toast({
         title: "Error updating task",
         description: error.message,
@@ -87,12 +118,6 @@ export const useKanbanTasks = (user: User | null) => {
       });
       return;
     }
-
-    setTasks(prev =>
-      prev.map(task =>
-        task.id === taskId ? { ...task, status: newStatus } : task
-      )
-    );
   };
 
   const deleteTask = async (taskId: string) => {
@@ -105,6 +130,7 @@ export const useKanbanTasks = (user: User | null) => {
       .eq('user_id', user.id);
 
     if (error) {
+      console.error('Error deleting task:', error);
       toast({
         title: "Error deleting task",
         description: error.message,
@@ -114,10 +140,6 @@ export const useKanbanTasks = (user: User | null) => {
     }
 
     setTasks(prev => prev.filter(task => task.id !== taskId));
-    toast({
-      title: "Task deleted",
-      description: "The scripture task has been removed from your board",
-    });
   };
 
   return {
