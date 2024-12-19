@@ -1,4 +1,3 @@
-import { Card } from "../ui/card";
 import { SharedResources } from "./SharedResources";
 
 export const KnowledgeBase = () => {
