@@ -4,7 +4,6 @@ import SubscriptionButton from "@/components/SubscriptionButton";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { CharacterWidget } from "../character/CharacterWidget";
-import { characters } from "@/lib/characters";
 
 const PremiumFeatures = () => {
   const [showPrayerWidget, setShowPrayerWidget] = useState(false);
@@ -50,7 +49,7 @@ const PremiumFeatures = () => {
 
       {showPrayerWidget && (
         <CharacterWidget
-          widgetId={characters[0].widgetId}
+          widgetId="d1CQmaU4op8GfEiw8o6k"
           onClose={() => setShowPrayerWidget(false)}
         />
       )}

@@ -16,11 +16,10 @@ export const CharacterWidget = ({ widgetId, onClose }: CharacterWidgetProps) => 
         >
           ×
         </button>
-        <div 
-          dangerouslySetInnerHTML={{
-            __html: `<elevenlabs-convai agent-id="${widgetId}"></elevenlabs-convai>`
-          }}
-        />
+        <div>
+          <elevenlabs-convai agent-id={widgetId}></elevenlabs-convai>
+          <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+        </div>
       </div>
     </div>
   );
