@@ -81,19 +81,42 @@ export const ChatMessage = ({ role, content, characterImage, characterName }: Ch
     }
   };
 
-  const handleSaveMessage = () => {
-    const event = new CustomEvent('saveMessage', { 
-      detail: { 
-        title: `Saved message from ${role === 'assistant' ? characterName : 'you'}`,
-        description: content
-      } 
-    });
-    window.dispatchEvent(event);
-    
-    toast({
-      title: "Message Saved",
-      description: "The message has been added to your saved messages",
-    });
+  const handleSaveMessage = async () => {
+    if (!user) {
+      toast({
+        title: "Error",
+        description: "You must be logged in to save messages",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const taskTitle = `Saved message from ${role === 'assistant' ? characterName : 'you'}`;
+      
+      const { error } = await supabase
+        .from('tasks')
+        .insert({
+          user_id: user.id,
+          title: taskTitle,
+          description: content,
+          status: 'saved'
+        });
+
+      if (error) throw error;
+      
+      toast({
+        title: "Message Saved",
+        description: "The message has been saved to your saved messages",
+      });
+    } catch (error) {
+      console.error('Error saving message:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save message. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   return (
