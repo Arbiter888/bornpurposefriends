@@ -21,18 +21,30 @@ export const ChatMessage = ({ role, content, characterImage, characterName }: Ch
     : content;
 
   const handleAddToPlanner = () => {
-    const event = new CustomEvent('addToKanban', { 
-      detail: { 
+    try {
+      const newTask = {
         title: content.slice(0, 50) + (content.length > 50 ? '...' : ''),
-        description: content
-      } 
-    });
-    window.dispatchEvent(event);
-    
-    toast({
-      title: "Added to Bible Study Planner",
-      description: "The scripture has been added to your planner",
-    });
+        description: content,
+        status: 'todo'
+      };
+      
+      const event = new CustomEvent('addToKanban', { 
+        detail: newTask
+      });
+      window.dispatchEvent(event);
+      
+      toast({
+        title: "Added to Bible Study Planner",
+        description: "The scripture has been added to your study planner",
+      });
+    } catch (error) {
+      console.error('Error adding to planner:', error);
+      toast({
+        title: "Error",
+        description: "Failed to add to planner. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleSaveMessage = () => {
@@ -60,7 +72,7 @@ export const ChatMessage = ({ role, content, characterImage, characterName }: Ch
       </Avatar>
       <div className="flex-1 space-y-2">
         {role === 'assistant' && (
-          <p className="text-sm text-foreground/70">{characterName}</p>
+          <p className="text-sm font-semibold text-foreground/70">{characterName}</p>
         )}
         <div
           className={`rounded-lg p-4 ${
@@ -69,7 +81,15 @@ export const ChatMessage = ({ role, content, characterImage, characterName }: Ch
               : 'bg-primary text-primary-foreground'
           }`}
         >
-          <div className="prose max-w-none">
+          <div 
+            className="prose max-w-none"
+            style={{ 
+              fontFamily: 'Arial, sans-serif',
+              fontSize: '1rem',
+              lineHeight: '1.6',
+              whiteSpace: 'pre-wrap'
+            }}
+          >
             {displayContent}
           </div>
           {shouldTruncate && (
@@ -98,7 +118,7 @@ export const ChatMessage = ({ role, content, characterImage, characterName }: Ch
             <Button
               variant="outline"
               size="sm"
-              className="flex items-center gap-2"
+              className="flex items-center gap-2 hover:bg-[#9b87f5] hover:text-white transition-colors"
               onClick={handleAddToPlanner}
             >
               <CalendarPlus className="w-4 h-4" />

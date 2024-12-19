@@ -14,8 +14,6 @@ interface ChatWindowProps {
   isLoading?: boolean;
   isGroupChat?: boolean;
   background?: string;
-  useKnowledgeBase?: boolean;
-  onToggleKnowledgeBase?: () => void;
 }
 
 export const ChatWindow = ({
@@ -28,8 +26,6 @@ export const ChatWindow = ({
   isLoading,
   isGroupChat,
   background,
-  useKnowledgeBase,
-  onToggleKnowledgeBase,
 }: ChatWindowProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -75,8 +71,6 @@ export const ChatWindow = ({
           onChange={setNewMessage}
           onSubmit={onSubmit}
           disabled={isLoading}
-          useKnowledgeBase={useKnowledgeBase}
-          onToggleKnowledgeBase={onToggleKnowledgeBase}
         />
       </div>
     </Card>
