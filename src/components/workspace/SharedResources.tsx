@@ -23,6 +23,11 @@ export const SharedResources = () => {
   const { toast } = useToast();
   const user = useUser();
 
+  const validateYouTubeUrl = (url: string) => {
+    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
+    return youtubeRegex.test(url);
+  };
+
   const handleAddResource = async () => {
     if (!user) {
       toast({
@@ -42,6 +47,15 @@ export const SharedResources = () => {
       return;
     }
 
+    if (type === 'youtube' && !validateYouTubeUrl(url)) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid YouTube URL",
+        variant: "destructive"
+      });
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from('tasks')
@@ -49,7 +63,7 @@ export const SharedResources = () => {
           user_id: user.id,
           title: title,
           description: url,
-          status: type === 'youtube' ? 'youtube' : 'link'
+          status: type
         })
         .select()
         .single();
@@ -68,7 +82,7 @@ export const SharedResources = () => {
 
       toast({
         title: "Success",
-        description: "Resource added successfully",
+        description: `${type === 'youtube' ? 'YouTube video' : 'Link'} added successfully`,
       });
     } catch (error) {
       console.error('Error adding resource:', error);
