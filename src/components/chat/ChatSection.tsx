@@ -29,7 +29,6 @@ export const ChatSection = ({
 }: ChatSectionProps) => {
   const isAtlas = characterName === "Atlas";
   const { messages: atlasMessages, isLoading: atlasIsLoading, sendMessage: sendAtlasMessage } = useAtlasChat();
-  const [useKnowledgeBase, setUseKnowledgeBase] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent, documentId?: string) => {
     e.preventDefault();
@@ -53,8 +52,6 @@ export const ChatSection = ({
         isLoading={isAtlas ? atlasIsLoading : defaultIsLoading}
         isGroupChat={isGroupChat}
         background={background}
-        useKnowledgeBase={useKnowledgeBase}
-        onToggleKnowledgeBase={() => setUseKnowledgeBase(!useKnowledgeBase)}
       />
       <KanbanBoard />
     </div>
