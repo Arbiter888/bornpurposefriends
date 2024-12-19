@@ -1,11 +1,9 @@
 export interface Character {
   id: string;
   name: string;
-  title: string;
   role: string;
   description: string;
   image: string;
-  profileImage: string;
   widgetId: string;
   nationality: string;
   skills: string[];
@@ -15,10 +13,6 @@ export interface Character {
     meetingsPerMonth: number;
   };
   conversationTopics: string[];
-  quickCall?: {
-    title: string;
-    description: string;
-  };
   gallery?: {
     videos?: string[];
     images?: string[];

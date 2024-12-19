@@ -1,4 +1,4 @@
-import { Character } from "@/lib/types/character";
+import { Character } from "@/lib/characters";
 import { Button } from "@/components/ui/button";
 import { Cross, BookOpen } from "lucide-react";
 import { useNavigate } from "react-router-dom";
