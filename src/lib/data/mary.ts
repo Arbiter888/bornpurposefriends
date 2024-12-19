@@ -6,7 +6,7 @@ export const mary: Character = {
   role: "Bible Study Leader",
   description: "Mary is passionate about helping believers dive deep into God's Word. With her gentle approach and profound understanding of Scripture, she guides others in discovering the transformative power of biblical truth.",
   image: "/lovable-uploads/c24ebe39-b567-489e-90f8-b11bb4742f8b.png",
-  widgetId: "d1CQmaU4op8GfEiw8o6k", // Updated to use Pastor Andrew's widget ID temporarily
+  widgetId: "UIJhhZRn6elHY8hwIc8H",
   nationality: "American",
   skills: [
     "Biblical Teaching",
