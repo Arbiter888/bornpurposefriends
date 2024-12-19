@@ -2,11 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Tomorrow:wght@400;500;600;700&display=swap');
+
 @layer base {
   body {
     @apply bg-background text-foreground;
     font-family: 'Tomorrow', sans-serif;
   }
+}
+
+* {
+  font-family: 'Tomorrow', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6, p, span, div, button, input, textarea {
+  font-family: 'Tomorrow', sans-serif !important;
 }
 
 .elevenlabs-convai-widget {
