@@ -1,18 +1,16 @@
 export interface Character {
   id: string;
   name: string;
-  role: string;
+  title: string;
+  image: string; // Chat avatar image
+  profileImage: string; // Profile/card image
   description: string;
-  image: string;
-  widgetId: string;
-  nationality: string;
+  topics: string[];
   skills: string[];
-  relationshipStats: {
-    trustLevel: number;
-    yearsKnown: number;
-    meetingsPerMonth: number;
+  quickCall?: {
+    title: string;
+    description: string;
   };
-  conversationTopics: string[];
   gallery?: {
     videos?: string[];
     images?: string[];
