@@ -1,4 +1,4 @@
-import { Character } from "@/lib/characters";
+import { Character } from "@/lib/types/character";
 import { useEffect, useRef, useState } from "react";
 import { Phone, BookOpen } from "lucide-react";
 import { Button } from "./ui/button";

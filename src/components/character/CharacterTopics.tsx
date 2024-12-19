@@ -1,4 +1,4 @@
-import { Character } from "@/lib/characters";
+import { Character } from "@/lib/types/character";
 import { Badge } from "../ui/badge";
 
 interface CharacterTopicsProps {

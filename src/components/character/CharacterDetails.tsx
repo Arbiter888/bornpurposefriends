@@ -1,4 +1,4 @@
-import { Character } from "@/lib/characters";
+import { Character } from "@/lib/types/character";
 import { Globe, MessageCircle, Clock } from "lucide-react";
 
 interface CharacterDetailsProps {

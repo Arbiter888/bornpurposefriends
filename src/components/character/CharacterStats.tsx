@@ -1,4 +1,4 @@
-import { Character } from "@/lib/characters";
+import { Character } from "@/lib/types/character";
 
 interface CharacterStatsProps {
   character: Character;

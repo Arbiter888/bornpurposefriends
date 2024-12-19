@@ -3,9 +3,11 @@ import { Character } from "../types/character";
 export const pastorAndrew: Character = {
   id: "atlas",
   name: "Pastor Andrew",
+  title: "Senior Pastor",
   role: "Senior Pastor",
   description: "A compassionate spiritual leader dedicated to teaching God's Word and guiding believers in their faith journey. With years of pastoral experience, Pastor Andrew makes Scripture accessible while maintaining deep theological understanding.",
   image: "/lovable-uploads/6ed28a08-45e9-4593-9903-7b5a31434201.png",
+  profileImage: "/lovable-uploads/6ed28a08-45e9-4593-9903-7b5a31434201.png",
   widgetId: "d1CQmaU4op8GfEiw8o6k",
   nationality: "American",
   skills: [
