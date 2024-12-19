@@ -8,9 +8,22 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const DEBATE_SYSTEM_PROMPT = `You are participating in a group debate. Based on your character's background, expertise, and perspective, provide your unique viewpoint on the topic. Your response should be distinctly different from what other characters might say, drawing from your specific background and beliefs. Be respectful but don't hesitate to disagree with others if your character would have a different opinion. Support your arguments with your character's expertise and experience. Keep responses concise, focused, and engaging. Remember to maintain your character's unique voice and perspective throughout the debate.`;
+const GROUP_STUDY_SYSTEM_PROMPT = `You are participating in an interactive group Bible study. As a spiritual mentor with your unique background and perspective, engage thoughtfully with the topic and other participants' views.
 
-const SCRIPTURE_FOCUS_PROMPT = `When discussing scripture, first focus on one particularly relevant verse or passage that directly addresses the topic at hand. Explain this scripture in detail, including its context and application, before mentioning other related verses. This helps create a deeper understanding of each scripture reference rather than overwhelming with multiple references at once. After thoroughly exploring the primary scripture, you can then suggest other relevant verses for further study.`;
+Key guidelines:
+1. Maintain your distinct character voice and expertise throughout
+2. When referencing scripture:
+   - If introducing a new scripture, explain its context and relevance thoroughly
+   - If referencing a scripture another participant mentioned, either:
+     a) Add a unique perspective or interpretation based on your background
+     b) Acknowledge and build upon their interpretation, adding your own insights
+     c) Connect it to another relevant passage or practical application
+3. Draw from your specific background and beliefs to offer unique insights
+4. Engage respectfully with other participants' views, showing how different perspectives can deepen understanding
+5. Keep responses focused and concise while being substantive
+6. Consider both theological depth and practical application in your responses
+
+Remember to maintain your character's unique voice and perspective throughout the discussion.`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -29,8 +42,8 @@ serve(async (req) => {
     console.log('Conversation ID:', conversationId);
 
     const systemPrompt = isGroupChat 
-      ? `${DEBATE_SYSTEM_PROMPT}\nYou are ${character.name}, ${character.role}. ${character.description}. You must provide a unique perspective that differs from what other characters might say, based on your specific background and beliefs.`
-      : `You are ${character.name}, ${character.role}. ${character.description}. ${SCRIPTURE_FOCUS_PROMPT}`;
+      ? `${GROUP_STUDY_SYSTEM_PROMPT}\nYou are ${character.name}, ${character.role}. ${character.description}. Your response should reflect your unique perspective and background while engaging thoughtfully with the group discussion.`
+      : `You are ${character.name}, ${character.role}. ${character.description}. When discussing scripture, first focus on one particularly relevant verse or passage that directly addresses the topic at hand. Explain this scripture in detail, including its context and application, before mentioning other related verses.`;
 
     const messages = [
       { 
@@ -42,14 +55,15 @@ serve(async (req) => {
     if (knowledgeBaseContent) {
       messages.push({
         role: 'system',
-        content: `Consider this relevant information: ${knowledgeBaseContent}`
+        content: `Consider this relevant information from the knowledge base: ${knowledgeBaseContent}`
       });
     }
 
     const characterContext = [
       `Your nationality is ${character.nationality}.`,
       `Your key skills are: ${Array.isArray(character.skills) ? character.skills.join(', ') : 'varied'}.`,
-      `Common topics you discuss: ${Array.isArray(character.conversationTopics) ? character.conversationTopics.join(', ') : 'various topics'}.`
+      `Common topics you discuss: ${Array.isArray(character.conversationTopics) ? character.conversationTopics.join(', ') : 'various topics'}.`,
+      `In group discussions, you should provide unique insights based on your background as ${character.role} and your specific expertise.`
     ].join(' ');
 
     messages.push({
@@ -60,7 +74,7 @@ serve(async (req) => {
     messages.push({
       role: 'user',
       content: isGroupChat 
-        ? `As ${character.name}, provide your unique perspective on this topic for the group debate, ensuring your response is distinctly different from other characters: ${message}`
+        ? `As ${character.name}, provide your unique perspective on this topic for the group Bible study, ensuring your response engages thoughtfully with the discussion while maintaining your distinct viewpoint: ${message}`
         : message
     });
 
@@ -73,13 +87,13 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: 'gpt-4o',
         messages: messages,
-        temperature: 1,
+        temperature: 0.9,
         max_tokens: 2048,
         top_p: 1,
-        frequency_penalty: 0.3,
-        presence_penalty: 0.3
+        frequency_penalty: 0.5,
+        presence_penalty: 0.5
       }),
     });
 
