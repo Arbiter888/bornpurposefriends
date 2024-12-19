@@ -1,12 +1,7 @@
 import { motion } from "framer-motion";
 import { characters } from "@/lib/characters";
-import { useState } from "react";
-import { CharacterWidget } from "../character/CharacterWidget";
-import { Button } from "../ui/button";
 
 const FeaturedCompanions = () => {
-  const [showPrayerWidget, setShowPrayerWidget] = useState(false);
-
   return (
     <div className="space-y-8">
       <div>
@@ -42,22 +37,6 @@ const FeaturedCompanions = () => {
           </motion.div>
         ))}
       </div>
-
-      <div className="flex justify-center">
-        <Button
-          onClick={() => setShowPrayerWidget(true)}
-          className="bg-[#0EA5E9] hover:bg-[#0284C7] text-white"
-        >
-          Try a Prayer Request
-        </Button>
-      </div>
-
-      {showPrayerWidget && (
-        <CharacterWidget
-          widgetId={characters[0].widgetId}
-          onClose={() => setShowPrayerWidget(false)}
-        />
-      )}
     </div>
   );
 };

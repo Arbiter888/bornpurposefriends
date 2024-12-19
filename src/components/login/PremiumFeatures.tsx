@@ -1,8 +1,14 @@
 import { Star } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import SubscriptionButton from "@/components/SubscriptionButton";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { CharacterWidget } from "../character/CharacterWidget";
+import { characters } from "@/lib/characters";
 
 const PremiumFeatures = () => {
+  const [showPrayerWidget, setShowPrayerWidget] = useState(false);
+
   return (
     <Card className="bg-white shadow-lg">
       <CardHeader className="text-center">
@@ -33,8 +39,21 @@ const PremiumFeatures = () => {
             Be a part of something greater and help us spread faith, hope, and love to more people
           </p>
           <SubscriptionButton />
+          <Button 
+            onClick={() => setShowPrayerWidget(true)}
+            className="w-full bg-[#0EA5E9] hover:bg-[#0284C7] text-white"
+          >
+            Try a Prayer Request
+          </Button>
         </div>
       </CardContent>
+
+      {showPrayerWidget && (
+        <CharacterWidget
+          widgetId={characters[0].widgetId}
+          onClose={() => setShowPrayerWidget(false)}
+        />
+      )}
     </Card>
   );
 };
