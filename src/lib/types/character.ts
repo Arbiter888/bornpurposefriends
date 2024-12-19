@@ -13,8 +13,12 @@ export interface Character {
     meetingsPerMonth: number;
   };
   conversationTopics: string[];
-  gallery?: {
-    videos?: string[];
-    images?: string[];
+  translations?: {
+    [key: string]: {
+      name: string;
+      role: string;
+      description: string;
+      widgetId: string;
+    };
   };
 }
