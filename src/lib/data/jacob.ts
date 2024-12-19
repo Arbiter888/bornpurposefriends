@@ -5,7 +5,7 @@ export const jacob: Character = {
   name: "Jacob",
   role: "Youth Pastor",
   description: "Jacob has a passion for connecting young believers with God's Word, making Scripture relevant while staying true to biblical principles. He excels at bridging generational gaps and fostering spiritual growth in young people.",
-  image: "/lovable-uploads/561b7642-c2ff-4011-a85d-7f51d90839b8.png",
+  image: "/lovable-uploads/c077e044-93a9-44e9-adb6-1a10b2647a8e.png",
   widgetId: "jjpaBiJA68inWAqkHX63",
   nationality: "American",
   skills: [
