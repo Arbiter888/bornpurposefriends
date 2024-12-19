@@ -9,7 +9,7 @@ const SubscriptionButton = () => {
 
   const handleSubscribe = async () => {
     if (!session) {
-      toast.error("Please sign in to subscribe");
+      toast.error("Please sign in to contribute");
       return;
     }
 
@@ -33,7 +33,7 @@ const SubscriptionButton = () => {
       }
     } catch (error) {
       console.error("Subscription error:", error);
-      toast.error("Failed to start subscription process. Please try again.");
+      toast.error("Failed to process contribution. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -45,7 +45,7 @@ const SubscriptionButton = () => {
       disabled={isLoading}
       className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
     >
-      {isLoading ? "Loading..." : "Subscribe Now"}
+      {isLoading ? "Processing..." : "Contribute Now"}
     </Button>
   );
 };
