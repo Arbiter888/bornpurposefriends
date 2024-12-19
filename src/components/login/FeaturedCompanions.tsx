@@ -1,76 +1,43 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { pastorAndrew } from "@/lib/data/pastorAndrew";
-import { Button } from "@/components/ui/button";
-import { Phone } from "lucide-react";
-import { useState, useEffect } from "react";
-import { CharacterWidget } from "../character/CharacterWidget";
+import { motion } from "framer-motion";
+import { characters } from "@/lib/characters";
 
 const FeaturedCompanions = () => {
-  const [showWidget, setShowWidget] = useState(false);
-  const [scriptLoaded, setScriptLoaded] = useState(false);
-
-  useEffect(() => {
-    const loadScript = () => {
-      const existingScript = document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]');
-      
-      if (existingScript) {
-        setScriptLoaded(true);
-        return;
-      }
-
-      const script = document.createElement("script");
-      script.src = "https://elevenlabs.io/convai-widget/index.js";
-      script.async = true;
-      script.defer = true;
-      
-      script.onload = () => {
-        setScriptLoaded(true);
-      };
-      
-      document.head.appendChild(script);
-    };
-
-    loadScript();
-  }, []);
-
-  const handlePrayerRequest = () => {
-    if (scriptLoaded) {
-      setShowWidget(true);
-    }
-  };
-
   return (
-    <Card className="bg-white shadow-lg">
-      <CardHeader className="text-center">
-        <CardTitle>Meet Our Ministry Team</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-          {[pastorAndrew, ...Array(3)].map((_, index) => (
-            <div key={index} className="flex flex-col items-center">
-              <div className="w-24 h-24 rounded-full bg-gray-200 mb-4" />
-              <h3 className="text-lg font-semibold">Ministry Member</h3>
-              <p className="text-gray-600 text-sm mb-2">Spiritual Guide</p>
-            </div>
-          ))}
-        </div>
-        <div className="mt-6 text-center">
-          <Button
-            onClick={handlePrayerRequest}
-            className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"
+    <div className="space-y-8">
+      <div>
+        <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-[#0EA5E9] to-[#2563EB] bg-clip-text text-transparent backdrop-blur-sm">
+          Welcome to BornPurpose
+        </h1>
+        <p className="text-lg text-gray-700">
+          Join our digital sanctuary for prayer, Bible study, and spiritual growth. Connect with our dedicated ministry team for meaningful conversations and biblical guidance.
+        </p>
+      </div>
+      
+      <div className="grid grid-cols-2 gap-4">
+        {characters.slice(0, 4).map((character, index) => (
+          <motion.div
+            key={character.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="relative group"
           >
-            <Phone className="w-4 h-4 mr-2" />
-            Try Prayer Request (Preview)
-          </Button>
-        </div>
-      </CardContent>
-      {showWidget && scriptLoaded && (
-        <CharacterWidget 
-          widgetId={pastorAndrew.widgetId} 
-          onClose={() => setShowWidget(false)} 
-        />
-      )}
-    </Card>
+            <div className="aspect-square relative overflow-hidden rounded-lg">
+              <img
+                src={character.image}
+                alt={character.name}
+                className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90" />
+              <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                <h3 className="text-xl font-bold">{character.name}</h3>
+                <p className="text-sm text-gray-300">{character.role}</p>
+              </div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
   );
 };
 
