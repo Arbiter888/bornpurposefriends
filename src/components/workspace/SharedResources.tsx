@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card } from "../ui/card";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -22,6 +22,42 @@ export const SharedResources = () => {
   const [resources, setResources] = useState<Resource[]>([]);
   const { toast } = useToast();
   const user = useUser();
+
+  // Fetch existing resources on component mount
+  useEffect(() => {
+    if (user) {
+      fetchResources();
+    }
+  }, [user]);
+
+  const fetchResources = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('tasks')
+        .select('*')
+        .eq('user_id', user?.id)
+        .in('status', ['link', 'youtube']);
+
+      if (error) throw error;
+
+      if (data) {
+        const formattedResources: Resource[] = data.map(item => ({
+          id: item.id,
+          title: item.title,
+          url: item.description || '',
+          type: item.status as 'link' | 'youtube'
+        }));
+        setResources(formattedResources);
+      }
+    } catch (error) {
+      console.error('Error fetching resources:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load resources",
+        variant: "destructive"
+      });
+    }
+  };
 
   const validateYouTubeUrl = (url: string) => {
     const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)\/.+/;
@@ -57,33 +93,38 @@ export const SharedResources = () => {
     }
 
     try {
+      const newResource = {
+        user_id: user.id,
+        title: title,
+        description: url,
+        status: type
+      };
+
       const { data, error } = await supabase
         .from('tasks')
-        .insert({
-          user_id: user.id,
-          title: title,
-          description: url,
-          status: type
-        })
+        .insert(newResource)
         .select()
         .single();
 
       if (error) throw error;
 
-      setResources([...resources, {
-        id: data.id,
-        title: data.title,
-        url: data.description,
-        type: data.status as 'link' | 'youtube'
-      }]);
+      if (data) {
+        const formattedResource: Resource = {
+          id: data.id,
+          title: data.title,
+          url: data.description || '',
+          type: data.status as 'link' | 'youtube'
+        };
+        
+        setResources([...resources, formattedResource]);
+        setTitle("");
+        setUrl("");
 
-      setTitle("");
-      setUrl("");
-
-      toast({
-        title: "Success",
-        description: `${type === 'youtube' ? 'YouTube video' : 'Link'} added successfully`,
-      });
+        toast({
+          title: "Success",
+          description: `${type === 'youtube' ? 'YouTube video' : 'Link'} added successfully`,
+        });
+      }
     } catch (error) {
       console.error('Error adding resource:', error);
       toast({
