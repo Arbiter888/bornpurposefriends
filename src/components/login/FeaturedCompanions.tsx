@@ -3,6 +3,7 @@ import { pastorAndrew } from "@/lib/data/pastorAndrew";
 import { Button } from "@/components/ui/button";
 import { Phone } from "lucide-react";
 import { useState, useEffect } from "react";
+import { CharacterWidget } from "../character/CharacterWidget";
 
 const FeaturedCompanions = () => {
   const [showWidget, setShowWidget] = useState(false);
@@ -44,47 +45,30 @@ const FeaturedCompanions = () => {
         <CardTitle>Meet Our Ministry Team</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-6">
-          <div className="flex flex-col items-center">
-            <img
-              src={pastorAndrew.image}
-              alt={pastorAndrew.name}
-              className="w-32 h-32 rounded-full object-cover mb-4"
-            />
-            <h3 className="text-lg font-semibold">{pastorAndrew.name}</h3>
-            <p className="text-gray-600 text-sm mb-4">{pastorAndrew.role}</p>
-            <Button
-              onClick={handlePrayerRequest}
-              className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"
-            >
-              <Phone className="w-4 h-4 mr-2" />
-              Try Prayer Request (Preview)
-            </Button>
-          </div>
-          <p className="text-sm text-gray-500 text-center italic">
-            Experience a preview of our prayer request feature with Pastor Andrew
-          </p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+          {[pastorAndrew, ...Array(3)].map((_, index) => (
+            <div key={index} className="flex flex-col items-center">
+              <div className="w-24 h-24 rounded-full bg-gray-200 mb-4" />
+              <h3 className="text-lg font-semibold">Ministry Member</h3>
+              <p className="text-gray-600 text-sm mb-2">Spiritual Guide</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-6 text-center">
+          <Button
+            onClick={handlePrayerRequest}
+            className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700"
+          >
+            <Phone className="w-4 h-4 mr-2" />
+            Try Prayer Request (Preview)
+          </Button>
         </div>
       </CardContent>
       {showWidget && scriptLoaded && (
-        <div className="fixed bottom-4 right-4 z-50 animate-fade-in">
-          <div 
-            className="relative bg-black rounded-lg p-4 shadow-2xl"
-            style={{ width: '300px' }}
-          >
-            <button 
-              onClick={() => setShowWidget(false)}
-              className="absolute top-2 right-2 text-white hover:text-gray-300"
-            >
-              ×
-            </button>
-            <div 
-              dangerouslySetInnerHTML={{
-                __html: `<elevenlabs-convai agent-id="${pastorAndrew.widgetId}"></elevenlabs-convai>`
-              }}
-            />
-          </div>
-        </div>
+        <CharacterWidget 
+          widgetId={pastorAndrew.widgetId} 
+          onClose={() => setShowWidget(false)} 
+        />
       )}
     </Card>
   );
