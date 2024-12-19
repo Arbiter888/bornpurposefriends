@@ -9,6 +9,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useUser } from "@supabase/auth-helpers-react";
 import { DocumentUploader } from "./DocumentUploader";
 import { DocumentList } from "./DocumentList";
+import { SharedResources } from "./SharedResources";
 
 interface Document {
   id: string;
@@ -93,20 +94,24 @@ export const KnowledgeBase = () => {
   }
 
   return (
-    <Card className="p-4">
-      <div className="space-y-4">
-        <DocumentUploader
-          title={title}
-          setTitle={setTitle}
-          isUploading={isUploading}
-          setIsUploading={setIsUploading}
-          onSuccess={fetchDocuments}
-        />
-        <DocumentList
-          documents={documents}
-          onDelete={handleDelete}
-        />
-      </div>
-    </Card>
+    <div className="space-y-6">
+      <Card className="p-4">
+        <div className="space-y-4">
+          <DocumentUploader
+            title={title}
+            setTitle={setTitle}
+            isUploading={isUploading}
+            setIsUploading={setIsUploading}
+            onSuccess={fetchDocuments}
+          />
+          <DocumentList
+            documents={documents}
+            onDelete={handleDelete}
+          />
+        </div>
+      </Card>
+      
+      <SharedResources />
+    </div>
   );
 };
