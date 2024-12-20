@@ -10,6 +10,7 @@ import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
 import Workspace from "./components/Workspace";
+import PrayerWall from "./pages/PrayerWall";
 import Footer from "./components/Footer";
 import { useEffect, useState } from "react";
 
@@ -82,6 +83,11 @@ const App = () => {
                 <Route path="/login" element={<Login />} />
                 <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                 <Route path="/terms" element={<Terms />} />
+                <Route path="/prayer-wall" element={
+                  <ProtectedRoute>
+                    <PrayerWall />
+                  </ProtectedRoute>
+                } />
                 <Route path="/" element={
                   <ProtectedRoute>
                     <Index />
