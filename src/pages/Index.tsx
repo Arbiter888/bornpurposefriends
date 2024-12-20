@@ -6,7 +6,6 @@ import { toast } from "@/hooks/use-toast";
 import { useSession } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import { HomeBackgroundSelector } from "@/components/home/HomeBackgroundSelector";
-import { Button } from "@/components/ui/button";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -59,16 +58,7 @@ const Index = () => {
       <div className="relative">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-4">
-              <HomeBackgroundSelector onSelect={handleBackgroundChange} />
-              <Button
-                onClick={() => navigate("/prayer-wall")}
-                variant="secondary"
-                className="bg-white/90 hover:bg-white"
-              >
-                Prayer Wall
-              </Button>
-            </div>
+            <HomeBackgroundSelector onSelect={handleBackgroundChange} />
             <button
               onClick={handleLogout}
               className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
