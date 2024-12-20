@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
+import { PrayerRequest } from "@/integrations/supabase/types/prayer";
 
 const PrayerWall = () => {
   const user = useUser();
@@ -17,7 +18,7 @@ const PrayerWall = () => {
   const [newRequest, setNewRequest] = useState({ title: "", content: "", isAnonymous: false });
   const [newResponse, setNewResponse] = useState<{ [key: string]: string }>({});
 
-  const { data: prayerRequests, refetch } = useQuery({
+  const { data: prayerRequests, refetch } = useQuery<PrayerRequest[]>({
     queryKey: ["prayerRequests"],
     queryFn: async () => {
       const { data, error } = await supabase
