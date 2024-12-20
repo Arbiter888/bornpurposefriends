@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { format } from "date-fns";
@@ -24,13 +24,17 @@ const PrayerWall = () => {
         .from("prayer_requests")
         .select(`
           *,
-          profiles:user_id (email),
+          profiles:user_id (
+            email
+          ),
           responses:prayer_responses (
             id,
             content,
             created_at,
             user_id,
-            profiles:user_id (email)
+            profiles:user_id (
+              email
+            )
           )
         `)
         .order("created_at", { ascending: false });
