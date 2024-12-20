@@ -1,14 +1,12 @@
-export type Json =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: Json | undefined }
-  | Json[];
+import { Json } from './base';
+import { MessagesTable } from './messages';
+import { TasksTable } from './tasks';
 
 export interface Database {
   public: {
     Tables: {
+      messages: MessagesTable;
+      tasks: TasksTable;
       documents: {
         Row: {
           content: string | null;
@@ -37,15 +35,6 @@ export interface Database {
           title?: string;
           user_id?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: "documents_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          }
-        ];
       };
       prayer_requests: {
         Row: {
@@ -72,15 +61,6 @@ export interface Database {
           title?: string;
           user_id?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: "prayer_requests_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "profiles";
-            referencedColumns: ["id"];
-          }
-        ];
       };
       prayer_responses: {
         Row: {
@@ -104,22 +84,6 @@ export interface Database {
           prayer_request_id?: string;
           user_id?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: "prayer_responses_prayer_request_id_fkey";
-            columns: ["prayer_request_id"];
-            isOneToOne: false;
-            referencedRelation: "prayer_requests";
-            referencedColumns: ["id"];
-          },
-          {
-            foreignKeyName: "prayer_responses_user_id_fkey";
-            columns: ["user_id"];
-            isOneToOne: false;
-            referencedRelation: "profiles";
-            referencedColumns: ["id"];
-          }
-        ];
       };
       profiles: {
         Row: {
@@ -143,15 +107,6 @@ export interface Database {
           is_subscribed?: boolean | null;
           updated_at?: string;
         };
-        Relationships: [
-          {
-            foreignKeyName: "profiles_id_fkey";
-            columns: ["id"];
-            isOneToOne: true;
-            referencedRelation: "users";
-            referencedColumns: ["id"];
-          }
-        ];
       };
     };
     Views: {
@@ -167,4 +122,4 @@ export interface Database {
       [_ in never]: never;
     };
   };
-};
+}
