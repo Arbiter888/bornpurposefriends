@@ -104,64 +104,82 @@ const LoginForm = () => {
         <label className="text-sm font-medium">Email address</label>
         <Input
           type="email"
-          placeholder="Your email address"
+          placeholder="Enter your email address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
           disabled={loading}
-          className="bg-gray-50"
+          className="bg-white border-2 border-gray-200"
         />
       </div>
       <div className="space-y-2">
         <label className="text-sm font-medium">Password</label>
         <Input
           type="password"
-          placeholder="Choose a password (min. 6 characters)"
+          placeholder={isSignUp ? "Create a password (min. 6 characters)" : "Enter your password"}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
           disabled={loading}
-          className="bg-gray-50"
+          className="bg-white border-2 border-gray-200"
           minLength={6}
         />
       </div>
       <button
         type="submit"
         disabled={loading}
-        className="w-full bg-[#0EA5E9] text-white py-2 rounded-md hover:bg-[#0284C7] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        className={`w-full py-2.5 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium
+          ${isSignUp 
+            ? 'bg-[#F97316] hover:bg-[#EA580C]' 
+            : 'bg-[#221F26] hover:bg-[#2C2832]'}`}
       >
-        {loading ? (isSignUp ? 'Creating account...' : 'Signing in...') : (isSignUp ? 'Create Account' : 'Sign in')}
+        {loading 
+          ? (isSignUp ? 'Creating account...' : 'Signing in...') 
+          : (isSignUp ? 'Create New Account' : 'Sign In')}
       </button>
       {!isSignUp && (
-        <a href="#" className="text-sm text-gray-600 hover:underline block text-center">
+        <button 
+          type="button" 
+          className="text-sm text-gray-600 hover:text-gray-800 block text-center w-full mt-2"
+        >
           Forgot your password?
-        </a>
+        </button>
       )}
     </form>
   );
 
   return (
-    <Card className="bg-white shadow-lg">
-      <CardHeader className="text-center">
+    <Card className="bg-white shadow-lg border-2">
+      <CardHeader className="text-center space-y-2">
         <CardTitle className="text-2xl font-bold">Welcome to BornPurpose</CardTitle>
-        <CardDescription>Join our spiritual community</CardDescription>
+        <CardDescription className="text-base">Join our spiritual community</CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="login" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="login">Sign In</TabsTrigger>
-            <TabsTrigger value="signup">Create Account</TabsTrigger>
+        <Tabs defaultValue="login" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-2 p-1 bg-gray-100">
+            <TabsTrigger 
+              value="login"
+              className="data-[state=active]:bg-[#221F26] data-[state=active]:text-white"
+            >
+              Sign In
+            </TabsTrigger>
+            <TabsTrigger 
+              value="signup"
+              className="data-[state=active]:bg-[#F97316] data-[state=active]:text-white"
+            >
+              Create Account
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="login">
             {renderForm(false)}
           </TabsContent>
           <TabsContent value="signup">
-            <div className="mb-4 text-sm text-gray-600 bg-blue-50 p-3 rounded-md">
-              <p>New to BornPurpose? Create your account by:</p>
-              <ol className="list-decimal ml-4 mt-2">
+            <div className="mb-6 text-sm bg-orange-50 p-4 rounded-md border border-orange-200">
+              <p className="font-medium text-orange-800 mb-2">New to BornPurpose?</p>
+              <ol className="list-decimal ml-4 text-orange-700 space-y-1">
                 <li>Enter your email address</li>
-                <li>Choose a secure password (minimum 6 characters)</li>
-                <li>Click "Create Account" to register</li>
+                <li>Create a secure password (minimum 6 characters)</li>
+                <li>Click "Create New Account" to join</li>
               </ol>
             </div>
             {renderForm(true)}
