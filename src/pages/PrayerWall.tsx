@@ -24,15 +24,14 @@ const PrayerWall = () => {
         .from("prayer_requests")
         .select(`
           *,
-          profiles:user_id (
+          user:user_id (
             email
           ),
           responses:prayer_responses (
             id,
             content,
             created_at,
-            user_id,
-            profiles:user_id (
+            user:user_id (
               email
             )
           )
@@ -157,7 +156,7 @@ const PrayerWall = () => {
             <CardHeader>
               <CardTitle>{request.title}</CardTitle>
               <p className="text-sm text-muted-foreground">
-                Posted by {request.is_anonymous ? "Anonymous" : request.profiles?.email} on{" "}
+                Posted by {request.is_anonymous ? "Anonymous" : request.user?.email} on{" "}
                 {format(new Date(request.created_at), "PPP")}
               </p>
             </CardHeader>
@@ -169,7 +168,7 @@ const PrayerWall = () => {
                   <div key={response.id} className="pl-4 border-l-2 border-muted">
                     <p className="whitespace-pre-wrap">{response.content}</p>
                     <p className="text-sm text-muted-foreground mt-1">
-                      {response.profiles?.email} - {format(new Date(response.created_at), "PPP")}
+                      {response.user?.email} - {format(new Date(response.created_at), "PPP")}
                     </p>
                   </div>
                 ))}
