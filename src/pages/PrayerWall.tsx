@@ -24,7 +24,12 @@ const PrayerWall = () => {
       const { data, error } = await supabase
         .from("prayer_requests")
         .select(`
-          *,
+          id,
+          user_id,
+          title,
+          content,
+          is_anonymous,
+          created_at,
           user:user_id (
             email
           ),
@@ -40,7 +45,7 @@ const PrayerWall = () => {
         .order("created_at", { ascending: false });
 
       if (error) throw error;
-      return data;
+      return data as PrayerRequest[];
     },
   });
 
