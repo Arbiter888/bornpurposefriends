@@ -8,22 +8,27 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const GROUP_STUDY_SYSTEM_PROMPT = `You are participating in an interactive group Bible study. As a spiritual mentor with your unique background and perspective, engage thoughtfully with the topic and other participants' views.
+const GROUP_STUDY_SYSTEM_PROMPT = `You are participating in an interactive group Bible study. As a spiritual mentor with your unique background and perspective, engage thoughtfully with the topic and other participants' views while maintaining a natural conversation flow.
 
-Key guidelines:
-1. Maintain your distinct character voice and expertise throughout
-2. When referencing scripture:
-   - If introducing a new scripture, explain its context and relevance thoroughly
-   - If referencing a scripture another participant mentioned, either:
-     a) Add a unique perspective or interpretation based on your background
-     b) Acknowledge and build upon their interpretation, adding your own insights
-     c) Connect it to another relevant passage or practical application
-3. Draw from your specific background and beliefs to offer unique insights
-4. Engage respectfully with other participants' views, showing how different perspectives can deepen understanding
-5. Keep responses focused and concise while being substantive
-6. Consider both theological depth and practical application in your responses
+Key guidelines for group discussion:
+1. Never repeat scriptures that others have mentioned
+2. Acknowledge and build upon previous responses
+3. Share different but related scriptures that add new perspectives
+4. Ask thought-provoking follow-up questions to the user
+5. Maintain your unique character voice and expertise
+6. If another participant mentioned a scripture:
+   - Add unique insights based on your background
+   - Connect it to another relevant passage
+   - Explain how it relates to practical application
+7. Include personal anecdotes or examples when relevant
+8. Ask questions that encourage deeper reflection
+9. Help users apply the scripture to their daily lives
 
-Remember to maintain your character's unique voice and perspective throughout the discussion.`;
+Remember to:
+- Keep responses focused and substantive
+- Consider both theological depth and practical application
+- Engage naturally with other participants' views
+- Ask at least one follow-up question in each response`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -31,18 +36,18 @@ serve(async (req) => {
   }
 
   try {
-    const { message, character, isGroupChat, knowledgeBaseContent, conversationId } = await req.json();
+    const { message, character, isGroupChat, knowledgeBaseContent, conversationId, previousResponses = [] } = await req.json();
     
     if (!character) {
       throw new Error('Character information is missing');
     }
 
     console.log('Processing request for character:', character.name);
-    console.log('Is group debate:', isGroupChat);
+    console.log('Is group chat:', isGroupChat);
     console.log('Conversation ID:', conversationId);
 
     const systemPrompt = isGroupChat 
-      ? `${GROUP_STUDY_SYSTEM_PROMPT}\nYou are ${character.name}, ${character.role}. ${character.description}. Your response should reflect your unique perspective and background while engaging thoughtfully with the group discussion.`
+      ? `${GROUP_STUDY_SYSTEM_PROMPT}\n\nYou are ${character.name}, ${character.role}. ${character.description}. Your response should reflect your unique perspective and background while engaging thoughtfully with the group discussion.`
       : `You are ${character.name}, ${character.role}. ${character.description}. When discussing scripture, first focus on one particularly relevant verse or passage that directly addresses the topic at hand. Explain this scripture in detail, including its context and application, before mentioning other related verses.`;
 
     const messages = [
@@ -71,10 +76,17 @@ serve(async (req) => {
       content: characterContext
     });
 
+    if (isGroupChat && previousResponses.length > 0) {
+      messages.push({
+        role: 'system',
+        content: `Previous responses in this discussion:\n${previousResponses.map((resp: any) => `${resp.characterName}: ${resp.content}`).join('\n\n')}\n\nBuild upon these responses with your unique perspective, different scriptures, and insights. Ask follow-up questions to deepen the discussion.`
+      });
+    }
+
     messages.push({
       role: 'user',
       content: isGroupChat 
-        ? `As ${character.name}, provide your unique perspective on this topic for the group Bible study, ensuring your response engages thoughtfully with the discussion while maintaining your distinct viewpoint: ${message}`
+        ? `As ${character.name}, provide your unique perspective on this topic for the group Bible study, ensuring your response engages thoughtfully with the previous responses while maintaining your distinct viewpoint and asking meaningful follow-up questions: ${message}`
         : message
     });
 

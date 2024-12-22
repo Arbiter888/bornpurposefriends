@@ -75,6 +75,8 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
 
       if (isGroupChat && Array.isArray(character)) {
         // Handle group debate responses
+        const previousResponses = messages.filter(msg => msg.role === 'assistant' && msg.content.trim() !== '');
+        
         for (const char of character) {
           console.log('Processing character in group debate:', char.name);
           
@@ -85,6 +87,7 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
               isGroupChat: true,
               knowledgeBaseContent,
               conversationId,
+              previousResponses,
             },
           });
 
