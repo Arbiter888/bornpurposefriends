@@ -8,27 +8,21 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const GROUP_STUDY_SYSTEM_PROMPT = `You are participating in an interactive group Bible study. As a spiritual mentor with your unique background and perspective, engage thoughtfully with the topic and other participants' views while maintaining a natural conversation flow.
+const GROUP_STUDY_SYSTEM_PROMPT = `You are participating in a concise, natural Bible study discussion. As a spiritual mentor, engage thoughtfully while maintaining these key guidelines:
 
-Key guidelines for group discussion:
-1. Never repeat scriptures that others have mentioned
-2. Acknowledge and build upon previous responses
-3. Share different but related scriptures that add new perspectives
-4. Ask thought-provoking follow-up questions to the user
-5. Maintain your unique character voice and expertise
-6. If another participant mentioned a scripture:
-   - Add unique insights based on your background
-   - Connect it to another relevant passage
-   - Explain how it relates to practical application
-7. Include personal anecdotes or examples when relevant
-8. Ask questions that encourage deeper reflection
-9. Help users apply the scripture to their daily lives
+1. Always include the full text of any scripture you reference
+2. Keep responses focused and brief (2-3 sentences max before the scripture)
+3. If referencing a scripture another participant mentioned, acknowledge them and add new insight
+4. Share different but related scriptures that add new perspectives
+5. Only Pastor Andrew should ask one follow-up question to the user
+6. Maintain your unique character voice and expertise
+7. Format scripture references as: "Book Chapter:Verse tells us 'actual scripture text'"
 
 Remember to:
-- Keep responses focused and substantive
-- Consider both theological depth and practical application
-- Engage naturally with other participants' views
-- Ask at least one follow-up question in each response`;
+- Keep responses concise and natural
+- Focus on practical application
+- Build naturally on others' insights
+- If you're Pastor Andrew, end with ONE thought-provoking question`;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -47,8 +41,8 @@ serve(async (req) => {
     console.log('Conversation ID:', conversationId);
 
     const systemPrompt = isGroupChat 
-      ? `${GROUP_STUDY_SYSTEM_PROMPT}\n\nYou are ${character.name}, ${character.role}. ${character.description}. Your response should reflect your unique perspective and background while engaging thoughtfully with the group discussion.`
-      : `You are ${character.name}, ${character.role}. ${character.description}. When discussing scripture, first focus on one particularly relevant verse or passage that directly addresses the topic at hand. Explain this scripture in detail, including its context and application, before mentioning other related verses.`;
+      ? `${GROUP_STUDY_SYSTEM_PROMPT}\n\nYou are ${character.name}, ${character.role}. ${character.description}. Your response should reflect your unique perspective while engaging naturally with the group discussion.`
+      : `You are ${character.name}, ${character.role}. ${character.description}. When discussing scripture, first share one particularly relevant verse with its complete text, then explain its application briefly.`;
 
     const messages = [
       { 
@@ -60,33 +54,21 @@ serve(async (req) => {
     if (knowledgeBaseContent) {
       messages.push({
         role: 'system',
-        content: `Consider this relevant information from the knowledge base: ${knowledgeBaseContent}`
+        content: `Consider this relevant information: ${knowledgeBaseContent}`
       });
     }
-
-    const characterContext = [
-      `Your nationality is ${character.nationality}.`,
-      `Your key skills are: ${Array.isArray(character.skills) ? character.skills.join(', ') : 'varied'}.`,
-      `Common topics you discuss: ${Array.isArray(character.conversationTopics) ? character.conversationTopics.join(', ') : 'various topics'}.`,
-      `In group discussions, you should provide unique insights based on your background as ${character.role} and your specific expertise.`
-    ].join(' ');
-
-    messages.push({
-      role: 'system',
-      content: characterContext
-    });
 
     if (isGroupChat && previousResponses.length > 0) {
       messages.push({
         role: 'system',
-        content: `Previous responses in this discussion:\n${previousResponses.map((resp: any) => `${resp.characterName}: ${resp.content}`).join('\n\n')}\n\nBuild upon these responses with your unique perspective, different scriptures, and insights. Ask follow-up questions to deepen the discussion.`
+        content: `Previous responses in this discussion:\n${previousResponses.map((resp: any) => `${resp.characterName}: ${resp.content}`).join('\n\n')}\n\nBuild naturally on these responses with your unique perspective and different scriptures. If you're Pastor Andrew, end with one clear follow-up question.`
       });
     }
 
     messages.push({
       role: 'user',
       content: isGroupChat 
-        ? `As ${character.name}, provide your unique perspective on this topic for the group Bible study, ensuring your response engages thoughtfully with the previous responses while maintaining your distinct viewpoint and asking meaningful follow-up questions: ${message}`
+        ? `As ${character.name}, provide your concise perspective on this topic, engaging naturally with previous responses while maintaining your distinct viewpoint. If you're Pastor Andrew, include one follow-up question: ${message}`
         : message
     });
 
@@ -101,8 +83,8 @@ serve(async (req) => {
       body: JSON.stringify({
         model: 'gpt-4o',
         messages: messages,
-        temperature: 0.9,
-        max_tokens: 2048,
+        temperature: 0.7,
+        max_tokens: 1000,
         top_p: 1,
         frequency_penalty: 0.5,
         presence_penalty: 0.5
