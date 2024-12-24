@@ -2,7 +2,9 @@ import { useState } from "react";
 import { useSession } from "@supabase/auth-helpers-react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { supabase } from "@/integrations/supabase/client";
 import TierCard from "./TierCard";
 import CharityCard from "./CharityCard";
 
