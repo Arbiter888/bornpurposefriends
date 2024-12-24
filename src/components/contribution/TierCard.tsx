@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Check, Church, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -50,25 +50,39 @@ const TierCard = ({
           <span className="ml-1 text-gray-600">/month</span>
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
-        <div className="space-y-2">
-          <h4 className="font-semibold text-lg">BornPurpose Features:</h4>
+      <CardContent className="space-y-8">
+        {/* HTB Impact Section */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Church className="h-5 w-5 text-primary" />
+            <h4 className="font-semibold text-lg">HTB Impact:</h4>
+          </div>
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-lg" />
+            <ul className="space-y-3 relative">
+              {impacts.map((impact) => (
+                <li key={impact} className="flex items-start gap-2 group">
+                  <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
+                  <span className="text-gray-600 group-hover:text-gray-900 transition-colors">
+                    {impact}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        {/* BornPurpose Features Section */}
+        <div className="space-y-4 pt-4 border-t border-gray-100">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-secondary" />
+            <h4 className="font-semibold text-lg">BornPurpose Features:</h4>
+          </div>
           <ul className="space-y-2">
             {features.map((feature) => (
               <li key={feature} className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
+                <Check className="h-5 w-5 text-secondary/70 flex-shrink-0 mt-0.5" />
                 <span className="text-gray-600">{feature}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-        <div className="space-y-2">
-          <h4 className="font-semibold text-lg">Your HTB Impact:</h4>
-          <ul className="space-y-2">
-            {impacts.map((impact) => (
-              <li key={impact} className="flex items-start gap-2">
-                <Check className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-600">{impact}</span>
               </li>
             ))}
           </ul>
@@ -76,7 +90,11 @@ const TierCard = ({
       </CardContent>
       <CardFooter>
         <Button
-          className="w-full bg-primary hover:bg-primary/90 transition-colors"
+          className={`w-full transition-colors ${
+            featured
+              ? "bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90"
+              : "bg-primary hover:bg-primary/90"
+          }`}
           onClick={() => onSubscribe(name, price)}
         >
           Contribute Monthly

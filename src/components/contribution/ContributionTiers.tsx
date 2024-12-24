@@ -2,38 +2,39 @@ import { useSession } from "@supabase/auth-helpers-react";
 import { toast } from "sonner";
 import TierCard from "./TierCard";
 import CharityCard from "./CharityCard";
+import { ArrowRight } from "lucide-react";
 
 const tiers = [
   {
     name: "Seed Level",
     price: "25",
     description: "Support HTB's mission while accessing BornPurpose premium features",
+    impacts: [
+      "Support Alpha courses for 2 participants",
+      "Provide resources for HTB's youth ministry",
+      "Contribute to church community programs",
+    ],
     features: [
       "Full BornPurpose Premium Access",
       "All AI Ministry Companions",
       "Group Bible Study Features",
       "Prayer Wall Access",
     ],
-    impacts: [
-      "Support Alpha courses for 2 participants",
-      "Provide resources for HTB's youth ministry",
-      "Contribute to church community programs",
-    ],
   },
   {
     name: "Growth Level",
     price: "50",
     description: "Expanded impact with enhanced features",
+    impacts: [
+      "Fund Alpha materials for 5 participants",
+      "Support HTB's community outreach programs",
+      "Help maintain church facilities",
+    ],
     features: [
       "All Seed Level Features",
       "Priority Prayer Support",
       "Advanced Study Tools",
       "Extended Chat Sessions",
-    ],
-    impacts: [
-      "Fund Alpha materials for 5 participants",
-      "Support HTB's community outreach programs",
-      "Help maintain church facilities",
     ],
     featured: true,
   },
@@ -41,16 +42,16 @@ const tiers = [
     name: "Harvest Level",
     price: "100",
     description: "Maximum kingdom impact with full features",
+    impacts: [
+      "Sponsor a complete Alpha small group",
+      "Support HTB's global mission work",
+      "Fund youth and children's programs",
+    ],
     features: [
       "All Growth Level Features",
       "Quarterly Ministry Team Meetings",
       "Custom Study Plans",
       "Priority Support",
-    ],
-    impacts: [
-      "Sponsor a complete Alpha small group",
-      "Support HTB's global mission work",
-      "Fund youth and children's programs",
     ],
   },
 ];
@@ -95,10 +96,21 @@ const ContributionTiers = () => {
           <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
             Monthly Kingdom Impact
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+          <p className="text-gray-600 max-w-2xl mx-auto text-lg mb-8">
             Support HTB's mission while getting full access to BornPurpose premium features.
             Every contribution helps expand our reach and impact.
           </p>
+          <div className="flex items-center justify-center gap-8 text-sm text-gray-500">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-primary" />
+              <span>HTB Impact</span>
+            </div>
+            <ArrowRight className="w-4 h-4" />
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-secondary" />
+              <span>BornPurpose Features</span>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
