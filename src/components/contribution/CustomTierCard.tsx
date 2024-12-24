@@ -16,14 +16,15 @@ interface CustomTierProps {
 }
 
 const CustomTierCard = ({ onSubscribe }: CustomTierProps) => {
-  const [amount, setAmount] = useState(75);
+  const [amount, setAmount] = useState(25);
 
   const calculateImpact = (value: number) => {
+    // Scaled impacts starting from small contributions
     return [
-      `Support ${Math.floor(value / 25)} Alpha participants`,
-      `Fund ${Math.floor(value / 50)} youth ministry sessions`,
-      `Enable ${Math.floor(value / 30)} community outreach events`,
-      `Support ${Math.floor(value / 40)} worship services`,
+      `Support ${Math.max(1, Math.floor(value / 5))} prayer group sessions`,
+      `Contribute to ${Math.max(1, Math.floor(value / 10))} community outreach meals`,
+      `Help provide ${Math.max(1, Math.floor(value / 15))} Alpha course materials`,
+      `Support ${Math.max(1, Math.floor(value / 20))} youth ministry activities`,
     ];
   };
 
@@ -33,10 +34,11 @@ const CustomTierCard = ({ onSubscribe }: CustomTierProps) => {
     <Card className="relative transform transition-all duration-300 hover:scale-105 border-primary/20 shadow-lg hover:shadow-xl bg-gradient-to-br from-white to-gray-50">
       <CardHeader className="space-y-1">
         <CardTitle className="text-3xl flex items-center gap-2 justify-center">
-          Choose Your Impact
+          Your Monthly Blessing
           <Sparkles className="h-6 w-6 text-primary animate-pulse" />
         </CardTitle>
         <CardDescription className="text-center">
+          <p className="text-sm text-gray-600 mb-2">Every contribution makes a difference in God's kingdom</p>
           <div className="flex items-center justify-center gap-2 text-2xl font-bold mt-2">
             <span className="text-4xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
               £{amount}
@@ -48,12 +50,12 @@ const CustomTierCard = ({ onSubscribe }: CustomTierProps) => {
       <CardContent className="space-y-8">
         <div className="space-y-6">
           <label className="text-sm text-gray-600 block text-center">
-            Adjust your monthly contribution:
+            Choose your monthly blessing amount:
           </label>
           <Slider
             value={[amount]}
             onValueChange={(values) => setAmount(values[0])}
-            min={25}
+            min={5}
             max={500}
             step={5}
             className="w-full"
@@ -90,16 +92,16 @@ const CustomTierCard = ({ onSubscribe }: CustomTierProps) => {
         <div className="space-y-4 pt-6 border-t border-gray-100">
           <div className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-secondary" />
-            <h4 className="font-semibold text-lg">All Premium Features Included:</h4>
+            <h4 className="font-semibold text-lg">Included Blessings:</h4>
           </div>
           <ul className="grid grid-cols-2 gap-3">
             {[
               "Full BornPurpose Access",
-              "All AI Companions",
-              "Priority Support",
-              "Advanced Study Tools",
-              "Extended Sessions",
-              "Ministry Team Meetings",
+              "Prayer Community",
+              "Bible Study Tools",
+              "Ministry Support",
+              "Spiritual Growth Resources",
+              "Community Connection",
             ].map((feature) => (
               <li key={feature} className="flex items-center gap-2">
                 <Sparkles className="h-4 w-4 text-secondary/70 flex-shrink-0" />

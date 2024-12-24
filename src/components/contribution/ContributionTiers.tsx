@@ -6,27 +6,27 @@ import { Church, Heart } from "lucide-react";
 
 const PRESET_AMOUNTS = [
   {
+    amount: "10",
+    impacts: [
+      "Support 2 prayer group sessions",
+      "Contribute to community meals",
+      "Help provide Alpha materials",
+    ],
+  },
+  {
     amount: "25",
     impacts: [
-      "Support Alpha courses for 2 participants",
-      "Provide resources for HTB's youth ministry",
-      "Contribute to church community programs",
+      "Support 5 prayer group sessions",
+      "Provide meals for 2 community events",
+      "Fund Alpha materials for 2 participants",
     ],
   },
   {
     amount: "50",
     impacts: [
-      "Fund Alpha materials for 5 participants",
-      "Support HTB's community outreach programs",
-      "Help maintain church facilities",
-    ],
-  },
-  {
-    amount: "100",
-    impacts: [
-      "Sponsor a complete Alpha small group",
-      "Support HTB's global mission work",
-      "Fund youth and children's programs",
+      "Support 10 prayer group sessions",
+      "Fund a month of youth activities",
+      "Provide Alpha materials for 3 participants",
     ],
   },
 ];
@@ -49,12 +49,11 @@ const ContributionTiers = () => {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Church className="h-8 w-8 text-primary" />
             <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-              Monthly Kingdom Impact
+              Join Us in Ministry
             </h2>
           </div>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg mb-8">
-            Support HTB's mission while getting full access to BornPurpose premium features.
-            Every contribution helps expand our reach and impact.
+            Every contribution, no matter the size, helps spread God's love and supports our ministry's mission. Together, we can make a difference in His kingdom.
           </p>
         </div>
 
@@ -63,8 +62,8 @@ const ContributionTiers = () => {
         </div>
 
         <div className="text-center mb-8">
-          <h3 className="text-2xl font-semibold mb-4">Quick Select Amounts</h3>
-          <p className="text-gray-600 mb-8">Choose from our preset contribution levels</p>
+          <h3 className="text-2xl font-semibold mb-4">Quick Select Blessings</h3>
+          <p className="text-gray-600 mb-8">Choose from our suggested monthly contributions</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
@@ -93,7 +92,7 @@ const ContributionTiers = () => {
                 className="w-full mt-6 bg-gradient-to-r from-primary/90 to-secondary/90 hover:from-primary hover:to-secondary"
                 onClick={() => handleSubscribe(tier.amount)}
               >
-                Select £{tier.amount}
+                Contribute £{tier.amount}
               </Button>
             </div>
           ))}
