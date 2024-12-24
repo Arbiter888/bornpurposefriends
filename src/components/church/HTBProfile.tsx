@@ -1,6 +1,7 @@
 import { MapPin, Youtube, Link as LinkIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
+import ContributionTiers from "../contribution/ContributionTiers";
 
 const locations = [
   {
