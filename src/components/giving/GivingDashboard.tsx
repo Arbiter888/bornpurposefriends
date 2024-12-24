@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, History, CreditCard, Church } from "lucide-react";
 import ContributionTiers from "../contribution/ContributionTiers";
@@ -9,7 +9,7 @@ import ChurchUpdates from "./ChurchUpdates";
 const GivingDashboard = () => {
   return (
     <div className="container mx-auto px-4 py-8">
-      <Card className="bg-white/90 backdrop-blur-sm">
+      <Card className="bg-white/95 backdrop-blur-sm shadow-lg">
         <CardContent className="p-6">
           <h1 className="text-3xl font-bold mb-6 text-center">Your Giving Dashboard</h1>
           

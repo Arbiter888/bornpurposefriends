@@ -1,4 +1,4 @@
-import { MapPin, Youtube, Link as LinkIcon } from "lucide-react";
+import { MapPin, Youtube, Link as LinkIcon, Church, Heart, Handshake, Users, Calendar } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 import GivingDashboard from "../giving/GivingDashboard";
@@ -103,9 +103,80 @@ const HTBProfile = () => {
           </div>
         </div>
 
+        <div className="mb-16">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold mb-4">Our Partner Church - HTB</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Join us in supporting Holy Trinity Brompton (HTB) and their impactful local and global initiatives
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <Card className="bg-white/90 backdrop-blur-sm p-6 hover:shadow-lg transition-all duration-300">
+              <div className="flex items-center mb-4">
+                <Church className="h-6 w-6 text-primary mr-3" />
+                <h3 className="text-xl font-semibold">Sunday Services</h3>
+              </div>
+              <p className="text-gray-600">
+                Multiple services across 6 locations bringing the community together in faith and fellowship
+              </p>
+            </Card>
+
+            <Card className="bg-white/90 backdrop-blur-sm p-6 hover:shadow-lg transition-all duration-300">
+              <div className="flex items-center mb-4">
+                <Heart className="h-6 w-6 text-primary mr-3" />
+                <h3 className="text-xl font-semibold">Alpha Course</h3>
+              </div>
+              <p className="text-gray-600">
+                Explore life, faith and meaning in a welcoming environment
+              </p>
+            </Card>
+
+            <Card className="bg-white/90 backdrop-blur-sm p-6 hover:shadow-lg transition-all duration-300">
+              <div className="flex items-center mb-4">
+                <Users className="h-6 w-6 text-primary mr-3" />
+                <h3 className="text-xl font-semibold">Youth & Children</h3>
+              </div>
+              <p className="text-gray-600">
+                Dynamic programs for all ages, nurturing the next generation in faith
+              </p>
+            </Card>
+
+            <Card className="bg-white/90 backdrop-blur-sm p-6 hover:shadow-lg transition-all duration-300">
+              <div className="flex items-center mb-4">
+                <Calendar className="h-6 w-6 text-primary mr-3" />
+                <h3 className="text-xl font-semibold">Life Groups</h3>
+              </div>
+              <p className="text-gray-600">
+                Weekly small group meetings for deeper spiritual growth and community
+              </p>
+            </Card>
+
+            <Card className="bg-white/90 backdrop-blur-sm p-6 hover:shadow-lg transition-all duration-300">
+              <div className="flex items-center mb-4">
+                <Handshake className="h-6 w-6 text-primary mr-3" />
+                <h3 className="text-xl font-semibold">Pastoral Care</h3>
+              </div>
+              <p className="text-gray-600">
+                Comprehensive support and counseling for spiritual and personal growth
+              </p>
+            </Card>
+
+            <Card className="bg-white/90 backdrop-blur-sm p-6 hover:shadow-lg transition-all duration-300">
+              <div className="flex items-center mb-4">
+                <MapPin className="h-6 w-6 text-primary mr-3" />
+                <h3 className="text-xl font-semibold">Global Impact</h3>
+              </div>
+              <p className="text-gray-600">
+                Supporting missions and initiatives that transform lives worldwide
+              </p>
+            </Card>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {locations.map((location) => (
-            <Card key={location.name} className="p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+            <Card key={location.name} className="bg-white/90 backdrop-blur-sm p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
               <div className="flex items-start gap-4 mb-4">
                 <MapPin className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
                 <div>
