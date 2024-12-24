@@ -7,6 +7,7 @@ import { useSession } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import { HomeBackgroundSelector } from "@/components/home/HomeBackgroundSelector";
 import ContributionTiers from "@/components/contribution/ContributionTiers";
+import PartnerChurchSection from "@/components/PartnerChurchSection";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -70,6 +71,7 @@ const Index = () => {
         </div>
         <Hero />
         <CharacterGrid />
+        <PartnerChurchSection />
         <ContributionTiers />
       </div>
     </div>
