@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Globe, ChevronDown } from "lucide-react";
+import { Globe } from "lucide-react";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { motion } from "framer-motion";
 
 const Hero = () => {
   const [currentLanguage, setCurrentLanguage] = useState<string>("en");
@@ -28,92 +27,45 @@ const Hero = () => {
   const content = getContent();
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="min-h-[50vh] flex flex-col items-center justify-center text-center px-4 py-16 relative overflow-hidden"
-    >
-      <motion.div 
-        className="absolute inset-0 bg-gradient-to-b from-primary/5 to-transparent"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-      />
-      
-      <motion.div 
-        className="flex items-center gap-2 mb-8 bg-white/90 backdrop-blur-sm px-6 py-3 rounded-full shadow-lg"
-        whileHover={{ scale: 1.02 }}
-      >
+    <div className="min-h-[30vh] flex flex-col items-center justify-center text-center px-4 py-12">
+      <div className="flex items-center gap-2 mb-8 bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm animate-fade-in">
         <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
         <span className="text-sm font-medium text-gray-700">{content.status}</span>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="ml-2">
+            <Button variant="ghost" size="icon">
               <Globe className="h-4 w-4" />
-              <ChevronDown className="h-3 w-3 ml-1" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-[200px]">
+          <DropdownMenuContent>
             <DropdownMenuItem onClick={() => setCurrentLanguage("en")}>
-              🇺🇸 English
+              English
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setCurrentLanguage("ko")}>
-              🇰🇷 한국어
+              한국어
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-      </motion.div>
-
-      <motion.h1 
-        className="text-5xl md:text-7xl font-bold mb-8"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
+      </div>
+      <h1 
+        className="text-4xl md:text-6xl font-bold mb-6 animate-fade-up"
         style={{ 
           fontFamily: 'Tomorrow',
-          background: 'linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%)',
+          background: 'linear-gradient(to right, #0EA5E9, #2563EB)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
           textShadow: '0 2px 4px rgba(0,0,0,0.1)',
+          padding: '0.5rem',
+          borderRadius: '0.5rem',
+          backgroundColor: 'rgba(255,255,255,0.9)',
         }}
       >
         bornpurpose
-      </motion.h1>
-
-      <motion.p 
-        className="text-lg md:text-xl text-gray-800 max-w-3xl mx-auto mb-12"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        style={{ 
-          fontFamily: 'Tomorrow',
-          lineHeight: '1.8'
-        }}
-      >
+      </h1>
+      <p className="text-lg md:text-xl text-gray-800 max-w-2xl mx-auto mb-8 animate-fade-up bg-white/90 backdrop-blur-sm p-4 rounded-lg shadow-lg" style={{ animationDelay: "0.2s", fontFamily: 'Tomorrow' }}>
         {content.description}
-      </motion.p>
-
-      <motion.div
-        className="flex flex-wrap justify-center gap-4"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-      >
-        <Button 
-          size="lg"
-          className="bg-gradient-to-r from-primary to-blue-600 hover:opacity-90 transition-opacity"
-        >
-          Start Your Journey
-        </Button>
-        <Button 
-          variant="outline" 
-          size="lg"
-          className="border-2 hover:bg-primary/5"
-        >
-          Learn More
-        </Button>
-      </motion.div>
-    </motion.div>
+      </p>
+    </div>
   );
 };
 
