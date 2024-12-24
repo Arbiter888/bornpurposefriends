@@ -19,46 +19,37 @@ const CustomTierCard = ({ onSubscribe }: CustomTierProps) => {
   const [amount, setAmount] = useState(75);
 
   const calculateImpact = (value: number) => {
-    const baseImpacts = [
-      "Support Alpha courses",
-      "Provide youth ministry resources",
-      "Contribute to community programs",
-    ];
-
-    const scaledImpacts = [
+    return [
       `Support ${Math.floor(value / 25)} Alpha participants`,
       `Fund ${Math.floor(value / 50)} youth ministry sessions`,
       `Enable ${Math.floor(value / 30)} community outreach events`,
+      `Support ${Math.floor(value / 40)} worship services`,
     ];
-
-    return value >= 25 ? scaledImpacts : baseImpacts;
   };
 
   const impacts = calculateImpact(amount);
 
   return (
-    <Card className="relative transform transition-all duration-300 hover:scale-105 border-primary shadow-lg">
-      <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-        <span className="bg-primary text-white px-3 py-1 rounded-full text-sm font-semibold">
-          Custom Impact
-        </span>
-      </div>
+    <Card className="relative transform transition-all duration-300 hover:scale-105 border-primary/20 shadow-lg hover:shadow-xl bg-gradient-to-br from-white to-gray-50">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl flex items-center gap-2">
-          Custom Level
-          <Sparkles className="h-5 w-5 text-primary animate-pulse" />
+        <CardTitle className="text-3xl flex items-center gap-2 justify-center">
+          Choose Your Impact
+          <Sparkles className="h-6 w-6 text-primary animate-pulse" />
         </CardTitle>
-        <CardDescription className="flex items-baseline">
-          <span className="text-3xl font-bold">£{amount}</span>
-          <span className="ml-1 text-gray-600">/month</span>
+        <CardDescription className="text-center">
+          <div className="flex items-center justify-center gap-2 text-2xl font-bold mt-2">
+            <span className="text-4xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+              £{amount}
+            </span>
+            <span className="text-gray-600 text-base">/month</span>
+          </div>
         </CardDescription>
-        <p className="text-sm text-gray-600 mt-2">
-          Choose your own contribution level and see your impact scale
-        </p>
       </CardHeader>
       <CardContent className="space-y-8">
-        <div className="space-y-4">
-          <label className="text-sm text-gray-600">Adjust your contribution:</label>
+        <div className="space-y-6">
+          <label className="text-sm text-gray-600 block text-center">
+            Adjust your monthly contribution:
+          </label>
           <Slider
             value={[amount]}
             onValueChange={(values) => setAmount(values[0])}
@@ -69,34 +60,31 @@ const CustomTierCard = ({ onSubscribe }: CustomTierProps) => {
           />
         </div>
 
-        <div className="space-y-4 relative overflow-hidden rounded-lg">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent" />
-          <div className="relative">
-            <div className="flex items-center gap-2 mb-4">
-              <Church className="h-6 w-6 text-primary animate-fade-in" />
-              <h4 className="font-bold text-lg bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-                Your Impact:
-              </h4>
-            </div>
-            <ul className="space-y-4">
-              {impacts.map((impact, index) => (
-                <li
-                  key={index}
-                  className="flex items-start gap-3 group animate-fade-up"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <Heart
-                    className="h-5 w-5 text-primary flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform"
-                    fill="#9b87f5"
-                    opacity={0.2}
-                  />
-                  <span className="text-gray-700 group-hover:text-gray-900 transition-colors font-medium">
-                    {impact}
-                  </span>
-                </li>
-              ))}
-            </ul>
+        <div className="space-y-4 p-6 bg-gradient-to-br from-primary/5 to-transparent rounded-lg">
+          <div className="flex items-center gap-2 mb-6">
+            <Church className="h-6 w-6 text-primary" />
+            <h4 className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+              Your Kingdom Impact:
+            </h4>
           </div>
+          <ul className="space-y-4">
+            {impacts.map((impact, index) => (
+              <li
+                key={index}
+                className="flex items-start gap-3 group animate-fade-up"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
+                <Heart
+                  className="h-5 w-5 text-primary flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform"
+                  fill="#9b87f5"
+                  opacity={0.2}
+                />
+                <span className="text-gray-700 group-hover:text-gray-900 transition-colors font-medium">
+                  {impact}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div className="space-y-4 pt-6 border-t border-gray-100">
@@ -104,18 +92,18 @@ const CustomTierCard = ({ onSubscribe }: CustomTierProps) => {
             <Sparkles className="h-5 w-5 text-secondary" />
             <h4 className="font-semibold text-lg">All Premium Features Included:</h4>
           </div>
-          <ul className="space-y-2">
+          <ul className="grid grid-cols-2 gap-3">
             {[
-              "Full BornPurpose Premium Access",
-              "All AI Ministry Companions",
-              "Priority Prayer Support",
+              "Full BornPurpose Access",
+              "All AI Companions",
+              "Priority Support",
               "Advanced Study Tools",
-              "Extended Chat Sessions",
-              "Quarterly Ministry Team Meetings",
+              "Extended Sessions",
+              "Ministry Team Meetings",
             ].map((feature) => (
-              <li key={feature} className="flex items-start gap-2">
-                <Sparkles className="h-5 w-5 text-secondary/70 flex-shrink-0 mt-0.5" />
-                <span className="text-gray-600">{feature}</span>
+              <li key={feature} className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4 text-secondary/70 flex-shrink-0" />
+                <span className="text-sm text-gray-600">{feature}</span>
               </li>
             ))}
           </ul>
@@ -123,10 +111,10 @@ const CustomTierCard = ({ onSubscribe }: CustomTierProps) => {
       </CardContent>
       <CardFooter>
         <Button
-          className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 shadow-lg hover:shadow-xl"
+          className="w-full bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 shadow-lg hover:shadow-xl text-lg py-6"
           onClick={() => onSubscribe(amount.toString())}
         >
-          Contribute Monthly
+          Contribute £{amount} Monthly
         </Button>
       </CardFooter>
     </Card>

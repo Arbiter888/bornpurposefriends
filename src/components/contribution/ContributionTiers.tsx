@@ -1,92 +1,45 @@
 import { useSession } from "@supabase/auth-helpers-react";
 import { toast } from "sonner";
-import TierCard from "./TierCard";
-import CharityCard from "./CharityCard";
 import CustomTierCard from "./CustomTierCard";
-import { ArrowRight, Church, Heart } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Church, Heart } from "lucide-react";
 
-const tiers = [
+const PRESET_AMOUNTS = [
   {
-    name: "Seed Level",
-    price: "25",
-    description: "Support HTB's mission while accessing BornPurpose premium features",
+    amount: "25",
     impacts: [
       "Support Alpha courses for 2 participants",
       "Provide resources for HTB's youth ministry",
       "Contribute to church community programs",
     ],
-    features: [
-      "Full BornPurpose Premium Access",
-      "All AI Ministry Companions",
-      "Group Bible Study Features",
-      "Prayer Wall Access",
-    ],
   },
   {
-    name: "Growth Level",
-    price: "50",
-    description: "Expanded impact with enhanced features",
+    amount: "50",
     impacts: [
       "Fund Alpha materials for 5 participants",
       "Support HTB's community outreach programs",
       "Help maintain church facilities",
     ],
-    features: [
-      "All Seed Level Features",
-      "Priority Prayer Support",
-      "Advanced Study Tools",
-      "Extended Chat Sessions",
-    ],
   },
   {
-    name: "Harvest Level",
-    price: "100",
-    description: "Maximum kingdom impact with full features",
+    amount: "100",
     impacts: [
       "Sponsor a complete Alpha small group",
       "Support HTB's global mission work",
       "Fund youth and children's programs",
     ],
-    features: [
-      "All Growth Level Features",
-      "Quarterly Ministry Team Meetings",
-      "Custom Study Plans",
-      "Priority Support",
-    ],
-  },
-];
-
-const charities = [
-  {
-    name: "Kids Matter",
-    description: "Supporting parents in prisons, schools, and communities",
-    link: "https://kidsmatter.org.uk",
-  },
-  {
-    name: "Compassion",
-    description: "Helping children escape poverty",
-    link: "https://www.compassion.org.uk",
-  },
-  {
-    name: "World Vision",
-    description: "Protecting children in dangerous places",
-    link: "https://www.worldvision.org.uk",
   },
 ];
 
 const ContributionTiers = () => {
   const session = useSession();
 
-  const handleSubscribe = (tier: string, price: string) => {
+  const handleSubscribe = (amount: string) => {
     if (!session) {
       toast.error("Please sign in to contribute");
       return;
     }
-    toast.info(`Processing ${tier} contribution...`);
-  };
-
-  const handleOneOffDonation = (charity: string, link: string) => {
-    window.open(link, "_blank");
+    toast.info(`Processing £${amount} contribution...`);
   };
 
   return (
@@ -103,44 +56,46 @@ const ContributionTiers = () => {
             Support HTB's mission while getting full access to BornPurpose premium features.
             Every contribution helps expand our reach and impact.
           </p>
-          <div className="flex items-center justify-center gap-8 text-sm text-gray-500">
-            <div className="flex items-center gap-2">
-              <Heart className="w-5 h-5 text-primary" fill="#9b87f5" opacity={0.2} />
-              <span>HTB Impact</span>
+        </div>
+
+        <div className="max-w-2xl mx-auto mb-16">
+          <CustomTierCard onSubscribe={handleSubscribe} />
+        </div>
+
+        <div className="text-center mb-8">
+          <h3 className="text-2xl font-semibold mb-4">Quick Select Amounts</h3>
+          <p className="text-gray-600 mb-8">Choose from our preset contribution levels</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          {PRESET_AMOUNTS.map((tier) => (
+            <div
+              key={tier.amount}
+              className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow"
+            >
+              <div className="text-center mb-4">
+                <span className="text-2xl font-bold">£{tier.amount}</span>
+                <span className="text-gray-600">/month</span>
+              </div>
+              <div className="space-y-3">
+                {tier.impacts.map((impact, index) => (
+                  <div key={index} className="flex items-start gap-2">
+                    <Heart
+                      className="h-5 w-5 text-primary flex-shrink-0 mt-1"
+                      fill="#9b87f5"
+                      opacity={0.2}
+                    />
+                    <span className="text-sm text-gray-700">{impact}</span>
+                  </div>
+                ))}
+              </div>
+              <Button
+                className="w-full mt-6 bg-gradient-to-r from-primary/90 to-secondary/90 hover:from-primary hover:to-secondary"
+                onClick={() => handleSubscribe(tier.amount)}
+              >
+                Select £{tier.amount}
+              </Button>
             </div>
-            <ArrowRight className="w-4 h-4" />
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-secondary" />
-              <span>BornPurpose Features</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-16">
-          {tiers.map((tier) => (
-            <TierCard
-              key={tier.name}
-              {...tier}
-              onSubscribe={handleSubscribe}
-            />
-          ))}
-          <CustomTierCard onSubscribe={(amount) => handleSubscribe("Custom", amount)} />
-        </div>
-
-        <div className="text-center mb-8 animate-fade-up">
-          <h2 className="text-3xl font-bold mb-4">One-off Donations to Partner Charities</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto mb-8 text-lg">
-            Support HTB's partner charities making a difference in children's lives around the world
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {charities.map((charity) => (
-            <CharityCard
-              key={charity.name}
-              {...charity}
-              onDonate={handleOneOffDonation}
-            />
           ))}
         </div>
       </div>
