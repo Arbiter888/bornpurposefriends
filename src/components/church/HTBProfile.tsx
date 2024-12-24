@@ -1,7 +1,6 @@
 import { MapPin, Youtube, Link as LinkIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
-import { VideoPlayer } from "../video/VideoPlayer";
 
 const locations = [
   {
@@ -92,7 +91,15 @@ const HTBProfile = () => {
 
         <div className="mb-16 animate-fade-up">
           <h3 className="text-3xl font-bold mb-8 text-center">Latest Service</h3>
-          <VideoPlayer videoId="vMvAyWVp0j0" />
+          <div className="aspect-video w-full max-w-4xl mx-auto rounded-xl overflow-hidden shadow-xl">
+            <iframe
+              className="w-full h-full"
+              src="https://www.youtube.com/embed/vMvAyWVp0j0"
+              title="HTB Sunday Service"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

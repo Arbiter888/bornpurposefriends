@@ -4,10 +4,6 @@ import { Button } from "../ui/button";
 import { CharacterWidget } from "../character/CharacterWidget";
 import { MessageSquare, BookOpen, Church } from "lucide-react";
 import { pastorAndrew } from "@/lib/data/pastorAndrew";
-import { useChat } from "@/hooks/useChat";
-import { useUser } from "@supabase/auth-helpers-react";
-import { useToast } from "../ui/use-toast";
-import { KanbanBoard } from "../kanban/KanbanBoard";
 
 interface VideoInteractionSectionProps {
   videoId: string;
@@ -16,22 +12,49 @@ interface VideoInteractionSectionProps {
 export const VideoInteractionSection = ({ videoId }: VideoInteractionSectionProps) => {
   const [showChat, setShowChat] = useState(false);
   const [showPrayerWidget, setShowPrayerWidget] = useState(false);
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
-  const user = useUser();
-  const { toast } = useToast();
-  
-  const {
-    messages,
-    isLoading,
-    handleSendMessage,
-  } = useChat(user, pastorAndrew.id);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handlePrayerRequest = () => {
-    setShowPrayerWidget(true);
-    toast({
-      title: "Opening prayer request...",
-      description: "Connecting with Pastor Andrew for prayer",
-    });
+  const handleSendMessage = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newMessage.trim()) return;
+
+    setIsLoading(true);
+    // Add user message
+    const userMessage = {
+      id: crypto.randomUUID(),
+      role: 'user',
+      content: newMessage,
+      timestamp: new Date(),
+    };
+    setMessages(prev => [...prev, userMessage]);
+    setNewMessage("");
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: newMessage, videoId }),
+      });
+
+      const data = await response.json();
+      
+      const assistantMessage = {
+        id: crypto.randomUUID(),
+        role: 'assistant',
+        content: data.response,
+        timestamp: new Date(),
+        characterName: pastorAndrew.name,
+        characterImage: pastorAndrew.image,
+      };
+
+      setMessages(prev => [...prev, assistantMessage]);
+    } catch (error) {
+      console.error("Error sending message:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -46,7 +69,7 @@ export const VideoInteractionSection = ({ videoId }: VideoInteractionSectionProp
           Chat with Pastor Andrew
         </Button>
         <Button
-          onClick={handlePrayerRequest}
+          onClick={() => setShowPrayerWidget(true)}
           className="flex items-center gap-2"
         >
           <Church className="w-4 h-4" />
@@ -63,7 +86,7 @@ export const VideoInteractionSection = ({ videoId }: VideoInteractionSectionProp
           characterImage={pastorAndrew.image}
           characterName={pastorAndrew.name}
           isLoading={isLoading}
-          background="/lovable-uploads/13d38535-30c9-41f0-8ad6-f6f3d90dceb4.png"
+          background="/lovable-uploads/4d95070c-c289-4e0e-9845-9dc062d08687.png"
         />
       )}
 
@@ -73,11 +96,6 @@ export const VideoInteractionSection = ({ videoId }: VideoInteractionSectionProp
           onClose={() => setShowPrayerWidget(false)}
         />
       )}
-
-      <div className="mt-8">
-        <h2 className="text-2xl font-bold mb-4 text-center">Bible Study Planner</h2>
-        <KanbanBoard />
-      </div>
     </div>
   );
 };

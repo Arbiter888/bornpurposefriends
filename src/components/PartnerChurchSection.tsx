@@ -1,10 +1,10 @@
 import { Church, Heart, Handshake, Users, Calendar, MapPin } from "lucide-react";
 import HTBProfile from "./church/HTBProfile";
-import { VideoInteractionSection } from "./video/VideoInteractionSection";
 
 const PartnerChurchSection = () => {
   return (
     <>
+      <HTBProfile />
       <div className="py-16 bg-gradient-to-b from-gray-50 to-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -77,7 +77,6 @@ const PartnerChurchSection = () => {
           </div>
         </div>
       </div>
-      <HTBProfile />
     </>
   );
 };
