@@ -16,7 +16,7 @@ interface CustomTierProps {
 }
 
 const CustomTierCard = ({ onSubscribe }: CustomTierProps) => {
-  const [amount, setAmount] = useState(50); // Default set to £50
+  const [amount, setAmount] = useState(50);
 
   const calculateImpact = (value: number) => {
     return [
