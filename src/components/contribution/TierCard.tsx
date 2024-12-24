@@ -1,4 +1,4 @@
-import { Check, Church, Sparkles } from "lucide-react";
+import { Check, Church, Heart, Sparkles, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 interface TierProps {
   name: string;
@@ -30,11 +31,12 @@ const TierCard = ({
 }: TierProps) => {
   return (
     <Card
-      className={`relative transform transition-all duration-300 hover:scale-105 ${
+      className={cn(
+        "relative transform transition-all duration-300 hover:scale-105",
         featured
           ? "border-primary shadow-lg scale-105"
           : "border-gray-200 hover:shadow-md"
-      }`}
+      )}
     >
       {featured && (
         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
@@ -44,26 +46,40 @@ const TierCard = ({
         </div>
       )}
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl">{name}</CardTitle>
+        <CardTitle className="text-2xl flex items-center gap-2">
+          {name}
+          {featured && <TrendingUp className="h-5 w-5 text-primary animate-pulse" />}
+        </CardTitle>
         <CardDescription className="flex items-baseline">
           <span className="text-3xl font-bold">£{price}</span>
           <span className="ml-1 text-gray-600">/month</span>
         </CardDescription>
+        <p className="text-sm text-gray-600 mt-2">{description}</p>
       </CardHeader>
       <CardContent className="space-y-8">
-        {/* HTB Impact Section */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Church className="h-5 w-5 text-primary" />
-            <h4 className="font-semibold text-lg">HTB Impact:</h4>
-          </div>
+        {/* HTB Impact Section with enhanced visibility */}
+        <div className="space-y-4 relative overflow-hidden rounded-lg">
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-50 to-transparent" />
           <div className="relative">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent rounded-lg" />
-            <ul className="space-y-3 relative">
-              {impacts.map((impact) => (
-                <li key={impact} className="flex items-start gap-2 group">
-                  <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform" />
-                  <span className="text-gray-600 group-hover:text-gray-900 transition-colors">
+            <div className="flex items-center gap-2 mb-4">
+              <Church className="h-6 w-6 text-primary animate-fade-in" />
+              <h4 className="font-bold text-lg bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+                HTB Impact:
+              </h4>
+            </div>
+            <ul className="space-y-4">
+              {impacts.map((impact, index) => (
+                <li
+                  key={impact}
+                  className="flex items-start gap-3 group animate-fade-up"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <Heart
+                    className="h-5 w-5 text-primary flex-shrink-0 mt-0.5 group-hover:scale-110 transition-transform"
+                    fill="#9b87f5"
+                    opacity={0.2}
+                  />
+                  <span className="text-gray-700 group-hover:text-gray-900 transition-colors font-medium">
                     {impact}
                   </span>
                 </li>
@@ -73,7 +89,7 @@ const TierCard = ({
         </div>
 
         {/* BornPurpose Features Section */}
-        <div className="space-y-4 pt-4 border-t border-gray-100">
+        <div className="space-y-4 pt-6 border-t border-gray-100">
           <div className="flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-secondary" />
             <h4 className="font-semibold text-lg">BornPurpose Features:</h4>
@@ -90,11 +106,12 @@ const TierCard = ({
       </CardContent>
       <CardFooter>
         <Button
-          className={`w-full transition-colors ${
+          className={cn(
+            "w-full transition-all duration-300",
             featured
-              ? "bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90"
+              ? "bg-gradient-to-r from-primary to-secondary hover:from-primary/90 hover:to-secondary/90 shadow-lg hover:shadow-xl"
               : "bg-primary hover:bg-primary/90"
-          }`}
+          )}
           onClick={() => onSubscribe(name, price)}
         >
           Contribute Monthly

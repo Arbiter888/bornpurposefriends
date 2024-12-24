@@ -2,7 +2,7 @@ import { useSession } from "@supabase/auth-helpers-react";
 import { toast } from "sonner";
 import TierCard from "./TierCard";
 import CharityCard from "./CharityCard";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Church, Heart } from "lucide-react";
 
 const tiers = [
   {
@@ -93,16 +93,19 @@ const ContributionTiers = () => {
     <div className="py-16 bg-gradient-to-b from-background to-gray-50">
       <div className="container px-4 mx-auto">
         <div className="text-center mb-12 animate-fade-up">
-          <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
-            Monthly Kingdom Impact
-          </h2>
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Church className="h-8 w-8 text-primary" />
+            <h2 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+              Monthly Kingdom Impact
+            </h2>
+          </div>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg mb-8">
             Support HTB's mission while getting full access to BornPurpose premium features.
             Every contribution helps expand our reach and impact.
           </p>
           <div className="flex items-center justify-center gap-8 text-sm text-gray-500">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-primary" />
+              <Heart className="w-5 h-5 text-primary" fill="#9b87f5" opacity={0.2} />
               <span>HTB Impact</span>
             </div>
             <ArrowRight className="w-4 h-4" />
