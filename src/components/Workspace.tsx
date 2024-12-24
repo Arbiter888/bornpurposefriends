@@ -8,7 +8,7 @@ import { useChat } from "@/hooks/useChat";
 import { useToast } from "./ui/use-toast";
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { Users } from "lucide-react";
+import { Users, Video } from "lucide-react";
 import { BackgroundSelector } from "./workspace/BackgroundSelector";
 import { TemplateQuestions } from "./workspace/TemplateQuestions";
 import { KnowledgeBase } from "./workspace/KnowledgeBase";
@@ -21,6 +21,7 @@ const Workspace = () => {
   const { toast } = useToast();
   const [isGroupChat, setIsGroupChat] = useState(false);
   const [background, setBackground] = useState("");
+  const [showVideo, setShowVideo] = useState(false);
   
   const {
     messages,
@@ -63,6 +64,14 @@ const Workspace = () => {
     });
   };
 
+  const toggleVideo = () => {
+    setShowVideo(!showVideo);
+    toast({
+      title: showVideo ? "Hiding Latest Service" : "Showing Latest Service",
+      description: showVideo ? "Video has been hidden" : "Latest service video is now visible",
+    });
+  };
+
   if (!character) {
     return <div>Character not found</div>;
   }
@@ -85,6 +94,16 @@ const Workspace = () => {
           </div>
           <div className="flex flex-wrap gap-2 w-full md:w-auto">
             <div className="w-full sm:w-auto">
+              <Button
+                onClick={toggleVideo}
+                variant={showVideo ? "default" : "outline"}
+                className="w-full sm:w-auto flex items-center justify-center gap-2"
+              >
+                <Video className="w-4 h-4" />
+                {showVideo ? "Hide Latest Service" : "Watch Latest Service"}
+              </Button>
+            </div>
+            <div className="w-full sm:w-auto">
               <TemplateQuestions onSelect={handleTemplateSelect} />
             </div>
             <div className="w-full sm:w-auto">
@@ -102,6 +121,17 @@ const Workspace = () => {
             </div>
           </div>
         </div>
+
+        {showVideo && (
+          <div className="w-full aspect-video mb-6">
+            <iframe
+              src="https://www.youtube.com/embed/vMvAyWVp0j0"
+              className="w-full h-full rounded-lg shadow-lg"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </div>
+        )}
 
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 md:gap-6">
           <div className="space-y-4 md:space-y-6">
