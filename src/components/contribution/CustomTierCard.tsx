@@ -16,10 +16,9 @@ interface CustomTierProps {
 }
 
 const CustomTierCard = ({ onSubscribe }: CustomTierProps) => {
-  const [amount, setAmount] = useState(25);
+  const [amount, setAmount] = useState(50); // Default set to £50
 
   const calculateImpact = (value: number) => {
-    // Scaled impacts starting from small contributions
     return [
       `Support ${Math.max(1, Math.floor(value / 5))} prayer group sessions`,
       `Contribute to ${Math.max(1, Math.floor(value / 10))} community outreach meals`,
@@ -50,7 +49,7 @@ const CustomTierCard = ({ onSubscribe }: CustomTierProps) => {
       <CardContent className="space-y-8">
         <div className="space-y-6">
           <label className="text-sm text-gray-600 block text-center">
-            Choose your monthly blessing amount:
+            Adjust your monthly blessing amount:
           </label>
           <Slider
             value={[amount]}
@@ -58,8 +57,14 @@ const CustomTierCard = ({ onSubscribe }: CustomTierProps) => {
             min={5}
             max={500}
             step={5}
+            defaultValue={[50]}
             className="w-full"
           />
+          <div className="flex justify-between text-sm text-gray-500">
+            <span>£5</span>
+            <span>£50</span>
+            <span>£500</span>
+          </div>
         </div>
 
         <div className="space-y-4 p-6 bg-gradient-to-br from-primary/5 to-transparent rounded-lg">
