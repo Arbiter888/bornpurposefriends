@@ -56,7 +56,7 @@ const locations = [
 
 const HTBProfile = () => {
   return (
-    <div className="py-16 bg-gradient-to-b from-background to-gray-50">
+    <div className="py-16">
       <div className="container mx-auto px-4">
         <div className="flex flex-col items-center mb-12 animate-fade-up">
           <img 
@@ -67,7 +67,7 @@ const HTBProfile = () => {
           <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
             Holy Trinity Brompton (HTB)
           </h2>
-          <p className="text-gray-600 max-w-2xl text-center mb-8 text-lg">
+          <p className="text-gray-600 max-w-2xl text-center mb-8 text-lg bg-white/90 p-4 rounded-lg backdrop-blur-sm">
             We have 10 services and 6 sites. Find the one for you, we can't wait to see you.
             During the Christmas season, some services have been altered. Please see below for changes.
           </p>
@@ -82,7 +82,7 @@ const HTBProfile = () => {
             <Button 
               variant="outline"
               onClick={() => window.open("https://htb.org", "_blank")}
-              className="transform transition-all duration-300 hover:scale-105"
+              className="transform transition-all duration-300 hover:scale-105 bg-white/90"
               size="lg"
             >
               Visit HTB Website
@@ -103,9 +103,16 @@ const HTBProfile = () => {
           </div>
         </div>
 
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold mb-4 bg-white/90 inline-block px-6 py-2 rounded-lg">Our Partner Church - HTB</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto bg-white/90 p-4 rounded-lg">
+            Join us in supporting Holy Trinity Brompton (HTB) and their impactful local and global initiatives
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {locations.map((location) => (
-            <Card key={location.name} className="p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
+            <Card key={location.name} className="p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-lg bg-white/90 backdrop-blur-sm">
               <div className="flex items-start gap-4 mb-4">
                 <MapPin className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
                 <div>
