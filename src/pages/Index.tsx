@@ -6,11 +6,9 @@ import { toast } from "@/hooks/use-toast";
 import { useSession } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import { HomeBackgroundSelector } from "@/components/home/HomeBackgroundSelector";
-import ContributionTiers from "@/components/contribution/ContributionTiers";
 import PartnerChurchSection from "@/components/PartnerChurchSection";
 import SectionToggle from "@/components/home/SectionToggle";
-import PaymentMethodsSection from "@/components/profile/PaymentMethodsSection";
-import ContributionHistory from "@/components/profile/ContributionHistory";
+import GivingDashboard from "@/components/giving/GivingDashboard";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -78,11 +76,7 @@ const Index = () => {
           <>
             <Hero />
             <CharacterGrid />
-            <ContributionTiers />
-            <div className="container mx-auto px-4 py-8 space-y-8">
-              <PaymentMethodsSection />
-              <ContributionHistory />
-            </div>
+            <GivingDashboard />
           </>
         ) : (
           <PartnerChurchSection />
