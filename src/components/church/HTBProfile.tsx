@@ -73,7 +73,7 @@ const HTBProfile = () => {
           <div className="flex gap-4 mb-8">
             <Button 
               onClick={() => window.open("https://htb.org/alpha", "_blank")}
-              className="bg-primary hover:bg-primary/90 transform transition-all duration-300 hover:scale-105"
+              className="bg-[#E11D48] hover:bg-[#BE123C] transform transition-all duration-300 hover:scale-105"
               size="lg"
             >
               Join Alpha
@@ -129,6 +129,10 @@ const HTBProfile = () => {
               </ul>
             </Card>
           ))}
+        </div>
+
+        <div className="mt-16">
+          <ContributionTiers />
         </div>
       </div>
     </div>

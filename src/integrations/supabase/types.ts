@@ -9,6 +9,68 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      charities: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          link: string
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          link: string
+          name: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          link?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      contributions: {
+        Row: {
+          amount: number
+          charity_id: string | null
+          created_at: string
+          id: string
+          is_recurring: boolean | null
+          status: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          charity_id?: string | null
+          created_at?: string
+          id?: string
+          is_recurring?: boolean | null
+          status?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          charity_id?: string | null
+          created_at?: string
+          id?: string
+          is_recurring?: boolean | null
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contributions_charity_id_fkey"
+            columns: ["charity_id"]
+            isOneToOne: false
+            referencedRelation: "charities"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       documents: {
         Row: {
           content: string | null
