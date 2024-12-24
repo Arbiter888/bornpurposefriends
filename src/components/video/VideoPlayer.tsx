@@ -1,3 +1,5 @@
+import { VideoInteractionSection } from "./VideoInteractionSection";
+
 interface VideoPlayerProps {
   videoId: string;
 }
