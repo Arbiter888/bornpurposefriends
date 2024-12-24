@@ -8,11 +8,13 @@ import { useEffect, useState } from "react";
 import { HomeBackgroundSelector } from "@/components/home/HomeBackgroundSelector";
 import ContributionTiers from "@/components/contribution/ContributionTiers";
 import PartnerChurchSection from "@/components/PartnerChurchSection";
+import SectionToggle from "@/components/home/SectionToggle";
 
 const Index = () => {
   const navigate = useNavigate();
   const session = useSession();
   const [background, setBackground] = useState("");
+  const [activeSection, setActiveSection] = useState("bornpurpose");
 
   useEffect(() => {
     if (!session) {
@@ -69,10 +71,16 @@ const Index = () => {
             </button>
           </div>
         </div>
-        <Hero />
-        <CharacterGrid />
-        <PartnerChurchSection />
-        <ContributionTiers />
+        <SectionToggle activeSection={activeSection} onSectionChange={setActiveSection} />
+        {activeSection === "bornpurpose" ? (
+          <>
+            <Hero />
+            <CharacterGrid />
+            <ContributionTiers />
+          </>
+        ) : (
+          <PartnerChurchSection />
+        )}
       </div>
     </div>
   );
