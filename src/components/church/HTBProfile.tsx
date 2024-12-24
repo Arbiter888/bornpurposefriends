@@ -1,7 +1,7 @@
 import { MapPin, Youtube, Link as LinkIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
-import ContributionTiers from "../contribution/ContributionTiers";
+import GivingDashboard from "../giving/GivingDashboard";
 
 const locations = [
   {
@@ -133,7 +133,7 @@ const HTBProfile = () => {
         </div>
 
         <div className="mt-16">
-          <ContributionTiers />
+          <GivingDashboard />
         </div>
       </div>
     </div>
