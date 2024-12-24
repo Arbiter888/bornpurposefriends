@@ -9,6 +9,8 @@ import { HomeBackgroundSelector } from "@/components/home/HomeBackgroundSelector
 import ContributionTiers from "@/components/contribution/ContributionTiers";
 import PartnerChurchSection from "@/components/PartnerChurchSection";
 import SectionToggle from "@/components/home/SectionToggle";
+import PaymentMethodsSection from "@/components/profile/PaymentMethodsSection";
+import ContributionHistory from "@/components/profile/ContributionHistory";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -77,6 +79,10 @@ const Index = () => {
             <Hero />
             <CharacterGrid />
             <ContributionTiers />
+            <div className="container mx-auto px-4 py-8 space-y-8">
+              <PaymentMethodsSection />
+              <ContributionHistory />
+            </div>
           </>
         ) : (
           <PartnerChurchSection />

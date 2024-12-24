@@ -161,6 +161,39 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_methods: {
+        Row: {
+          card_brand: string
+          card_exp_month: number
+          card_exp_year: number
+          card_last4: string
+          created_at: string
+          id: string
+          is_default: boolean | null
+          user_id: string
+        }
+        Insert: {
+          card_brand: string
+          card_exp_month: number
+          card_exp_year: number
+          card_last4: string
+          created_at?: string
+          id?: string
+          is_default?: boolean | null
+          user_id: string
+        }
+        Update: {
+          card_brand?: string
+          card_exp_month?: number
+          card_exp_year?: number
+          card_last4?: string
+          created_at?: string
+          id?: string
+          is_default?: boolean | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       prayer_requests: {
         Row: {
           content: string
