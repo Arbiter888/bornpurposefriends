@@ -1,15 +1,7 @@
-import { Check, Gift } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { useSession } from "@supabase/auth-helpers-react";
 import { toast } from "sonner";
+import TierCard from "./TierCard";
+import CharityCard from "./CharityCard";
 
 const tiers = [
   {
@@ -97,11 +89,13 @@ const ContributionTiers = () => {
   };
 
   return (
-    <div className="py-12 bg-gradient-to-b from-background to-gray-50">
+    <div className="py-16 bg-gradient-to-b from-background to-gray-50">
       <div className="container px-4 mx-auto">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">Monthly Kingdom Impact</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+        <div className="text-center mb-12 animate-fade-up">
+          <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">
+            Monthly Kingdom Impact
+          </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto text-lg">
             Support HTB's mission while getting full access to BornPurpose premium features.
             Every contribution helps expand our reach and impact.
           </p>
@@ -109,88 +103,28 @@ const ContributionTiers = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           {tiers.map((tier) => (
-            <Card
+            <TierCard
               key={tier.name}
-              className={`relative ${
-                tier.featured
-                  ? "border-primary shadow-lg scale-105"
-                  : "border-gray-200"
-              }`}
-            >
-              {tier.featured && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <span className="bg-primary text-white px-3 py-1 rounded-full text-sm">
-                    Most Popular
-                  </span>
-                </div>
-              )}
-              <CardHeader>
-                <CardTitle className="text-2xl">{tier.name}</CardTitle>
-                <CardDescription>
-                  <span className="text-2xl font-bold">£{tier.price}</span>
-                  /month
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <h4 className="font-semibold mb-2">BornPurpose Features:</h4>
-                  <ul className="space-y-2">
-                    {tier.features.map((feature) => (
-                      <li key={feature} className="flex items-start gap-2">
-                        <Check className="h-5 w-5 text-primary flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-600">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2">Your HTB Impact:</h4>
-                  <ul className="space-y-2">
-                    {tier.impacts.map((impact) => (
-                      <li key={impact} className="flex items-start gap-2">
-                        <Check className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
-                        <span className="text-gray-600">{impact}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </CardContent>
-              <CardFooter>
-                <Button
-                  className="w-full bg-primary hover:bg-primary/90"
-                  onClick={() => handleSubscribe(tier.name, tier.price)}
-                >
-                  Contribute Monthly
-                </Button>
-              </CardFooter>
-            </Card>
+              {...tier}
+              onSubscribe={handleSubscribe}
+            />
           ))}
         </div>
 
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold mb-4">One-off Donations to Partner Charities</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto mb-8">
+        <div className="text-center mb-8 animate-fade-up">
+          <h2 className="text-3xl font-bold mb-4">One-off Donations to Partner Charities</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto mb-8 text-lg">
             Support HTB's partner charities making a difference in children's lives around the world
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {charities.map((charity) => (
-            <Card key={charity.name} className="text-center">
-              <CardHeader>
-                <CardTitle>{charity.name}</CardTitle>
-                <CardDescription>{charity.description}</CardDescription>
-              </CardHeader>
-              <CardFooter>
-                <Button
-                  className="w-full"
-                  onClick={() => handleOneOffDonation(charity.name, charity.link)}
-                >
-                  <Gift className="mr-2" />
-                  Donate Now
-                </Button>
-              </CardFooter>
-            </Card>
+            <CharityCard
+              key={charity.name}
+              {...charity}
+              onDonate={handleOneOffDonation}
+            />
           ))}
         </div>
       </div>
