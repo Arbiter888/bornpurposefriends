@@ -4,7 +4,6 @@ import HTBProfile from "./church/HTBProfile";
 const PartnerChurchSection = () => {
   return (
     <>
-      <HTBProfile />
       <div className="py-16 bg-gradient-to-b from-gray-50 to-background">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
@@ -15,7 +14,7 @@ const PartnerChurchSection = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <div className="bg-white/90 backdrop-blur-sm p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center mb-4">
                 <Church className="h-6 w-6 text-primary mr-3" />
                 <h3 className="text-xl font-semibold">Sunday Services</h3>
@@ -25,7 +24,7 @@ const PartnerChurchSection = () => {
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <div className="bg-white/90 backdrop-blur-sm p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center mb-4">
                 <Heart className="h-6 w-6 text-primary mr-3" />
                 <h3 className="text-xl font-semibold">Alpha Course</h3>
@@ -35,7 +34,7 @@ const PartnerChurchSection = () => {
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <div className="bg-white/90 backdrop-blur-sm p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center mb-4">
                 <Users className="h-6 w-6 text-primary mr-3" />
                 <h3 className="text-xl font-semibold">Youth & Children</h3>
@@ -45,7 +44,7 @@ const PartnerChurchSection = () => {
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <div className="bg-white/90 backdrop-blur-sm p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center mb-4">
                 <Calendar className="h-6 w-6 text-primary mr-3" />
                 <h3 className="text-xl font-semibold">Life Groups</h3>
@@ -55,7 +54,7 @@ const PartnerChurchSection = () => {
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <div className="bg-white/90 backdrop-blur-sm p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center mb-4">
                 <Handshake className="h-6 w-6 text-primary mr-3" />
                 <h3 className="text-xl font-semibold">Pastoral Care</h3>
@@ -65,7 +64,7 @@ const PartnerChurchSection = () => {
               </p>
             </div>
 
-            <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <div className="bg-white/90 backdrop-blur-sm p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow">
               <div className="flex items-center mb-4">
                 <MapPin className="h-6 w-6 text-primary mr-3" />
                 <h3 className="text-xl font-semibold">Global Impact</h3>
@@ -77,6 +76,7 @@ const PartnerChurchSection = () => {
           </div>
         </div>
       </div>
+      <HTBProfile />
     </>
   );
 };
