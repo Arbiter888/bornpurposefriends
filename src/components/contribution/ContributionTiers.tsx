@@ -2,6 +2,7 @@ import { useSession } from "@supabase/auth-helpers-react";
 import { toast } from "sonner";
 import TierCard from "./TierCard";
 import CharityCard from "./CharityCard";
+import CustomTierCard from "./CustomTierCard";
 import { ArrowRight, Church, Heart } from "lucide-react";
 
 const tiers = [
@@ -36,7 +37,6 @@ const tiers = [
       "Advanced Study Tools",
       "Extended Chat Sessions",
     ],
-    featured: true,
   },
   {
     name: "Harvest Level",
@@ -116,7 +116,7 @@ const ContributionTiers = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-16">
           {tiers.map((tier) => (
             <TierCard
               key={tier.name}
@@ -124,6 +124,7 @@ const ContributionTiers = () => {
               onSubscribe={handleSubscribe}
             />
           ))}
+          <CustomTierCard onSubscribe={(amount) => handleSubscribe("Custom", amount)} />
         </div>
 
         <div className="text-center mb-8 animate-fade-up">
