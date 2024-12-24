@@ -28,14 +28,14 @@ const ChurchUpdates = () => {
 
   return (
     <div className="space-y-6">
-      <Card className="bg-white/95 backdrop-blur-sm">
+      <Card>
         <CardHeader>
           <CardTitle>Recent Church Updates</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             {updates.map((update, index) => (
-              <Card key={index} className="bg-white/80 backdrop-blur-sm">
+              <Card key={index} className="bg-white/50">
                 <CardContent className="pt-6">
                   <div className="flex items-start gap-4">
                     <div className="p-2 bg-primary/10 rounded-lg">
