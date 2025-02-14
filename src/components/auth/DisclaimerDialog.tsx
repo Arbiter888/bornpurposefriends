@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -9,37 +9,20 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { supabase } from "@/integrations/supabase/client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useUser } from "@supabase/auth-helpers-react";
 import { toast } from "sonner";
 
 export const DisclaimerDialog = () => {
   const [open, setOpen] = useState(true);
+  const [accepted, setAccepted] = useState(false);
   const navigate = useNavigate();
   const user = useUser();
 
-  useEffect(() => {
-    const checkAcceptance = async () => {
-      if (!user) return;
-
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('disclaimer_accepted')
-        .eq('id', user.id)
-        .single();
-
-      if (profile?.disclaimer_accepted) {
-        setOpen(false);
-        navigate('/');
-      }
-    };
-
-    checkAcceptance();
-  }, [user, navigate]);
-
   const handleAccept = async () => {
-    if (!user) return;
+    if (!user || !accepted) return;
 
     try {
       const { error } = await supabase
@@ -100,10 +83,25 @@ export const DisclaimerDialog = () => {
               </ul>
             </div>
 
-            <div className="bg-primary/5 p-4 rounded-lg">
-              <p className="text-center font-medium">
-                🔲 I acknowledge and agree to these terms and wish to proceed.
-              </p>
+            <div className="flex items-center space-x-2 justify-center">
+              <Checkbox 
+                id="terms" 
+                checked={accepted}
+                onCheckedChange={(checked) => setAccepted(checked as boolean)}
+              />
+              <label
+                htmlFor="terms"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                I agree to the{" "}
+                <Link to="/terms" className="text-primary hover:underline">
+                  Terms of Service
+                </Link>{" "}
+                and{" "}
+                <Link to="/privacy" className="text-primary hover:underline">
+                  Privacy Policy
+                </Link>
+              </label>
             </div>
           </AlertDialogDescription>
         </AlertDialogHeader>
@@ -112,8 +110,9 @@ export const DisclaimerDialog = () => {
             className="w-full sm:w-auto min-w-[200px]"
             size="lg"
             onClick={handleAccept}
+            disabled={!accepted}
           >
-            ✅ Accept & Continue
+            Accept & Continue
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
