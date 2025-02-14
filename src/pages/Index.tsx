@@ -11,7 +11,7 @@ import { HomeBackgroundSelector } from "@/components/home/HomeBackgroundSelector
 const Index = () => {
   const navigate = useNavigate();
   const session = useSession();
-  const [background, setBackground] = useState("");
+  const [background, setBackground] = useState("/lovable-uploads/e5022c69-9adb-495b-bb18-b9710c0567c6.png");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

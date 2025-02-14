@@ -1,3 +1,4 @@
+
 import { Character } from "@/lib/characters";
 import { Button } from "@/components/ui/button";
 import { Cross, BookOpen } from "lucide-react";
@@ -18,7 +19,7 @@ const CharacterActions = ({ character, onQuickCall }: CharacterActionsProps) => 
         className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
       >
         <Cross className="w-4 h-4 mr-2" />
-        Prayer Request
+        Call {character.name}
       </Button>
       <Button 
         onClick={() => navigate(`/workspace/${character.id}`)}
