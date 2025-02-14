@@ -1,12 +1,15 @@
+
 import { motion } from "framer-motion";
 import { characters } from "@/lib/characters";
+import { Phone } from "lucide-react";
+
 const FeaturedCompanions = () => {
   return <div className="space-y-8">
       <div>
         <h1 className="text-6xl font-bold mb-4 bg-gradient-to-r from-[#0EA5E9] to-[#2563EB] bg-clip-text text-transparent backdrop-blur-sm">
           Welcome to BornPurpose
         </h1>
-        <p className="text-lg text-gray-700">Join our faith-driven community, where Christ’s love empowers you to overcome challenges and walk boldly in faith. Whether through prayer, study, or fellowship, we stand together to find strength, hope, and purpose.</p>
+        <p className="text-lg text-gray-700">Join our faith-driven community, where Christ's love empowers you to overcome challenges and walk boldly in faith. Whether through prayer, study, or fellowship, we stand together to find strength, hope, and purpose.</p>
       </div>
       
       <div className="grid grid-cols-2 gap-4">
@@ -29,6 +32,14 @@ const FeaturedCompanions = () => {
             </div>
           </motion.div>)}
       </div>
+
+      <div className="bg-white shadow-lg rounded-lg p-6">
+        <div className="flex items-center justify-center gap-2 text-[#4BA3F5] font-medium">
+          <Phone className="w-5 h-5" />
+          <span>Connect with Pastor Andrew: +44 7366 284993</span>
+        </div>
+      </div>
     </div>;
 };
+
 export default FeaturedCompanions;
