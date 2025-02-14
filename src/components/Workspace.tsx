@@ -1,3 +1,4 @@
+
 import { useParams } from "react-router-dom";
 import { characters } from "@/lib/characters";
 import { useUser } from "@supabase/auth-helpers-react";
@@ -104,7 +105,7 @@ const Workspace = () => {
               </Button>
             </div>
             <div className="w-full sm:w-auto">
-              <TemplateQuestions onSelect={handleTemplateSelect} />
+              <TemplateQuestions onSelect={handleTemplateSelect} characterId={character.id} />
             </div>
             <div className="w-full sm:w-auto">
               <BackgroundSelector onSelect={handleBackgroundChange} />
