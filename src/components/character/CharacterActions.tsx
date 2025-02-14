@@ -1,7 +1,7 @@
 
 import { Character } from "@/lib/characters";
 import { Button } from "@/components/ui/button";
-import { Cross, BookOpen } from "lucide-react";
+import { Phone, MessageSquare } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface CharacterActionsProps {
@@ -18,7 +18,7 @@ const CharacterActions = ({ character, onQuickCall }: CharacterActionsProps) => 
         onClick={onQuickCall}
         className="w-full bg-primary hover:bg-primary/90 text-primary-foreground"
       >
-        <Cross className="w-4 h-4 mr-2" />
+        <Phone className="w-4 h-4 mr-2" />
         Call {character.name}
       </Button>
       <Button 
@@ -26,8 +26,8 @@ const CharacterActions = ({ character, onQuickCall }: CharacterActionsProps) => 
         variant="secondary"
         className="w-full"
       >
-        <BookOpen className="w-4 h-4 mr-2" />
-        Bible Study Together
+        <MessageSquare className="w-4 h-4 mr-2" />
+        Chat with {character.name}
       </Button>
     </div>
   );

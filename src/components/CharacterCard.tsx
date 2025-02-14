@@ -1,6 +1,7 @@
+
 import { Character } from "@/lib/characters";
 import { useEffect, useRef, useState } from "react";
-import { Phone, BookOpen, Globe } from "lucide-react";
+import { Phone, MessageSquare, Globe } from "lucide-react";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
 import {
@@ -144,14 +145,14 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
               className="flex-1 bg-blue-500 hover:bg-blue-600 rounded-xl"
             >
               <Phone className="w-4 h-4 mr-2" />
-              {currentLanguage === "ko" ? "기도 요청" : "Prayer Request Call"}
+              {currentLanguage === "ko" ? `${getCurrentName()}에게 전화` : `Call ${getCurrentName()}`}
             </Button>
             <Button
               onClick={handleBibleStudy}
               className="flex-1 bg-blue-500 hover:bg-blue-600 rounded-xl"
             >
-              <BookOpen className="w-4 h-4 mr-2" />
-              {currentLanguage === "ko" ? "성경 공부" : "Bible Study"}
+              <MessageSquare className="w-4 h-4 mr-2" />
+              {currentLanguage === "ko" ? `${getCurrentName()}와 채팅` : `Chat with ${getCurrentName()}`}
             </Button>
           </div>
         </div>
