@@ -24,9 +24,9 @@ export const DisclaimerDialog = () => {
       if (!user) return;
 
       const { data: profile } = await supabase
-        .from('user_metadata')
+        .from('profiles')
         .select('disclaimer_accepted')
-        .eq('user_id', user.id)
+        .eq('id', user.id)
         .single();
 
       if (profile?.disclaimer_accepted) {
@@ -43,11 +43,12 @@ export const DisclaimerDialog = () => {
 
     try {
       const { error } = await supabase
-        .from('user_metadata')
+        .from('profiles')
         .upsert({
-          user_id: user.id,
+          id: user.id,
           disclaimer_accepted: true,
           disclaimer_accepted_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
         });
 
       if (error) throw error;

@@ -23,9 +23,9 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
 
       try {
         const { data } = await supabase
-          .from('user_metadata')
+          .from('profiles')
           .select('disclaimer_accepted')
-          .eq('user_id', user.id)
+          .eq('id', user.id)
           .single();
 
         setDisclaimerAccepted(!!data?.disclaimer_accepted);

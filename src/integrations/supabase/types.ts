@@ -256,6 +256,8 @@ export type Database = {
       profiles: {
         Row: {
           created_at: string
+          disclaimer_accepted: boolean | null
+          disclaimer_accepted_at: string | null
           email: string | null
           id: string
           is_subscribed: boolean | null
@@ -263,6 +265,8 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          disclaimer_accepted?: boolean | null
+          disclaimer_accepted_at?: string | null
           email?: string | null
           id: string
           is_subscribed?: boolean | null
@@ -270,6 +274,8 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          disclaimer_accepted?: boolean | null
+          disclaimer_accepted_at?: string | null
           email?: string | null
           id?: string
           is_subscribed?: boolean | null
@@ -383,30 +389,6 @@ export type Database = {
           id?: string
           status?: string
           title?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      user_metadata: {
-        Row: {
-          created_at: string | null
-          disclaimer_accepted: boolean | null
-          disclaimer_accepted_at: string | null
-          updated_at: string | null
-          user_id: string
-        }
-        Insert: {
-          created_at?: string | null
-          disclaimer_accepted?: boolean | null
-          disclaimer_accepted_at?: string | null
-          updated_at?: string | null
-          user_id: string
-        }
-        Update: {
-          created_at?: string | null
-          disclaimer_accepted?: boolean | null
-          disclaimer_accepted_at?: string | null
-          updated_at?: string | null
           user_id?: string
         }
         Relationships: []
