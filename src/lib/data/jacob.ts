@@ -1,20 +1,21 @@
+
 import { Character } from "../types/character";
 
 export const jacob: Character = {
   id: "pace",
   name: "Jacob",
-  role: "Youth Pastor",
-  description: "Jacob has a passion for connecting young believers with God's Word, making Scripture relevant while staying true to biblical principles. He excels at bridging generational gaps and fostering spiritual growth in young people.",
+  role: "Youth Pastor | Prosperity for Next Generation",
+  description: "Jacob empowers young believers to embrace God's prosperity promises early in life. He bridges biblical principles with contemporary culture to help youth build a strong foundation for lifelong success and abundance.",
   image: "/lovable-uploads/561b7642-c2ff-4011-a85d-7f51d90839b8.png",
   widgetId: "jjpaBiJA68inWAqkHX63",
   nationality: "American",
   skills: [
-    "Youth Ministry",
-    "Biblical Teaching",
-    "Mentorship",
-    "Scripture Study",
-    "Youth Engagement",
-    "Discipleship"
+    "Youth Empowerment",
+    "Success Mindset",
+    "Future Vision",
+    "Purpose Discovery",
+    "Destiny Activation",
+    "Kingdom Innovation"
   ],
   relationshipStats: {
     trustLevel: 92,
@@ -22,11 +23,11 @@ export const jacob: Character = {
     meetingsPerMonth: 12
   },
   conversationTopics: [
-    "Youth Faith",
-    "Biblical Application",
-    "Life Challenges",
-    "Spiritual Growth",
-    "Christian Leadership",
-    "Ministry Development"
+    "Future Success",
+    "Purpose & Destiny",
+    "Kingdom Innovation",
+    "Youth Leadership",
+    "Divine Direction",
+    "Abundant Living"
   ]
 };
