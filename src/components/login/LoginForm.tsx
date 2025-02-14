@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -12,13 +13,16 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Clear any existing session on component mount
+  // Only clear session if there is one
   useEffect(() => {
-    const clearExistingSession = async () => {
-      const { error } = await supabase.auth.signOut();
-      if (error) console.error('Error clearing session:', error);
+    const checkAndClearSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        const { error } = await supabase.auth.signOut();
+        if (error) console.error('Error clearing session:', error);
+      }
     };
-    clearExistingSession();
+    checkAndClearSession();
   }, []);
 
   // Listen for auth state changes
