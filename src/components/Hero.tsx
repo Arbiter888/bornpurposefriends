@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Globe } from "lucide-react";
 import { Button } from "./ui/button";
@@ -20,7 +21,7 @@ const Hero = () => {
     }
     return {
       status: "Ministry Team Online",
-      description: "Welcome to your digital sanctuary for prayer and Bible study. Connect with our ministry team for deeper understanding of Scripture, prayer support, and guidance in your walk with Christ."
+      description: "Welcome to your digital sanctuary for faith, prosperity, and divine transformation. Here, you'll find a community of believers dedicated to unlocking God's blessings in every area of life. Connect with our ministry team for powerful prayer support, biblical wisdom, and guidance to walk boldly in God's abundance"
     };
   };
 
