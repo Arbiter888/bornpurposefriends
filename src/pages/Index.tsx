@@ -7,15 +7,11 @@ import { toast } from "@/hooks/use-toast";
 import { useSession } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import { HomeBackgroundSelector } from "@/components/home/HomeBackgroundSelector";
-import PartnerChurchSection from "@/components/PartnerChurchSection";
-import SectionToggle from "@/components/home/SectionToggle";
-import GivingDashboard from "@/components/giving/GivingDashboard";
 
 const Index = () => {
   const navigate = useNavigate();
   const session = useSession();
   const [background, setBackground] = useState("");
-  const [activeSection, setActiveSection] = useState("bornpurpose");
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -87,16 +83,8 @@ const Index = () => {
             </button>
           </div>
         </div>
-        <SectionToggle activeSection={activeSection} onSectionChange={setActiveSection} />
-        {activeSection === "bornpurpose" ? (
-          <>
-            <Hero />
-            <CharacterGrid />
-            <GivingDashboard />
-          </>
-        ) : (
-          <PartnerChurchSection />
-        )}
+        <Hero />
+        <CharacterGrid />
       </div>
     </div>
   );
