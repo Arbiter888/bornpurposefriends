@@ -1,3 +1,4 @@
+
 import Hero from "@/components/Hero";
 import CharacterGrid from "@/components/CharacterGrid";
 import { supabase } from "@/integrations/supabase/client";
@@ -15,11 +16,18 @@ const Index = () => {
   const session = useSession();
   const [background, setBackground] = useState("");
   const [activeSection, setActiveSection] = useState("bornpurpose");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!session) {
-      navigate("/login");
-    }
+    const checkSession = async () => {
+      if (!session) {
+        navigate("/login");
+        return;
+      }
+      setIsLoading(false);
+    };
+
+    checkSession();
   }, [session, navigate]);
 
   const handleLogout = async () => {
@@ -43,6 +51,14 @@ const Index = () => {
       description: "Home background has been changed successfully",
     });
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!session) {
     return null;

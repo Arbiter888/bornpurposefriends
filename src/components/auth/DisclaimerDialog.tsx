@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AlertDialog,
   AlertDialogContent,
@@ -21,6 +21,24 @@ export const DisclaimerDialog = () => {
   const navigate = useNavigate();
   const user = useUser();
 
+  useEffect(() => {
+    const checkAcceptance = async () => {
+      if (!user) return;
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('disclaimer_accepted')
+        .eq('id', user.id)
+        .single();
+
+      if (profile?.disclaimer_accepted) {
+        setOpen(false);
+      }
+    };
+
+    checkAcceptance();
+  }, [user]);
+
   const handleAccept = async () => {
     if (!user || !accepted) return;
 
@@ -38,7 +56,7 @@ export const DisclaimerDialog = () => {
 
       setOpen(false);
       toast.success("Welcome to BornPurpose!");
-      navigate('/');
+      navigate('/', { replace: true });
     } catch (error) {
       console.error('Error saving disclaimer acceptance:', error);
       toast.error("There was an error. Please try again.");
