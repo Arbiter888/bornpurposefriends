@@ -29,5 +29,27 @@ export const grace: Character = {
     "Divine Provision",
     "Blessing Release",
     "Prosperous Living"
-  ]
+  ],
+  translations: {
+    zh: {
+      name: "格蕾丝",
+      role: "祷告事工领袖 | 祷告与突破的繁荣",
+      description: "格蕾丝带领信徒进入强大的突破性祷告，释放天堂的丰盛。她帮助你发展一种祷告生活，在生活的各个领域激活上帝的繁荣和祝福的应许。"
+    },
+    es: {
+      name: "Gracia",
+      role: "Líder de Ministerio de Oración | Prosperidad en Oración y Avance",
+      description: "Gracia guía a los creyentes hacia una poderosa oración de avance que desbloquea la abundancia del cielo. Ella te ayuda a desarrollar una vida de oración que activa las promesas de prosperidad y bendición de Dios en cada área de la vida."
+    },
+    fr: {
+      name: "Grâce",
+      role: "Responsable du Ministère de Prière | Prospérité dans la Prière et la Percée",
+      description: "Grâce conduit les croyants dans une puissante prière de percée qui libère l'abondance du ciel. Elle vous aide à développer une vie de prière qui active les promesses de Dieu de prospérité et de bénédiction dans tous les domaines de la vie."
+    },
+    de: {
+      name: "Gnade",
+      role: "Gebetsdienstleiterin | Wohlstand im Gebet & Durchbruch",
+      description: "Gnade führt Gläubige zu kraftvollen Durchbruchsgebeten, die den Überfluss des Himmels freisetzen. Sie hilft Ihnen, ein Gebetsleben zu entwickeln, das Gottes Versprechen von Wohlstand und Segen in allen Lebensbereichen aktiviert."
+    }
+  }
 };

@@ -1,4 +1,3 @@
-
 import { Character } from "@/lib/characters";
 import { useEffect, useRef, useState } from "react";
 import { Phone, MessageSquare, Globe } from "lucide-react";
@@ -10,6 +9,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LANGUAGES } from "@/contexts/LanguageContext";
 
 interface CharacterCardProps {
   character: Character;
@@ -17,60 +18,12 @@ interface CharacterCardProps {
   isWidgetActive: boolean;
 }
 
-// Language map with language code to name mapping
-const LANGUAGES = {
-  en: "English",
-  ar: "العربية", // Arabic
-  bg: "Български", // Bulgarian
-  zh: "中文", // Chinese
-  hr: "Hrvatski", // Croatian
-  cs: "Čeština", // Czech
-  da: "Dansk", // Danish
-  nl: "Nederlands", // Dutch
-  fi: "Suomi", // Finnish
-  fr: "Français", // French
-  de: "Deutsch", // German
-  el: "Ελληνικά", // Greek
-  hi: "हिन्दी", // Hindi
-  hu: "Magyar", // Hungarian
-  id: "Bahasa Indonesia", // Indonesian
-  it: "Italiano", // Italian
-  ja: "日本語", // Japanese
-  ko: "한국어", // Korean
-  ms: "Bahasa Melayu", // Malay
-  no: "Norsk", // Norwegian
-  pl: "Polski", // Polish
-  pt: "Português", // Portuguese
-  "pt-BR": "Português (Brasil)", // Portuguese-Brazilian
-  ro: "Română", // Romanian
-  ru: "Русский", // Russian
-  sk: "Slovenčina", // Slovak
-  es: "Español", // Spanish
-  sv: "Svenska", // Swedish
-  ta: "தமிழ்", // Tamil
-  tr: "Türkçe", // Turkish
-  uk: "Українська", // Ukrainian
-  vi: "Tiếng Việt", // Vietnamese
-};
-
-// RTL languages
-const RTL_LANGUAGES = ["ar", "he"];
-
 const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCardProps) => {
   const [showWidget, setShowWidget] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const navigate = useNavigate();
-  const [currentLanguage, setCurrentLanguage] = useState<string>(() => {
-    return localStorage.getItem("preferredLanguage") || "en";
-  });
-
-  // Save language preference when it changes
-  useEffect(() => {
-    localStorage.setItem("preferredLanguage", currentLanguage);
-    // Set RTL direction based on language
-    document.documentElement.dir = RTL_LANGUAGES.includes(currentLanguage) ? "rtl" : "ltr";
-  }, [currentLanguage]);
+  const { currentLanguage } = useLanguage();
 
   // Load widget script
   useEffect(() => {
@@ -123,24 +76,36 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     navigate(`/workspace/${character.id}`);
   };
 
+  // Get character name in current language (with fallback to English)
   const getCurrentName = () => {
-    if (currentLanguage === "en") return character.name;
-    return character.translations?.[currentLanguage]?.name || character.name;
+    if (character.translations?.[currentLanguage]?.name) {
+      return character.translations[currentLanguage].name;
+    }
+    return character.name;
   };
 
+  // Get character role in current language (with fallback to English)
   const getCurrentRole = () => {
-    if (currentLanguage === "en") return character.role;
-    return character.translations?.[currentLanguage]?.role || character.role;
+    if (character.translations?.[currentLanguage]?.role) {
+      return character.translations[currentLanguage].role;
+    }
+    return character.role;
   };
 
+  // Get character description in current language (with fallback to English)
   const getCurrentDescription = () => {
-    if (currentLanguage === "en") return character.description;
-    return character.translations?.[currentLanguage]?.description || character.description;
+    if (character.translations?.[currentLanguage]?.description) {
+      return character.translations[currentLanguage].description;
+    }
+    return character.description;
   };
 
+  // Get widget ID in current language (with fallback to English)
   const getCurrentWidgetId = () => {
-    if (currentLanguage === "en") return character.widgetId;
-    return character.translations?.[currentLanguage]?.widgetId || character.widgetId;
+    if (character.translations?.[currentLanguage]?.widgetId) {
+      return character.translations[currentLanguage].widgetId;
+    }
+    return character.widgetId;
   };
 
   // Localized button text for Call and Chat

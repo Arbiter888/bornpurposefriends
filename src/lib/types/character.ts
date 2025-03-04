@@ -19,7 +19,7 @@ export interface Character {
       name: string;
       role: string;
       description: string;
-      widgetId: string;
+      widgetId?: string;
     };
   };
   gallery?: {
