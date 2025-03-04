@@ -1,8 +1,9 @@
 
 import HTBHeader from "./HTBHeader";
-import VideoHighlights from "./VideoHighlights";
 import ChurchInfo from "./ChurchInfo";
 import GivingDashboard from "../giving/GivingDashboard";
+import CommunityConnections from "./CommunityConnections";
+import FeatureInitiatives from "./FeatureInitiatives";
 import { motion } from "framer-motion";
 
 const HTBProfile = () => {
@@ -34,7 +35,8 @@ const HTBProfile = () => {
           </div>
         </motion.div>
 
-        <VideoHighlights />
+        <FeatureInitiatives />
+        <CommunityConnections />
         <ChurchInfo />
 
         <motion.div 

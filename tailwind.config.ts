@@ -42,6 +42,8 @@ export default {
           dark: "#221F26",
           red: "#E11D48",
           blue: "#2563EB",
+          gold: "#FFC107",
+          green: "#10B981",
         },
       },
       keyframes: {
