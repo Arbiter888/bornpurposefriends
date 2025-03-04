@@ -1,4 +1,5 @@
-import { Card } from "../ui/card";
+
+import { Card, CardContent } from "../ui/card";
 import { Heart, Users, Handshake } from "lucide-react";
 import {
   DropdownMenu,
@@ -7,6 +8,7 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import SubscriptionButton from "../SubscriptionButton";
+import { motion } from "framer-motion";
 
 const VideoHighlights = () => {
   const highlights = [
@@ -34,19 +36,33 @@ const VideoHighlights = () => {
   ];
 
   return (
-    <div className="my-12">
+    <motion.div 
+      className="my-12"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.4, duration: 0.5 }}
+    >
       <h3 className="text-2xl font-bold mb-6 text-center">Featured Initiatives</h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {highlights.map((highlight, index) => (
           <DropdownMenu key={index}>
             <DropdownMenuTrigger asChild>
-              <Card className="bg-white/90 backdrop-blur-sm p-6 hover:shadow-lg transition-all duration-300 cursor-pointer">
-                <div className="flex items-center mb-4">
-                  <highlight.icon className="h-6 w-6 text-primary mr-3" />
-                  <h3 className="text-xl font-semibold">{highlight.title}</h3>
-                </div>
-                <p className="text-gray-600">{highlight.description}</p>
-              </Card>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 + index * 0.1, duration: 0.5 }}
+                whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+              >
+                <Card className="bg-white/90 backdrop-blur-sm p-6 hover:shadow-lg transition-all duration-300 cursor-pointer h-full">
+                  <CardContent className="p-0">
+                    <div className="flex items-center mb-4">
+                      <highlight.icon className="h-6 w-6 text-primary mr-3" />
+                      <h3 className="text-xl font-semibold">{highlight.title}</h3>
+                    </div>
+                    <p className="text-gray-600">{highlight.description}</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-80 p-4 bg-white/95 backdrop-blur-sm">
               <div className="space-y-4">
@@ -58,7 +74,7 @@ const VideoHighlights = () => {
           </DropdownMenu>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 

@@ -1,18 +1,21 @@
 
 import Hero from "@/components/Hero";
 import CharacterGrid from "@/components/CharacterGrid";
+import PartnerChurchSection from "@/components/PartnerChurchSection";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { useSession } from "@supabase/auth-helpers-react";
 import { useEffect, useState } from "react";
 import { HomeBackgroundSelector } from "@/components/home/HomeBackgroundSelector";
+import SectionToggle from "@/components/home/SectionToggle";
 
 const Index = () => {
   const navigate = useNavigate();
   const session = useSession();
   const [background, setBackground] = useState("/lovable-uploads/e5022c69-9adb-495b-bb18-b9710c0567c6.png");
   const [isLoading, setIsLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState("bornpurpose");
 
   useEffect(() => {
     const checkSession = async () => {
@@ -64,17 +67,21 @@ const Index = () => {
     <div 
       className="min-h-screen text-foreground relative"
       style={{
-        backgroundImage: background ? `url(${background})` : undefined,
-        backgroundColor: background ? undefined : "#FDF4F5",
+        backgroundImage: activeSection === "bornpurpose" && background ? `url(${background})` : undefined,
+        backgroundColor: activeSection === "bornpurpose" && !background ? "#FDF4F5" : 
+                         activeSection === "htb" ? "#f5f7fa" : undefined,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
     >
-      <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" />
+      {activeSection === "bornpurpose" && <div className="absolute inset-0 bg-black/20 backdrop-blur-[2px]" />}
       <div className="relative">
         <div className="container mx-auto px-4 py-4">
           <div className="flex justify-between items-center">
-            <HomeBackgroundSelector onSelect={handleBackgroundChange} />
+            {activeSection === "bornpurpose" && (
+              <HomeBackgroundSelector onSelect={handleBackgroundChange} />
+            )}
+            {activeSection === "htb" && <div />}
             <button
               onClick={handleLogout}
               className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors"
@@ -83,8 +90,17 @@ const Index = () => {
             </button>
           </div>
         </div>
-        <Hero />
-        <CharacterGrid />
+        
+        <SectionToggle activeSection={activeSection} onSectionChange={setActiveSection} />
+        
+        {activeSection === "bornpurpose" ? (
+          <>
+            <Hero />
+            <CharacterGrid />
+          </>
+        ) : (
+          <PartnerChurchSection />
+        )}
       </div>
     </div>
   );

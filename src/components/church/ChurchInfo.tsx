@@ -1,8 +1,10 @@
+
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { Card } from "../ui/card";
+import { Card, CardContent } from "../ui/card";
 import { Church, Heart, Handshake, Users, Calendar, MapPin } from "lucide-react";
 import { locations } from "./churchLocations";
+import { motion } from "framer-motion";
 
 const ChurchInfo = () => {
   const [showLocations, setShowLocations] = useState(false);
@@ -41,7 +43,12 @@ const ChurchInfo = () => {
   ];
 
   return (
-    <div className="py-12">
+    <motion.div 
+      className="py-12"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.5, duration: 0.5 }}
+    >
       <div className="text-center mb-8">
         <h2 className="text-3xl font-bold mb-4">Our Services & Ministries</h2>
         <Button 
@@ -55,46 +62,66 @@ const ChurchInfo = () => {
       {!showLocations ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
-            <Card key={index} className="bg-white/90 backdrop-blur-sm p-6 hover:shadow-lg transition-all duration-300">
-              <div className="flex items-center mb-4">
-                <service.icon className="h-6 w-6 text-primary mr-3" />
-                <h3 className="text-xl font-semibold">{service.title}</h3>
-              </div>
-              <p className="text-gray-600">{service.description}</p>
-            </Card>
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 + index * 0.1, duration: 0.5 }}
+              whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+            >
+              <Card className="bg-white/90 backdrop-blur-sm p-6 h-full">
+                <CardContent className="p-0">
+                  <div className="flex items-center mb-4">
+                    <service.icon className="h-6 w-6 text-primary mr-3" />
+                    <h3 className="text-xl font-semibold">{service.title}</h3>
+                  </div>
+                  <p className="text-gray-600">{service.description}</p>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {locations.map((location) => (
-            <Card key={location.name} className="bg-white/90 backdrop-blur-sm p-6 transform transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              <div className="flex items-start gap-4 mb-4">
-                <MapPin className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="text-xl font-semibold mb-2">{location.name}</h3>
-                  <Button
-                    variant="link"
-                    className="p-0 h-auto text-primary hover:text-primary/90"
-                    onClick={() => window.open(location.mapLink, "_blank")}
-                  >
-                    <MapPin className="w-4 h-4 mr-2" />
-                    View on Google Maps
-                  </Button>
-                </div>
-              </div>
-              <ul className="space-y-2 text-gray-600">
-                {location.services.map((service, index) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <span className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
-                    {service}
-                  </li>
-                ))}
-              </ul>
-            </Card>
+          {locations.map((location, index) => (
+            <motion.div
+              key={location.name}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 + index * 0.1, duration: 0.5 }}
+              whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)" }}
+            >
+              <Card className="bg-white/90 backdrop-blur-sm p-6 h-full">
+                <CardContent className="p-0">
+                  <div className="flex items-start gap-4 mb-4">
+                    <MapPin className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
+                    <div>
+                      <h3 className="text-xl font-semibold mb-2">{location.name}</h3>
+                      <Button
+                        variant="link"
+                        className="p-0 h-auto text-primary hover:text-primary/90"
+                        onClick={() => window.open(location.mapLink, "_blank")}
+                      >
+                        <MapPin className="w-4 h-4 mr-2" />
+                        View on Google Maps
+                      </Button>
+                    </div>
+                  </div>
+                  <ul className="space-y-2 text-gray-600 mt-4">
+                    {location.services.map((service, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <span className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
+                        {service}
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

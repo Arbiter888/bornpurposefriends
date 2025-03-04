@@ -1,5 +1,7 @@
+
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Church, Home } from "lucide-react";
+import { motion } from "framer-motion";
 
 interface SectionToggleProps {
   activeSection: string;
@@ -8,7 +10,12 @@ interface SectionToggleProps {
 
 const SectionToggle = ({ activeSection, onSectionChange }: SectionToggleProps) => {
   return (
-    <div className="flex justify-center mb-8">
+    <motion.div 
+      className="flex justify-center mb-8"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <ToggleGroup
         type="single"
         value={activeSection}
@@ -26,7 +33,7 @@ const SectionToggle = ({ activeSection, onSectionChange }: SectionToggleProps) =
           HTB
         </ToggleGroupItem>
       </ToggleGroup>
-    </div>
+    </motion.div>
   );
 };
 

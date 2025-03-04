@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Terms from "./pages/Terms";
+import HTB from "./pages/HTB";
 import Workspace from "./components/Workspace";
 import Footer from "./components/Footer";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -32,6 +33,11 @@ const App = () => {
                 <Route path="/" element={
                   <ProtectedRoute>
                     <Index />
+                  </ProtectedRoute>
+                } />
+                <Route path="/htb" element={
+                  <ProtectedRoute>
+                    <HTB />
                   </ProtectedRoute>
                 } />
                 <Route path="/workspace/:characterId" element={

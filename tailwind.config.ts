@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -36,6 +37,12 @@ export default {
           DEFAULT: "rgba(26, 31, 44, 0.1)",
           foreground: "#1A1F2C",
         },
+        htb: {
+          charcoal: "#403E43",
+          dark: "#221F26",
+          red: "#E11D48",
+          blue: "#2563EB",
+        },
       },
       keyframes: {
         "fade-up": {
@@ -56,10 +63,26 @@ export default {
             opacity: "1",
           },
         },
+        "scale-in": {
+          "0%": {
+            transform: "scale(0.95)",
+            opacity: "0"
+          },
+          "100%": {
+            transform: "scale(1)",
+            opacity: "1"
+          }
+        },
+        "slide-in-right": {
+          "0%": { transform: "translateX(100%)" },
+          "100%": { transform: "translateX(0)" }
+        },
       },
       animation: {
         "fade-up": "fade-up 0.5s ease-out",
         "fade-in": "fade-in 0.3s ease-out",
+        "scale-in": "scale-in 0.2s ease-out",
+        "slide-in-right": "slide-in-right 0.3s ease-out",
       },
       backdropBlur: {
         xs: "2px",
