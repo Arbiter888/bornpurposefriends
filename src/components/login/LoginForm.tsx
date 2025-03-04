@@ -1,4 +1,4 @@
-
+<lov-code>
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -251,7 +251,7 @@ const TRANSLATIONS = {
     ru: "Создайте пароль (мин. 6 символов)",
     sk: "Vytvorte heslo (min. 6 znakov)",
     es: "Crea una contraseña (mín. 6 caracteres)",
-    sv: "Skapa ett lösenord (min. 6 tecken)",
+    sv: "Skapa ett lösenord (minst 6 tecken)",
     ta: "கடவுச்சொல்லை உருவாக்கவும் (குறைந்தது 6 எழுத்துகள்)",
     tr: "Bir şifre oluşturun (en az 6 karakter)",
     uk: "Створіть пароль (мін. 6 символів)",
@@ -397,7 +397,7 @@ const TRANSLATIONS = {
     en: ["Enter your email address", "Create a secure password (minimum 6 characters)", "Click \"Create New Account\" to join"],
     ar: ["أدخل عنوان بريدك الإلكتروني", "قم بإنشاء كلمة مرور آمنة (6 أحرف على الأقل)", "انقر على \"إنشاء حساب جديد\" للانضمام"],
     bg: ["Въведете вашия имейл адрес", "Създайте надеждна парола (минимум 6 знака)", "Щракнете върху \"Създаване на нов акаунт\", за да се присъедините"],
-    zh: ["输入您的电子邮件地址", "创建安全密码（至少6个字符）", "点击"创建新账户"加入"],
+    zh: ["输入您的电子邮件地址", "创建安全密码（至少6个字符）", "点击\"创建新账户\"加入"],
     hr: ["Unesite svoju email adresu", "Stvorite sigurnu lozinku (najmanje 6 znakova)", "Kliknite \"Stvori novi račun\" za pridruživanje"],
     cs: ["Zadejte svou e-mailovou adresu", "Vytvořte bezpečné heslo (minimálně 6 znaků)", "Klikněte na \"Vytvořit nový účet\" pro připojení"],
     da: ["Indtast din e-mailadresse", "Opret en sikker adgangskode (minimum 6 tegn)", "Klik på \"Opret ny konto\" for at tilmelde dig"],
@@ -658,92 +658,4 @@ const LoginForm = () => {
           required
           disabled={loading}
           className="bg-white border-2 border-gray-200"
-          minLength={6}
-        />
-      </div>
-      <button
-        type="submit"
-        disabled={loading}
-        className={`w-full py-2.5 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium
-          bg-[#4BA3F5] hover:bg-[#4BA3F5]/90`}
-      >
-        {loading 
-          ? (isSignUp ? getTranslation(currentLanguage, 'creatingAccount') : getTranslation(currentLanguage, 'signingIn')) 
-          : (isSignUp ? getTranslation(currentLanguage, 'createNewAccount') : getTranslation(currentLanguage, 'loginButton'))}
-      </button>
-      {!isSignUp && (
-        <button 
-          type="button" 
-          className="text-sm text-gray-600 hover:text-gray-800 block text-center w-full mt-2"
-        >
-          {getTranslation(currentLanguage, 'forgotPassword')}
-        </button>
-      )}
-    </form>
-  );
-
-  return (
-    <Card className="bg-white shadow-lg border-2">
-      <CardHeader className="text-center space-y-2">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-2xl font-bold text-[#4BA3F5]">
-            {getTranslation(currentLanguage, 'title')}
-          </CardTitle>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Globe className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="max-h-[300px] overflow-y-auto">
-              {Object.entries(LANGUAGES).map(([code, name]) => (
-                <DropdownMenuItem 
-                  key={code} 
-                  onClick={() => setCurrentLanguage(code)}
-                  className={currentLanguage === code ? "bg-blue-50 text-blue-600 font-medium" : ""}
-                >
-                  {name}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        <CardDescription className="text-base">{getTranslation(currentLanguage, 'subtitle')}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="login" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 p-1 bg-gray-100">
-            <TabsTrigger 
-              value="login"
-              className="data-[state=active]:bg-[#4BA3F5] data-[state=active]:text-white"
-            >
-              {getTranslation(currentLanguage, 'loginButton')}
-            </TabsTrigger>
-            <TabsTrigger 
-              value="signup"
-              className="data-[state=active]:bg-[#4BA3F5] data-[state=active]:text-white"
-            >
-              {getTranslation(currentLanguage, 'signupButton')}
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="login">
-            {renderForm(false)}
-          </TabsContent>
-          <TabsContent value="signup">
-            <div className="mb-6 text-sm bg-blue-50 p-4 rounded-md border border-blue-200">
-              <p className="font-medium text-blue-800 mb-2">{getTranslation(currentLanguage, 'newUser')}</p>
-              <ol className="list-decimal ml-4 text-blue-700 space-y-1">
-                {(TRANSLATIONS.signupSteps[currentLanguage as keyof typeof TRANSLATIONS.signupSteps] || TRANSLATIONS.signupSteps.en).map((step, index) => (
-                  <li key={index}>{step}</li>
-                ))}
-              </ol>
-            </div>
-            {renderForm(true)}
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
-  );
-};
-
-export default LoginForm;
+          minLength={6
