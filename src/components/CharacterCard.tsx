@@ -1,3 +1,4 @@
+
 import { Character } from "@/lib/characters";
 import { useEffect, useRef, useState } from "react";
 import { Phone, MessageSquare, Globe } from "lucide-react";
@@ -9,8 +10,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { LANGUAGES } from "@/contexts/LanguageContext";
 
 interface CharacterCardProps {
   character: Character;
@@ -23,9 +22,8 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
   const containerRef = useRef<HTMLDivElement>(null);
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const navigate = useNavigate();
-  const { currentLanguage, setCurrentLanguage } = useLanguage();
+  const [currentLanguage, setCurrentLanguage] = useState<string>("en");
 
-  // Load widget script
   useEffect(() => {
     const loadScript = () => {
       const existingScript = document.querySelector('script[src="https://elevenlabs.io/convai-widget/index.js"]');
@@ -76,121 +74,24 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     navigate(`/workspace/${character.id}`);
   };
 
-  // Get character name in current language (with fallback to English)
   const getCurrentName = () => {
-    if (character.translations?.[currentLanguage]?.name) {
-      return character.translations[currentLanguage].name;
-    }
-    return character.name;
+    if (currentLanguage === "en") return character.name;
+    return character.translations?.[currentLanguage]?.name || character.name;
   };
 
-  // Get character role in current language (with fallback to English)
   const getCurrentRole = () => {
-    if (character.translations?.[currentLanguage]?.role) {
-      return character.translations[currentLanguage].role;
-    }
-    return character.role;
+    if (currentLanguage === "en") return character.role;
+    return character.translations?.[currentLanguage]?.role || character.role;
   };
 
-  // Get character description in current language (with fallback to English)
   const getCurrentDescription = () => {
-    if (character.translations?.[currentLanguage]?.description) {
-      return character.translations[currentLanguage].description;
-    }
-    return character.description;
+    if (currentLanguage === "en") return character.description;
+    return character.translations?.[currentLanguage]?.description || character.description;
   };
 
-  // Get widget ID in current language (with fallback to English)
   const getCurrentWidgetId = () => {
-    if (character.translations?.[currentLanguage]?.widgetId) {
-      return character.translations[currentLanguage].widgetId;
-    }
-    return character.widgetId;
-  };
-
-  // Localized button text for Call and Chat
-  const getLocalizedCallText = () => {
-    const name = getCurrentName();
-    
-    // These are examples, in a real app these would come from a translation file
-    const callPhrases: Record<string, string> = {
-      en: `Call ${name}`,
-      ar: `اتصل بـ ${name}`,
-      bg: `Обадете се на ${name}`,
-      zh: `呼叫 ${name}`,
-      hr: `Nazovi ${name}`,
-      cs: `Zavolat ${name}`,
-      da: `Ring til ${name}`,
-      nl: `Bel ${name}`,
-      fi: `Soita ${name}`,
-      fr: `Appeler ${name}`,
-      de: `Rufe ${name} an`,
-      el: `Κλήση ${name}`,
-      hi: `${name} को कॉल करें`,
-      hu: `Hívás ${name}`,
-      id: `Panggil ${name}`,
-      it: `Chiama ${name}`,
-      ja: `${name}に電話する`,
-      ko: `${name}에게 전화`,
-      ms: `Panggil ${name}`,
-      no: `Ring ${name}`,
-      pl: `Zadzwoń do ${name}`,
-      pt: `Ligar para ${name}`,
-      "pt-BR": `Ligar para ${name}`,
-      ro: `Sună pe ${name}`,
-      ru: `Позвонить ${name}`,
-      sk: `Zavolať ${name}`,
-      es: `Llamar a ${name}`,
-      sv: `Ring ${name}`,
-      ta: `${name}ஐ அழைக்க`,
-      tr: `${name}'i ara`,
-      uk: `Зателефонувати ${name}`,
-      vi: `Gọi cho ${name}`
-    };
-
-    return callPhrases[currentLanguage] || callPhrases.en;
-  };
-
-  const getLocalizedChatText = () => {
-    const name = getCurrentName();
-    
-    // These are examples, in a real app these would come from a translation file
-    const chatPhrases: Record<string, string> = {
-      en: `Chat with ${name}`,
-      ar: `الدردشة مع ${name}`,
-      bg: `Чат с ${name}`,
-      zh: `与 ${name} 聊天`,
-      hr: `Razgovaraj s ${name}`,
-      cs: `Chatovat s ${name}`,
-      da: `Chat med ${name}`,
-      nl: `Chat met ${name}`,
-      fi: `Keskustele ${name} kanssa`,
-      fr: `Discuter avec ${name}`,
-      de: `Mit ${name} chatten`,
-      el: `Συνομιλία με ${name}`,
-      hi: `${name} के साथ चैट करें`,
-      hu: `Csevegés ${name} személlyel`,
-      id: `Mengobrol dengan ${name}`,
-      it: `Chatta con ${name}`,
-      ja: `${name}とチャット`,
-      ko: `${name}와 채팅`,
-      ms: `Berbual dengan ${name}`,
-      no: `Chat med ${name}`,
-      pl: `Czatuj z ${name}`,
-      pt: `Conversar com ${name}`,
-      "pt-BR": `Conversar com ${name}`,
-      ro: `Chat cu ${name}`,
-      ru: `Чат с ${name}`,
-      sk: `Chatovať s ${name}`,
-      es: `Chatear con ${name}`,
-      sv: `Chatta med ${name}`,
-      ta: `${name} உடன் அரட்டை`,
-      tr: `${name} ile sohbet et`,
-      uk: `Чат з ${name}`,
-      vi: `Trò chuyện với ${name}`
-    };
-
-    return chatPhrases[currentLanguage] || chatPhrases.en;
+    if (currentLanguage === "en") return character.widgetId;
+    return character.translations?.[currentLanguage]?.widgetId || character.widgetId;
   };
 
   return (
@@ -222,16 +123,13 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
                     <Globe className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="max-h-[300px] overflow-y-auto">
-                  {Object.entries(LANGUAGES).map(([code, name]) => (
-                    <DropdownMenuItem 
-                      key={code} 
-                      onClick={() => setCurrentLanguage(code)}
-                      className={currentLanguage === code ? "bg-blue-50 text-blue-600 font-medium" : ""}
-                    >
-                      {name}
-                    </DropdownMenuItem>
-                  ))}
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={() => setCurrentLanguage("en")}>
+                    English
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setCurrentLanguage("ko")}>
+                    한국어
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -248,7 +146,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
             >
               <Phone className="w-4 h-4 mr-1 flex-shrink-0" />
               <span className="truncate">
-                {getLocalizedCallText()}
+                {currentLanguage === "ko" ? `${getCurrentName()}에게 전화` : `Call ${getCurrentName()}`}
               </span>
             </Button>
             <Button
@@ -257,7 +155,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
             >
               <MessageSquare className="w-4 h-4 mr-1 flex-shrink-0" />
               <span className="truncate">
-                {getLocalizedChatText()}
+                {currentLanguage === "ko" ? `${getCurrentName()}와 채팅` : `Chat with ${getCurrentName()}`}
               </span>
             </Button>
           </div>

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Message } from "@/types/chat";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,7 +6,6 @@ import { User } from "@supabase/auth-helpers-react";
 import { Character } from "@/lib/characters";
 import { handleMessageStorage } from "./chatHelpers";
 import { searchKnowledgeBase } from "./knowledgeBaseHelpers";
-import { useLanguage } from "@/contexts/LanguageContext";
 
 export const useChat = (user: User | null, characterId: string | undefined, isGroupChat: boolean = false) => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -15,7 +13,6 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   const [conversationId] = useState(() => crypto.randomUUID());
-  const { currentLanguage } = useLanguage();
 
   useEffect(() => {
     if (!user?.id || !characterId) return;
@@ -91,7 +88,6 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
               knowledgeBaseContent,
               conversationId,
               previousResponses,
-              language: currentLanguage,
             },
           });
 
@@ -125,7 +121,6 @@ export const useChat = (user: User | null, characterId: string | undefined, isGr
             isGroupChat: false,
             knowledgeBaseContent,
             conversationId,
-            language: currentLanguage,
           },
         });
 
