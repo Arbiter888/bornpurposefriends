@@ -23,7 +23,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
   const containerRef = useRef<HTMLDivElement>(null);
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const navigate = useNavigate();
-  const { currentLanguage } = useLanguage();
+  const { currentLanguage, setCurrentLanguage } = useLanguage();
 
   // Load widget script
   useEffect(() => {

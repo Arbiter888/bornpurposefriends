@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -402,7 +401,7 @@ const TRANSLATIONS = {
     cs: ["Zadejte svou e-mailovou adresu", "Vytvořte bezpečné heslo (minimálně 6 znaků)", "Klikněte na \"Vytvořit nový účet\" pro připojení"],
     da: ["Indtast din e-mailadresse", "Opret en sikker adgangskode (minimum 6 tegn)", "Klik på \"Opret ny konto\" for at tilmelde dig"],
     nl: ["Voer je e-mailadres in", "Maak een veilig wachtwoord (minimaal 6 tekens)", "Klik op \"Nieuw account aanmaken\" om lid te worden"],
-    fi: ["Syötä sähköpostiosoitteesi", "Luo turvallinen salasana (vähintään 6 merkkiä)", "Napsauta \"Luo uusi tili\" liittyäksesi"],
+    fi: ["Syötä sähköpostiosoitteesi", "Luo turvallinen salasana (väh. 6 merkkiä)", "Napsauta \"Luo uusi tili\" liittyäksesi"],
     fr: ["Entrez votre adresse e-mail", "Créez un mot de passe sécurisé (minimum 6 caractères)", "Cliquez sur \"Créer un nouveau compte\" pour rejoindre"],
     de: ["Geben Sie Ihre E-Mail-Adresse ein", "Erstellen Sie ein sicheres Passwort (mindestens 6 Zeichen)", "Klicken Sie auf \"Neues Konto erstellen\", um beizutreten"],
     el: ["Εισάγετε τη διεύθυνση ηλεκτρονικού ταχυδρομείου σας", "Δημιουργήστε έναν ασφαλή κωδικό πρόσβασης (τουλάχιστον 6 χαρακτήρες)", "Κάντε κλικ στο \"Δημιουργία νέου λογαριασμού\" για να συμμετάσχετε"],
@@ -628,6 +627,11 @@ const LoginForm = () => {
   };
 
   const getTranslation = (key: string, section: keyof typeof TRANSLATIONS) => {
+    if (section === 'signupSteps') {
+      // Handle array type specially
+      const steps = TRANSLATIONS[section][currentLanguage as keyof typeof TRANSLATIONS[typeof section]] || TRANSLATIONS[section].en;
+      return Array.isArray(steps) ? steps : TRANSLATIONS[section].en;
+    }
     return TRANSLATIONS[section][currentLanguage as keyof typeof TRANSLATIONS[typeof section]] || TRANSLATIONS[section].en;
   };
 
@@ -637,7 +641,7 @@ const LoginForm = () => {
         <label className="text-sm font-medium">{getTranslation(currentLanguage, 'emailLabel')}</label>
         <Input
           type="email"
-          placeholder={getTranslation(currentLanguage, 'emailPlaceholder')}
+          placeholder={getTranslation(currentLanguage, 'emailPlaceholder') as string}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -650,100 +654,4 @@ const LoginForm = () => {
         <Input
           type="password"
           placeholder={isSignUp 
-            ? getTranslation(currentLanguage, 'passwordPlaceholderSignup')
-            : getTranslation(currentLanguage, 'passwordPlaceholderLogin')
-          }
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          disabled={loading}
-          className="bg-white border-2 border-gray-200"
-          minLength={6}
-        />
-      </div>
-      <button
-        type="submit"
-        disabled={loading}
-        className={`w-full py-2.5 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-white font-medium
-          bg-[#4BA3F5] hover:bg-[#4BA3F5]/90`}
-      >
-        {loading 
-          ? (isSignUp ? getTranslation(currentLanguage, 'creatingAccount') : getTranslation(currentLanguage, 'signingIn')) 
-          : (isSignUp ? getTranslation(currentLanguage, 'createNewAccount') : getTranslation(currentLanguage, 'loginButton'))}
-      </button>
-      {!isSignUp && (
-        <button 
-          type="button" 
-          className="text-sm text-gray-600 hover:text-gray-800 block text-center w-full mt-2"
-        >
-          {getTranslation(currentLanguage, 'forgotPassword')}
-        </button>
-      )}
-    </form>
-  );
-
-  return (
-    <Card className="bg-white shadow-lg border-2">
-      <CardHeader className="text-center space-y-2">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-2xl font-bold text-[#4BA3F5]">
-            {getTranslation(currentLanguage, 'title')}
-          </CardTitle>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon">
-                <Globe className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="max-h-[300px] overflow-y-auto">
-              {Object.entries(LANGUAGES).map(([code, name]) => (
-                <DropdownMenuItem 
-                  key={code} 
-                  onClick={() => setCurrentLanguage(code)}
-                  className={currentLanguage === code ? "bg-blue-50 text-blue-600 font-medium" : ""}
-                >
-                  {name}
-                </DropdownMenuItem>
-              ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-        <CardDescription className="text-base">{getTranslation(currentLanguage, 'subtitle')}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Tabs defaultValue="login" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 p-1 bg-gray-100">
-            <TabsTrigger 
-              value="login"
-              className="data-[state=active]:bg-[#4BA3F5] data-[state=active]:text-white"
-            >
-              {getTranslation(currentLanguage, 'loginButton')}
-            </TabsTrigger>
-            <TabsTrigger 
-              value="signup"
-              className="data-[state=active]:bg-[#4BA3F5] data-[state=active]:text-white"
-            >
-              {getTranslation(currentLanguage, 'signupButton')}
-            </TabsTrigger>
-          </TabsList>
-          <TabsContent value="login">
-            {renderForm(false)}
-          </TabsContent>
-          <TabsContent value="signup">
-            <div className="mb-6 text-sm bg-blue-50 p-4 rounded-md border border-blue-200">
-              <p className="font-medium text-blue-800 mb-2">{getTranslation(currentLanguage, 'newUser')}</p>
-              <ol className="list-decimal ml-4 text-blue-700 space-y-1">
-                {(TRANSLATIONS.signupSteps[currentLanguage as keyof typeof TRANSLATIONS.signupSteps] || TRANSLATIONS.signupSteps.en).map((step, index) => (
-                  <li key={index}>{step}</li>
-                ))}
-              </ol>
-            </div>
-            {renderForm(true)}
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-    </Card>
-  );
-};
-
-export default LoginForm;
+            ? getTranslation(currentLanguage, 'passwordPlaceholder
