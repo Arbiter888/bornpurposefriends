@@ -139,20 +139,24 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
             <p className="text-gray-300 text-sm">{getCurrentDescription()}</p>
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex gap-2 w-full">
             <Button
               onClick={handlePrayerRequest}
-              className="flex-1 bg-blue-500 hover:bg-blue-600 rounded-xl"
+              className="flex-1 bg-blue-500 hover:bg-blue-600 rounded-xl px-2 text-xs sm:text-sm whitespace-normal h-auto py-2"
             >
-              <Phone className="w-4 h-4 mr-2" />
-              {currentLanguage === "ko" ? `${getCurrentName()}에게 전화` : `Call ${getCurrentName()}`}
+              <Phone className="w-4 h-4 mr-1 flex-shrink-0" />
+              <span className="truncate">
+                {currentLanguage === "ko" ? `${getCurrentName()}에게 전화` : `Call ${getCurrentName()}`}
+              </span>
             </Button>
             <Button
               onClick={handleBibleStudy}
-              className="flex-1 bg-blue-500 hover:bg-blue-600 rounded-xl"
+              className="flex-1 bg-blue-500 hover:bg-blue-600 rounded-xl px-2 text-xs sm:text-sm whitespace-normal h-auto py-2"
             >
-              <MessageSquare className="w-4 h-4 mr-2" />
-              {currentLanguage === "ko" ? `${getCurrentName()}와 채팅` : `Chat with ${getCurrentName()}`}
+              <MessageSquare className="w-4 h-4 mr-1 flex-shrink-0" />
+              <span className="truncate">
+                {currentLanguage === "ko" ? `${getCurrentName()}와 채팅` : `Chat with ${getCurrentName()}`}
+              </span>
             </Button>
           </div>
         </div>
