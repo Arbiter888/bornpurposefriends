@@ -29,6 +29,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [isVideoError, setIsVideoError] = useState(false);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [isHovering, setIsHovering] = useState(false);
   
   // Check if character has videos
   const hasVideo = character.gallery?.videos && character.gallery.videos.length > 0;
@@ -95,11 +96,30 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     loadVideoFromSupabase();
   }, [character.gallery?.videos, hasVideo]);
 
+  // Play/pause video on hover
+  useEffect(() => {
+    if (videoRef.current && isHovering && videoUrl) {
+      videoRef.current.play().catch(error => {
+        console.error("Error playing video:", error);
+      });
+    } else if (videoRef.current && !isHovering) {
+      videoRef.current.pause();
+    }
+  }, [isHovering, videoUrl]);
+
   useEffect(() => {
     if (!isWidgetActive) {
       setShowWidget(false);
     }
   }, [isWidgetActive]);
+
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+  };
 
   const handlePrayerRequest = () => {
     if (scriptLoaded) {
@@ -161,6 +181,8 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
           height: 'auto',
           fontFamily: 'Tomorrow'
         }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <div className="relative">
           {hasVideo && videoUrl && !isVideoError ? (
@@ -168,12 +190,12 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
               <video
                 ref={videoRef}
                 className={`w-full h-full object-cover rounded-t-2xl ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
-                autoPlay
                 loop
                 playsInline
                 muted={isMuted}
                 onLoadedData={handleVideoLoaded}
                 onError={handleVideoError}
+                preload="auto"
               >
                 <source src={videoUrl} type="video/mp4" />
                 {/* Fallback to image if video fails to load */}

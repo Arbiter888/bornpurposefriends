@@ -1,7 +1,7 @@
 
 import { Card } from "../ui/card";
 import { ScrollArea } from "../ui/scroll-area";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 interface GalleryProps {
@@ -13,6 +13,8 @@ interface GalleryProps {
 export const Gallery = ({ videos, images, characterId }: GalleryProps) => {
   const [videoUrls, setVideoUrls] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
+  const [hoveredVideo, setHoveredVideo] = useState<string | null>(null);
+  const videoRefs = useRef<Record<string, HTMLVideoElement | null>>({});
 
   useEffect(() => {
     const loadVideosFromSupabase = async () => {
@@ -53,10 +55,34 @@ export const Gallery = ({ videos, images, characterId }: GalleryProps) => {
     loadVideosFromSupabase();
   }, [videos]);
 
+  // Play/pause video on hover
+  useEffect(() => {
+    if (hoveredVideo && videoRefs.current[hoveredVideo]) {
+      videoRefs.current[hoveredVideo]?.play().catch(error => {
+        console.error("Error playing video:", error);
+      });
+    }
+    
+    // Pause all other videos
+    Object.entries(videoRefs.current).forEach(([key, videoElement]) => {
+      if (key !== hoveredVideo && videoElement) {
+        videoElement.pause();
+      }
+    });
+  }, [hoveredVideo]);
+
   // Convert YouTube Shorts URL to embed URL
   const getEmbedUrl = (url: string) => {
     const videoId = url.split('/shorts/')[1]?.split('?')[0];
     return `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&playlist=${videoId}&mute=1`;
+  };
+
+  const handleMouseEnter = (videoKey: string) => {
+    setHoveredVideo(videoKey);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredVideo(null);
   };
 
   if ((!videos?.length && !images?.length) || loading) {
@@ -89,11 +115,20 @@ export const Gallery = ({ videos, images, characterId }: GalleryProps) => {
             
             // Handle local video from Supabase
             return (
-              <div key={`video-${index}`} className="relative aspect-video w-full">
+              <div 
+                key={`video-${index}`} 
+                className="relative aspect-video w-full hover:shadow-lg transition-all duration-300"
+                onMouseEnter={() => handleMouseEnter(video)}
+                onMouseLeave={handleMouseLeave}
+              >
                 <video
+                  ref={el => videoRefs.current[video] = el}
                   className="w-full h-full rounded-lg"
                   controls
                   src={videoUrl}
+                  preload="auto"
+                  loop
+                  muted
                 >
                   Your browser does not support the video tag.
                 </video>
