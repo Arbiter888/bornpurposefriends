@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Phone, MessageSquare, Globe, Volume2, VolumeX } from "lucide-react";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -27,6 +28,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
   const [isVideoError, setIsVideoError] = useState(false);
+  const [videoUrl, setVideoUrl] = useState<string | null>(null);
   
   // Check if character has videos
   const hasVideo = character.gallery?.videos && character.gallery.videos.length > 0;
@@ -60,6 +62,38 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
 
     loadScript();
   }, []);
+
+  // Add effect to load video URL from Supabase
+  useEffect(() => {
+    const loadVideoFromSupabase = async () => {
+      if (hasVideo) {
+        try {
+          const videoFilename = character.gallery?.videos?.[0];
+          if (videoFilename) {
+            const { data, error } = await supabase.storage
+              .from('videos')
+              .createSignedUrl(videoFilename, 3600); // 1 hour expiration
+            
+            if (error) {
+              console.error("Error fetching video from Supabase:", error);
+              setIsVideoError(true);
+              return;
+            }
+            
+            if (data?.signedUrl) {
+              setVideoUrl(data.signedUrl);
+              setIsVideoError(false);
+            }
+          }
+        } catch (error) {
+          console.error("Error loading video:", error);
+          setIsVideoError(true);
+        }
+      }
+    };
+
+    loadVideoFromSupabase();
+  }, [character.gallery?.videos, hasVideo]);
 
   useEffect(() => {
     if (!isWidgetActive) {
@@ -129,7 +163,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
         }}
       >
         <div className="relative">
-          {hasVideo && !isVideoError ? (
+          {hasVideo && videoUrl && !isVideoError ? (
             <div className="relative w-full">
               <video
                 ref={videoRef}
@@ -141,7 +175,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
                 onLoadedData={handleVideoLoaded}
                 onError={handleVideoError}
               >
-                <source src={character.gallery?.videos?.[0]} type="video/mp4" />
+                <source src={videoUrl} type="video/mp4" />
                 {/* Fallback to image if video fails to load */}
                 Your browser does not support the video tag.
               </video>
