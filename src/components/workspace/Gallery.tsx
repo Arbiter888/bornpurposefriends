@@ -58,6 +58,7 @@ export const Gallery = ({ videos, images, characterId }: GalleryProps) => {
   // Play/pause video on hover
   useEffect(() => {
     if (hoveredVideo && videoRefs.current[hoveredVideo]) {
+      console.log("Playing gallery video:", hoveredVideo);
       videoRefs.current[hoveredVideo]?.play().catch(error => {
         console.error("Error playing video:", error);
       });
@@ -78,10 +79,12 @@ export const Gallery = ({ videos, images, characterId }: GalleryProps) => {
   };
 
   const handleMouseEnter = (videoKey: string) => {
+    console.log("Mouse enter for gallery video:", videoKey);
     setHoveredVideo(videoKey);
   };
 
   const handleMouseLeave = () => {
+    console.log("Mouse leave for gallery video");
     setHoveredVideo(null);
   };
 
@@ -129,6 +132,7 @@ export const Gallery = ({ videos, images, characterId }: GalleryProps) => {
                   preload="auto"
                   loop
                   muted
+                  autoPlay={hoveredVideo === video}
                 >
                   Your browser does not support the video tag.
                 </video>

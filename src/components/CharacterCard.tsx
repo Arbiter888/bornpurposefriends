@@ -71,6 +71,14 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
         try {
           const videoFilename = character.gallery?.videos?.[0];
           if (videoFilename) {
+            console.log("Loading video:", videoFilename, "for character:", character.name);
+            
+            // Skip if it's a YouTube video
+            if (videoFilename.includes('youtube.com') || videoFilename.includes('youtu.be')) {
+              setVideoUrl(videoFilename);
+              return;
+            }
+            
             const { data, error } = await supabase.storage
               .from('videos')
               .createSignedUrl(videoFilename, 3600); // 1 hour expiration
@@ -82,6 +90,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
             }
             
             if (data?.signedUrl) {
+              console.log("Video URL loaded successfully for:", character.name);
               setVideoUrl(data.signedUrl);
               setIsVideoError(false);
             }
@@ -94,18 +103,23 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     };
 
     loadVideoFromSupabase();
-  }, [character.gallery?.videos, hasVideo]);
+  }, [character.gallery?.videos, hasVideo, character.name]);
 
   // Play/pause video on hover
   useEffect(() => {
     if (videoRef.current && isHovering && videoUrl) {
+      console.log("Attempting to play video for:", character.name);
+      // Set muted to ensure autoplay works in all browsers
+      videoRef.current.muted = true;
+      setIsMuted(true);
+      
       videoRef.current.play().catch(error => {
-        console.error("Error playing video:", error);
+        console.error("Error playing video for", character.name, ":", error);
       });
     } else if (videoRef.current && !isHovering) {
       videoRef.current.pause();
     }
-  }, [isHovering, videoUrl]);
+  }, [isHovering, videoUrl, character.name]);
 
   useEffect(() => {
     if (!isWidgetActive) {
@@ -114,10 +128,12 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
   }, [isWidgetActive]);
 
   const handleMouseEnter = () => {
+    console.log("Mouse enter for character:", character.name);
     setIsHovering(true);
   };
 
   const handleMouseLeave = () => {
+    console.log("Mouse leave for character:", character.name);
     setIsHovering(false);
   };
 
@@ -135,7 +151,8 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     navigate(`/workspace/${character.id}`);
   };
 
-  const toggleMute = () => {
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent triggering parent click events
     if (videoRef.current) {
       videoRef.current.muted = !videoRef.current.muted;
       setIsMuted(videoRef.current.muted);
@@ -143,8 +160,16 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
   };
 
   const handleVideoLoaded = () => {
+    console.log("Video loaded for character:", character.name);
     setIsVideoLoaded(true);
     setIsVideoError(false);
+    
+    // Try to play the video immediately if hovering
+    if (isHovering && videoRef.current) {
+      videoRef.current.play().catch(err => 
+        console.error("Failed to autoplay on load:", err)
+      );
+    }
   };
 
   const handleVideoError = () => {
@@ -193,6 +218,7 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
                 loop
                 playsInline
                 muted={isMuted}
+                autoPlay={isHovering}
                 onLoadedData={handleVideoLoaded}
                 onError={handleVideoError}
                 preload="auto"
