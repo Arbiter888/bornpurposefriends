@@ -29,5 +29,8 @@ export const mary: Character = {
     "Money Management",
     "Giving Principles",
     "Abundance Mindset"
-  ]
+  ],
+  gallery: {
+    videos: ["marysayinghi.mp4"]
+  }
 };

@@ -29,5 +29,8 @@ export const grace: Character = {
     "Divine Provision",
     "Blessing Release",
     "Prosperous Living"
-  ]
+  ],
+  gallery: {
+    videos: ["gracesayinghi.mp4"]
+  }
 };

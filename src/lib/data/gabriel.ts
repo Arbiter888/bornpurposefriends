@@ -29,5 +29,8 @@ export const gabriel: Character = {
     "Physical Prosperity",
     "Body Restoration",
     "Health & Faith"
-  ]
+  ],
+  gallery: {
+    videos: ["gabrielsayinghi.mp4"]
+  }
 };

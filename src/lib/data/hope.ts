@@ -29,5 +29,8 @@ export const hope: Character = {
     "Breakthrough Principles",
     "Blessing Activation",
     "Prosperity Mindset"
-  ]
+  ],
+  gallery: {
+    videos: ["hopesayinghi.mp4"]
+  }
 };

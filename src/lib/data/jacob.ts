@@ -29,5 +29,8 @@ export const jacob: Character = {
     "Youth Leadership",
     "Divine Direction",
     "Abundant Living"
-  ]
+  ],
+  gallery: {
+    videos: ["jacobsayinghi.mp4"]
+  }
 };
