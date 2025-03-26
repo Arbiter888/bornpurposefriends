@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { characters } from "@/lib/characters";
 import { Phone } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 const FeaturedCompanions = () => {
   return <div className="space-y-8">
@@ -13,24 +14,46 @@ const FeaturedCompanions = () => {
       </div>
       
       <div className="grid grid-cols-2 gap-4">
-        {characters.slice(0, 4).map((character, index) => <motion.div key={character.id} initial={{
-        opacity: 0,
-        y: 20
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} transition={{
-        delay: index * 0.1
-      }} className="relative group">
-            <div className="aspect-square relative overflow-hidden rounded-lg">
-              <img src={character.image} alt={character.name} className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90" />
-              <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-                <h3 className="text-xl font-bold">{character.name}</h3>
-                <p className="text-sm text-gray-300">{character.role}</p>
+        {characters.slice(0, 4).map((character, index) => {
+          const hasVideo = character.gallery?.videos && character.gallery.videos.length > 0;
+          
+          return (
+            <motion.div key={character.id} initial={{
+              opacity: 0,
+              y: 20
+            }} animate={{
+              opacity: 1,
+              y: 0
+            }} transition={{
+              delay: index * 0.1
+            }} className="relative group">
+              <div className="aspect-square relative overflow-hidden rounded-lg">
+                {hasVideo ? (
+                  <div className="w-full h-full">
+                    <video
+                      className="w-full h-full object-cover object-top"
+                      autoPlay
+                      loop
+                      playsInline
+                      muted
+                    >
+                      <source src={character.gallery.videos[0]} type="video/mp4" />
+                      {/* Fallback to image if video can't play */}
+                      <img src={character.image} alt={character.name} className="w-full h-full object-cover object-top" />
+                    </video>
+                  </div>
+                ) : (
+                  <img src={character.image} alt={character.name} className="w-full h-full object-cover object-top transition-transform duration-300 group-hover:scale-105" />
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90" />
+                <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+                  <h3 className="text-xl font-bold">{character.name}</h3>
+                  <p className="text-sm text-gray-300">{character.role}</p>
+                </div>
               </div>
-            </div>
-          </motion.div>)}
+            </motion.div>
+          );
+        })}
       </div>
 
       <div className="bg-white shadow-lg rounded-lg p-6">

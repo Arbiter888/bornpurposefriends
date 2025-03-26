@@ -1,7 +1,7 @@
 
 import { Character } from "@/lib/characters";
 import { useEffect, useRef, useState } from "react";
-import { Phone, MessageSquare, Globe } from "lucide-react";
+import { Phone, MessageSquare, Globe, Volume2, VolumeX } from "lucide-react";
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router-dom";
 import {
@@ -23,6 +23,13 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
   const [scriptLoaded, setScriptLoaded] = useState(false);
   const navigate = useNavigate();
   const [currentLanguage, setCurrentLanguage] = useState<string>("en");
+  const [isMuted, setIsMuted] = useState(true);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [isVideoError, setIsVideoError] = useState(false);
+  
+  // Check if character has videos
+  const hasVideo = character.gallery?.videos && character.gallery.videos.length > 0;
 
   useEffect(() => {
     const loadScript = () => {
@@ -74,6 +81,23 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
     navigate(`/workspace/${character.id}`);
   };
 
+  const toggleMute = () => {
+    if (videoRef.current) {
+      videoRef.current.muted = !videoRef.current.muted;
+      setIsMuted(videoRef.current.muted);
+    }
+  };
+
+  const handleVideoLoaded = () => {
+    setIsVideoLoaded(true);
+    setIsVideoError(false);
+  };
+
+  const handleVideoError = () => {
+    console.error("Error loading video for character:", character.name);
+    setIsVideoError(true);
+  };
+
   const getCurrentName = () => {
     if (currentLanguage === "en") return character.name;
     return character.translations?.[currentLanguage]?.name || character.name;
@@ -105,12 +129,49 @@ const CharacterCard = ({ character, onWidgetOpen, isWidgetActive }: CharacterCar
         }}
       >
         <div className="relative">
-          <img
-            src={character.image}
-            alt={getCurrentName()}
-            className="w-full h-full object-contain rounded-2xl"
-            loading="lazy"
-          />
+          {hasVideo && !isVideoError ? (
+            <div className="relative w-full">
+              <video
+                ref={videoRef}
+                className={`w-full h-full object-cover rounded-t-2xl ${isVideoLoaded ? 'opacity-100' : 'opacity-0'}`}
+                autoPlay
+                loop
+                playsInline
+                muted={isMuted}
+                onLoadedData={handleVideoLoaded}
+                onError={handleVideoError}
+              >
+                <source src={character.gallery?.videos?.[0]} type="video/mp4" />
+                {/* Fallback to image if video fails to load */}
+                Your browser does not support the video tag.
+              </video>
+              
+              {/* Show image while video is loading */}
+              {!isVideoLoaded && (
+                <img
+                  src={character.image}
+                  alt={getCurrentName()}
+                  className="w-full h-full object-contain rounded-t-2xl absolute top-0 left-0"
+                  loading="lazy"
+                />
+              )}
+              
+              {/* Sound toggle button */}
+              <button 
+                onClick={toggleMute}
+                className="absolute bottom-3 right-3 bg-black/60 p-1.5 rounded-full text-white hover:bg-black/80 transition-colors z-10"
+              >
+                {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+              </button>
+            </div>
+          ) : (
+            <img
+              src={character.image}
+              alt={getCurrentName()}
+              className="w-full h-full object-contain rounded-t-2xl"
+              loading="lazy"
+            />
+          )}
         </div>
 
         <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent rounded-b-2xl">
